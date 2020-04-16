@@ -1,2 +1,2 @@
 # jtyper
-Typescript notebook
+> Typescript notebook running in browser
