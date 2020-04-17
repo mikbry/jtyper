@@ -16,11 +16,17 @@ declare module 'styled-components' {
       background: string;
       surface: string;
       onSurface: string;
+      menu: string;
+      divider: string;
+      group: string;
+      selected: string;
+      disabled: string;
     };
     fontFamily: string;
     spacing: {
       headerHeight: number;
       explorerWidth: number;
+      iconSize: number;
     };
   }
 }

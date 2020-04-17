@@ -78,6 +78,7 @@
     "@styled-icons/boxicons-regular": "^10.0.0",
     "@styled-icons/fa-regular": "^10.0.0",
     "@styled-icons/feather": "^10.0.0",
+    "@styled-icons/icomoon": "^10.0.0",
     "@styled-icons/styled-icon": "^10.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { StyledIcon } from '@styled-icons/styled-icon';
 
 const Button = styled.button`
-  height: 30px;
+  height: ${props => props.theme.spacing.iconSize}px;
   line-height: 1;
   background: transparent;
   border: 0px;
@@ -18,8 +18,8 @@ const Button = styled.button`
   color: ${props => props.theme.palette.surface};
   cursor: pointer;
   & > svg {
-    width: 30px;
-    height: 30px;
+    width: ${props => props.theme.spacing.iconSize}px;
+    height: ${props => props.theme.spacing.iconSize}px;
   }
   &:hover {
     color: white;
