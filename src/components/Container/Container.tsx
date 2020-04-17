@@ -12,6 +12,7 @@ const Container = styled.div`
   top: ${props => props.theme.spacing.headerHeight}px;
   left: 50%;
   transform: translate(calc(-50% + ${props => props.theme.spacing.explorerWidth / 2}px), 0);
+  height: calc(100% - 48px);
 `;
 
 export default Container;

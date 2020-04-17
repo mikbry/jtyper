@@ -5,9 +5,16 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { Book } from '@styled-icons/icomoon/Book';
+import { useStore } from '../../store';
+import Toolbar from '../Toolbar';
 
-const Header = styled.header`
+const Styled = styled.header`
+  position: fixed;
+  z-index: 3;
+  width: 100%;
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
   line-height: ${props => props.theme.spacing.headerHeight}px;
@@ -28,5 +35,21 @@ const Header = styled.header`
     text-align: left;
   }
 `;
+
+const Icon = styled(Book)`
+  width: 24px;
+  margin-right: 0.6em;
+`;
+
+const Header: FunctionComponent = () => {
+  const { project } = useStore();
+  return (
+    <Styled>
+      <Icon />
+      jtyper : {project?.title || 'undefined'}
+      <Toolbar />
+    </Styled>
+  );
+};
 
 export default Header;

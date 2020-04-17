@@ -8,6 +8,19 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 
+import { FloppyDisk } from '@styled-icons/icomoon/FloppyDisk';
+import { Plus } from '@styled-icons/icomoon//Plus';
+import { Scissors } from '@styled-icons/icomoon/Scissors';
+import { Copy } from '@styled-icons/icomoon/Copy';
+import { Paste } from '@styled-icons/icomoon/Paste';
+import { ArrowUp } from '@styled-icons/icomoon/ArrowUp';
+import { ArrowDown } from '@styled-icons/icomoon/ArrowDown';
+import { Next2 } from '@styled-icons/icomoon/Next2';
+import { Stop2 } from '@styled-icons/icomoon//Stop2';
+import { History } from '@styled-icons/icomoon/History';
+import { Forward3 } from '@styled-icons/icomoon/Forward3';
+
+/*
 import { Save } from '@styled-icons/boxicons-regular/Save';
 import { Plus } from '@styled-icons/boxicons-regular/Plus';
 import { Cut } from '@styled-icons/boxicons-regular/Cut';
@@ -19,6 +32,7 @@ import { SkipNext } from '@styled-icons/boxicons-regular/SkipNext';
 import { Stop } from '@styled-icons/boxicons-regular/Stop';
 import { Reset } from '@styled-icons/boxicons-regular/Reset';
 import { FastForward } from '@styled-icons/boxicons-regular/FastForward';
+*/
 
 /*
 import { Save } from '@styled-icons/feather/Save';
@@ -34,7 +48,7 @@ import { RotateCw } from '@styled-icons/feather/RotateCw';
 import { FastForward } from '@styled-icons/feather/FastForward';
 */
 
-import IconButton from './IconButton';
+import IconButton from '../IconButton';
 
 const Styled = styled.div`
   margin-left: auto;
@@ -45,7 +59,7 @@ const Styled = styled.div`
 const Bar = styled.div`
   margin: 4px;
   line-height: 36px;
-  border: 1px solid ${props => props.theme.palette.onSurface};
+  border: 1px solid ${props => props.theme.palette.group};
 `;
 
 const Toolbar: FunctionComponent = () => {
@@ -55,27 +69,27 @@ const Toolbar: FunctionComponent = () => {
   return (
     <Styled>
       <Bar>
-        <IconButton icon={Save} onClick={handleSave} />
+        <IconButton icon={FloppyDisk} onClick={handleSave} />
       </Bar>
       <Bar>
         <IconButton icon={Plus} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={Cut} onClick={handleSave} />
+        <IconButton icon={Scissors} onClick={handleSave} />
         <IconButton icon={Copy} onClick={handleSave} />
         <IconButton icon={Paste} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={UpArrowAlt} onClick={handleSave} />
-        <IconButton icon={DownArrowAlt} onClick={handleSave} />
+        <IconButton icon={ArrowUp} onClick={handleSave} />
+        <IconButton icon={ArrowDown} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={SkipNext} onClick={handleSave}>
+        <IconButton icon={Next2} onClick={handleSave}>
           Run
         </IconButton>
-        <IconButton icon={Stop} onClick={handleSave} />
-        <IconButton icon={Reset} onClick={handleSave} />
-        <IconButton icon={FastForward} onClick={handleSave} />
+        <IconButton icon={Stop2} onClick={handleSave} />
+        <IconButton icon={History} onClick={handleSave} />
+        <IconButton icon={Forward3} onClick={handleSave} />
       </Bar>
     </Styled>
   );

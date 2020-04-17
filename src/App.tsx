@@ -15,38 +15,20 @@ import Header from './components/Header';
 import Explorer from './components/Explorer';
 import Container from './components/Container';
 import Notebook from './components/Notebook';
-import Item from './components/Item';
-import Cell from './components/Cell';
-import Toolbar from './components/Toolbar';
 
 const Wrapper = styled.div`
   display: flex;
-`;
-
-const Icon = styled.span`
-  margin-right: 0.6em;
+  height: 100%;
 `;
 
 const App: FunctionComponent = () => (
   <StoreProvider>
     <Page>
-      <Header>
-        <Icon role='img' aria-label='notebook'>
-          📒
-        </Icon>
-        jtyper : notebook
-        <Toolbar />
-      </Header>
+      <Header />
       <Wrapper>
-        <Explorer>
-          <Item>Welcome</Item>
-        </Explorer>
+        <Explorer />
         <Container>
-          <Notebook>
-            <Cell>Header</Cell>
-            <Cell>lorem ipsum</Cell>
-            <Cell>console.log(&apos;hello world&apos;)</Cell>
-          </Notebook>
+          <Notebook />
         </Container>
       </Wrapper>
     </Page>
