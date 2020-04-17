@@ -6,13 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { useReducer, FunctionComponent } from 'react';
+import React, { useReducer, useCallback, FunctionComponent } from 'react';
 import context from './context';
 import store, { getInitialState } from './store';
 import { StateType, ActionType } from '../types';
 
 const StoreProvider: FunctionComponent<{}> = ({ children }) => {
-  const memoizedReducer = React.useCallback(
+  const memoizedReducer = useCallback(
     (prevState: StateType, action: ActionType) => {
       const func = store.reducers[action.type];
       if (func) {
