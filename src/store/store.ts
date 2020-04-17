@@ -27,7 +27,7 @@ export const initState = async () => {
   store.reducers = handlers;
   let state = initialState;
   const dispatch = (action: ActionType) => {
-    const func = handlers[action.type];
+    const func: Function = handlers[action.type];
     if (func) {
       state = func(state, action);
     }

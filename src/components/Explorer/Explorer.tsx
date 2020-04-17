@@ -11,9 +11,10 @@ import styled from 'styled-components';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
-import { useStore } from '../../store';
+import { useStore, useActions } from '../../store';
 import IconButton from '../IconButton';
 import Item from '../Item';
+import { NotebookType } from '../../types';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -38,14 +39,23 @@ const Bar = styled.div`
 `;
 
 const Explorer: FunctionComponent = () => {
-  const { project, dispatch } = useStore();
-  const handleSave = () => {
-    // TODO
+  const { project } = useStore();
+  const { createNotebook, selectFile } = useActions();
+  const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    createNotebook();
   };
-  const handleSelect = (selected: number) => {
+  const handleDuplicate = () => {
     // TODO
-    console.log('handmeSelect', selected, dispatch);
-    // if (dispatch) dispatch({ type: 'selectFile', selected });
+    console.log('TODO handleDuplicate');
+  };
+  const handleDelete = () => {
+    // TODO
+    console.log('TODO handleDelete');
+  };
+  const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
+    event.preventDefault();
+    selectFile({ selected });
   };
   const selected = project?.selected;
   return (
@@ -53,14 +63,14 @@ const Explorer: FunctionComponent = () => {
       <Bar>
         Files
         <div>
-          <IconButton icon={FileText2} onClick={handleSave} />
-          <IconButton icon={Copy} onClick={handleSave} />
-          <IconButton icon={Bin} onClick={handleSave} />
+          <IconButton icon={FileText2} onClick={handleCreate} />
+          <IconButton icon={Copy} onClick={handleDuplicate} />
+          <IconButton icon={Bin} onClick={handleDelete} />
         </div>
       </Bar>
       {project &&
-        project.files.map((file, index) => (
-          <Item key={file.name} onClick={() => handleSelect(index)} selected={index === selected}>
+        project.files.map((file: NotebookType, index: number) => (
+          <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
             {file.name || file.title}
           </Item>
         ))}
