@@ -9,6 +9,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import Cell from '../Cell';
 import { useStore } from '../../store';
+import { CellType } from '../../types';
 
 const Wrapper = styled.div`
   padding: 0.6em;
@@ -29,7 +30,7 @@ const Notebook: FunctionComponent = () => {
   const selected = project?.selected;
 
   const handleSelectCell = (index: number) => {
-    console.log('handleSelectCell', index);
+    console.log('TODO handleSelectCell', index);
   };
 
   let content;
@@ -37,7 +38,7 @@ const Notebook: FunctionComponent = () => {
     const notebook = project.files[selected];
     content = (
       <>
-        {notebook.cells.map((cell, index) => (
+        {notebook.cells.map((cell: CellType, index: number) => (
           <Cell key={cell.id} selected={index === selected} onClick={() => handleSelectCell(index)}>
             {cell.raw}
           </Cell>

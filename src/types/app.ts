@@ -23,6 +23,7 @@ export interface CellType {
 }
 
 export interface NotebookType {
+  id: string;
   title?: string;
   name?: string;
   folder?: string;

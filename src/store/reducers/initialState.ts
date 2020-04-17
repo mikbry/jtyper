@@ -13,6 +13,7 @@ const initialState: StateType = {
     selected: 0,
     files: [
       {
+        id: 'dfggf',
         name: 'Home',
         cells: [
           { raw: '# Header', id: 'a' },

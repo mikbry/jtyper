@@ -12,14 +12,17 @@ import store, { getInitialState } from './store';
 import { StateType, ActionType } from '../types';
 
 const StoreProvider: FunctionComponent<{}> = ({ children }) => {
-  const [state, dispatch] = useReducer((prevState: StateType, action: ActionType) => {
-    const func = store.reducers[action.type];
-    if (func) {
-      const newState = func(prevState, action);
-      return { ...prevState, ...newState };
-    }
-    return prevState;
-  }, getInitialState());
+  const memoizedReducer = React.useCallback(
+    (prevState: StateType, action: ActionType) => {
+      const func = store.reducers[action.type];
+      if (func) {
+        return func(prevState, action);
+      }
+      return null;
+    },
+    [getInitialState()],
+  );
+  const [state, dispatch] = useReducer(memoizedReducer, getInitialState());
 
   const { Provider } = context;
   const props = { value: { ...state, dispatch } };
