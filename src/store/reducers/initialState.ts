@@ -15,6 +15,7 @@ const initialState: StateType = {
       {
         id: 'dfggf',
         name: 'Home',
+        readOnly: true,
         cells: [
           { raw: '# Header', id: 'a' },
           { raw: 'lorem ipsum', id: 'b' },

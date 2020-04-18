@@ -15,27 +15,35 @@ const Button = styled.button`
   background: transparent;
   border: 0px;
   margin: 3px;
-  color: ${props => props.theme.palette.surface};
+  color: ${props => (props.disabled ? props.theme.palette.disabled : props.theme.palette.surface)};
   cursor: pointer;
   & > svg {
     width: ${props => props.theme.spacing.iconSize}px;
     height: ${props => props.theme.spacing.iconSize}px;
   }
   &:hover {
-    color: white;
+    color: ${props => (props.disabled ? props.theme.palette.disabled : 'white')};
   }
 `;
 
 interface IconButtonProps {
   icon: StyledIcon;
+  disabled?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const IconButton: FunctionComponent<IconButtonProps> = ({ icon: Icon, onClick, children }) => (
-  <Button onClick={onClick}>
-    <Icon />
-    {children && <span>{children}</span>}
-  </Button>
-);
+const onDummy = () => {
+  /* */
+};
+
+const IconButton: FunctionComponent<IconButtonProps> = ({ icon: Icon, disabled = false, onClick, children }) => {
+  const onC = disabled ? onDummy : onClick;
+  return (
+    <Button onClick={onC} disabled={disabled}>
+      <Icon />
+      {children && <span>{children}</span>}
+    </Button>
+  );
+};
 
 export default IconButton;
