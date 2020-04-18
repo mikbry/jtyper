@@ -20,34 +20,8 @@ import { Stop2 } from '@styled-icons/icomoon//Stop2';
 import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
 
-/*
-import { Save } from '@styled-icons/boxicons-regular/Save';
-import { Plus } from '@styled-icons/boxicons-regular/Plus';
-import { Cut } from '@styled-icons/boxicons-regular/Cut';
-import { Copy } from '@styled-icons/boxicons-regular/Copy';
-import { Paste } from '@styled-icons/boxicons-regular/Paste';
-import { UpArrowAlt } from '@styled-icons/boxicons-regular/UpArrowAlt';
-import { DownArrowAlt } from '@styled-icons/boxicons-regular/DownArrowAlt';
-import { SkipNext } from '@styled-icons/boxicons-regular/SkipNext';
-import { Stop } from '@styled-icons/boxicons-regular/Stop';
-import { Reset } from '@styled-icons/boxicons-regular/Reset';
-import { FastForward } from '@styled-icons/boxicons-regular/FastForward';
-*/
-
-/*
-import { Save } from '@styled-icons/feather/Save';
-import { Plus } from '@styled-icons/feather/Plus';
-import { Scissors } from '@styled-icons/feather/Scissors';
-import { Copy } from '@styled-icons/feather/Copy';
-import { Clipboard } from '@styled-icons/feather/Clipboard';
-import { ArrowUp } from '@styled-icons/feather/ArrowUp';
-import { ArrowDown } from '@styled-icons/feather/ArrowDown';
-import { SkipForward } from '@styled-icons/feather/SkipForward';
-import { Square } from '@styled-icons/feather/Square';
-import { RotateCw } from '@styled-icons/feather/RotateCw';
-import { FastForward } from '@styled-icons/feather/FastForward';
-*/
-
+import { useStore, useActions } from '../../store';
+import { getCurrentNotebook } from '../../store/selectors';
 import IconButton from '../IconButton';
 
 const Styled = styled.div`
@@ -63,33 +37,52 @@ const Bar = styled.div`
 `;
 
 const Toolbar: FunctionComponent = () => {
+  const { project } = useStore();
+  const { createCell } = useActions();
   const handleSave = () => {
     // TODO
+    console.log('TODO handleSave');
   };
+  const handleCreate = () => {
+    // TODO
+    createCell();
+  };
+  const notebook = getCurrentNotebook(project);
+  let editDiabled = true;
+  let navDisabled = true;
+  let runDisabled = true;
+  if (notebook) {
+    const { readOnly } = notebook;
+    editDiabled = !!readOnly;
+    // TODO
+    navDisabled = false;
+    runDisabled = false;
+  }
+
   return (
     <Styled>
       <Bar>
-        <IconButton icon={FloppyDisk} onClick={handleSave} />
+        <IconButton icon={FloppyDisk} disabled={editDiabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={Plus} onClick={handleSave} />
+        <IconButton icon={Plus} disabled={editDiabled} onClick={handleCreate} />
       </Bar>
       <Bar>
-        <IconButton icon={Scissors} onClick={handleSave} />
-        <IconButton icon={Copy} onClick={handleSave} />
-        <IconButton icon={Paste} onClick={handleSave} />
+        <IconButton icon={Scissors} disabled={editDiabled} onClick={handleSave} />
+        <IconButton icon={Copy} disabled={editDiabled} onClick={handleSave} />
+        <IconButton icon={Paste} disabled={editDiabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={ArrowUp} onClick={handleSave} />
-        <IconButton icon={ArrowDown} onClick={handleSave} />
+        <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleSave} />
+        <IconButton icon={ArrowDown} disabled={navDisabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={Next2} onClick={handleSave}>
+        <IconButton icon={Next2} disabled={runDisabled} onClick={handleSave}>
           Run
         </IconButton>
-        <IconButton icon={Stop2} onClick={handleSave} />
-        <IconButton icon={History} onClick={handleSave} />
-        <IconButton icon={Forward3} onClick={handleSave} />
+        <IconButton icon={Stop2} disabled={runDisabled} onClick={handleSave} />
+        <IconButton icon={History} disabled={runDisabled} onClick={handleSave} />
+        <IconButton icon={Forward3} disabled={runDisabled} onClick={handleSave} />
       </Bar>
     </Styled>
   );

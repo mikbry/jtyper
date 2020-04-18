@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { SetStateAction, Dispatch } from 'react';
-import { NotebookType, ProjectType, CellType, CellTypeEnum, CodeEnum } from './app';
+import { NotebookType, ProjectType, CellType, CellFormatEnum, CodeEnum } from './app';
 
 export interface ContextType extends StateType {
   dispatch: Dispatch<SetStateAction<ContextType>>; // (action: ActionType) => void;
@@ -31,4 +31,4 @@ export interface ReducerType {
   [key: string]: Function;
 }
 
-export { NotebookType, ProjectType, CellType, CellTypeEnum, CodeEnum };
+export { NotebookType, ProjectType, CellType, CellFormatEnum, CodeEnum };

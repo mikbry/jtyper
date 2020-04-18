@@ -10,14 +10,14 @@ export enum CodeEnum {
   'typescript',
 }
 
-export enum CellTypeEnum {
+export enum CellFormatEnum {
   'markdown',
   'code',
   'raw',
 }
 
 export interface CellType {
-  type?: CellTypeEnum;
+  format?: CellFormatEnum;
   id: string;
   raw: string;
 }

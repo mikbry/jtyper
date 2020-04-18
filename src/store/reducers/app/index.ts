@@ -7,7 +7,8 @@
  */
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
-import { StateType, ProjectType, NotebookType } from '../../../types';
+import { StateType, ProjectType, NotebookType, CellFormatEnum, CellType } from '../../../types';
+import { getCurrentNotebook } from '../../selectors';
 
 const generateId = () =>
   Math.random()
@@ -48,6 +49,18 @@ const handlers = {
     project.selected = files.length;
     files.push(notebook);
     return { ...state, project };
+  },
+  [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormatEnum }) => {
+    const { project } = state;
+    const notebook = getCurrentNotebook(project);
+    if (notebook) {
+      const { raw = '', format } = action;
+      notebook.selectedCell = notebook.cells.length;
+      const cell: CellType = { id: generateId(), raw, format };
+      notebook.cells.push(cell);
+      return { ...state, project };
+    }
+    return state;
   },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
