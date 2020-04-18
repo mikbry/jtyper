@@ -8,7 +8,8 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import Cell from '../Cell';
-import { useStore } from '../../store';
+import { useStore, useActions } from '../../store';
+import { getCurrentNotebook } from '../../store/selectors';
 import { CellType } from '../../types';
 
 const Wrapper = styled.div`
@@ -27,19 +28,27 @@ const NoContent = styled.div`
 
 const Notebook: FunctionComponent = () => {
   const { project } = useStore();
-  const selected = project?.selected;
-
-  const handleSelectCell = (index: number) => {
-    console.log('TODO handleSelectCell', index);
+  const { selectCell } = useActions();
+  const handleSelectCell = (selected: number) => {
+    selectCell({ selected });
   };
 
   let content;
-  if (project && selected !== undefined) {
-    const notebook = project.files[selected];
+  const notebook = getCurrentNotebook(project);
+  if (notebook) {
+    const { selectedCell = -1 } = notebook;
+    const { readOnly } = notebook;
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
-          <Cell key={cell.id} selected={index === selected} onClick={() => handleSelectCell(index)}>
+          <Cell
+            key={cell.id}
+            editable={!readOnly}
+            selected={index === selectedCell}
+            onClick={() => {
+              if (!readOnly) handleSelectCell(index);
+            }}
+          >
             {cell.raw}
           </Cell>
         ))}

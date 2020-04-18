@@ -71,12 +71,12 @@ const handlers = {
     const { selected } = action;
     const { project } = state;
     const { files } = project;
-    if (selected !== undefined && project.selected) {
-      let notebook = files[project.selected];
+    let notebook = getCurrentNotebook(project);
+    if (notebook && project.selected !== undefined) {
       notebook = { ...notebook, selectedCell: selected };
       files[project.selected] = notebook;
     }
-    return { ...state, project: { files } };
+    return { ...state, project: { ...project, files } };
   },
 };
 

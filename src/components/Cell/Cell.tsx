@@ -10,6 +10,7 @@ import styled, { DefaultTheme } from 'styled-components';
 
 interface Props {
   selected?: boolean;
+  editable?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
@@ -24,14 +25,15 @@ const Styled = styled.div`
   margin: 0;
   padding: 0.6em;
   width: auto;
-  border: 1px solid ${(props: StyledProps) => props.theme.palette.background};
+  border: 1px solid
+    ${(props: StyledProps) => (props.selected ? props.theme.palette.secondary : props.theme.palette.background)};
 
   &:not(:last-child) {
     margin-bottom: 1.2em;
   }
 
   &:hover {
-    border: 1px solid ${props => props.theme.palette.surface};
+    border: 1px solid ${props => (props.editable ? props.theme.palette.surface : props.theme.palette.background)};
   }
 
   &:focus {
@@ -39,9 +41,11 @@ const Styled = styled.div`
   }
 `;
 
-const Cell: FunctionComponent<Props> = ({ selected, children, onClick }) => (
+const Cell: FunctionComponent<Props> = ({ selected = false, editable = false, children, onClick }) => (
   <Styled
     role='button'
+    selected={selected}
+    editable={editable}
     onKeyPress={() => {
       /* TODO */
     }}
