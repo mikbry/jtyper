@@ -7,8 +7,8 @@
  */
 
 import { createContext } from 'react';
-import { ContextType } from '../types';
+import { LocalContextType } from '../types';
 
-const context = createContext<Partial<ContextType>>({});
+const context = createContext<Partial<LocalContextType>>({});
 
 export default context;

@@ -5,20 +5,20 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { SetStateAction, Dispatch } from 'react';
-import { NotebookType, ProjectType, CellType, CellFormatEnum, CodeEnum } from './app';
+import { Dispatch } from 'react';
+import { NotebookType, DocumentType, CellType, CellFormatEnum, CodeEnum, EditorType } from './app';
 
-export interface ContextType extends StateType {
-  dispatch: Dispatch<SetStateAction<ContextType>>; // (action: ActionType) => void;
+export interface LocalContextType extends StateType {
+  dispatch: Dispatch<ActionType>;
 }
 
 export interface StateType {
-  // TODO
-  project: ProjectType;
+  document: DocumentType;
+  files: Array<NotebookType>;
+  editor: EditorType;
 }
 
 export interface ActionType {
-  // TODO
   type: string;
   payload: {};
 }
@@ -31,4 +31,4 @@ export interface ReducerType {
   [key: string]: Function;
 }
 
-export { NotebookType, ProjectType, CellType, CellFormatEnum, CodeEnum };
+export { NotebookType, EditorType, DocumentType, CellType, CellFormatEnum, CodeEnum };

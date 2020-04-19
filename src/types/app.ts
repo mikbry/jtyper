@@ -32,11 +32,14 @@ export interface NotebookType {
   localStorage?: boolean;
   cells: Array<CellType>;
   run?: Array<number>;
-  selectedCell?: number;
 }
 
-export interface ProjectType {
+export interface DocumentType {
   title: string;
-  files: Array<NotebookType>;
+  author?: string;
+}
+
+export interface EditorType {
   selected?: number;
+  selectedCell?: number;
 }

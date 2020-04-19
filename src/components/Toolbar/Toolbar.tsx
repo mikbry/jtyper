@@ -37,26 +37,33 @@ const Bar = styled.div`
 `;
 
 const Toolbar: FunctionComponent = () => {
-  const { project } = useStore();
-  const { createCell } = useActions();
+  const { editor, files } = useStore();
+  const { createCell, selectCell } = useActions();
+  const { selectedCell } = editor;
   const handleSave = () => {
     // TODO
     console.log('TODO handleSave');
   };
   const handleCreate = () => {
-    // TODO
     createCell();
   };
-  const notebook = getCurrentNotebook(project);
+  const handleUp = () => {
+    const selected = selectedCell === undefined ? 0 : selectedCell - 1;
+    selectCell({ selected });
+  };
+  const handleDown = () => {
+    const selected = selectedCell === undefined ? 0 : selectedCell + 1;
+    selectCell({ selected });
+  };
+  const notebook = getCurrentNotebook(editor, files);
   let editDiabled = true;
   let navDisabled = true;
   let runDisabled = true;
   if (notebook) {
     const { readOnly } = notebook;
     editDiabled = !!readOnly;
-    // TODO
-    navDisabled = false;
-    runDisabled = false;
+    navDisabled = !!readOnly; // Not working for runnable cells
+    runDisabled = false; // TODO
   }
 
   return (
@@ -73,8 +80,8 @@ const Toolbar: FunctionComponent = () => {
         <IconButton icon={Paste} disabled={editDiabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleSave} />
-        <IconButton icon={ArrowDown} disabled={navDisabled} onClick={handleSave} />
+        <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleUp} />
+        <IconButton icon={ArrowDown} disabled={navDisabled} onClick={handleDown} />
       </Bar>
       <Bar>
         <IconButton icon={Next2} disabled={runDisabled} onClick={handleSave}>

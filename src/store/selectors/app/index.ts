@@ -5,12 +5,12 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ProjectType, NotebookType } from '../../../types';
+import { EditorType, NotebookType } from '../../../types';
 
-export const getCurrentNotebook = (project: ProjectType | undefined): NotebookType | undefined => {
+export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType | undefined => {
   let notebook;
-  if (project && project.selected !== undefined) {
-    notebook = project.files[project.selected];
+  if (editor.selected !== undefined) {
+    notebook = files[editor.selected];
   }
   return notebook;
 };

@@ -39,7 +39,7 @@ const Bar = styled.div`
 `;
 
 const Explorer: FunctionComponent = () => {
-  const { project } = useStore();
+  const { files, editor } = useStore();
   const { createNotebook, selectFile } = useActions();
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -57,7 +57,7 @@ const Explorer: FunctionComponent = () => {
     event.preventDefault();
     selectFile({ selected });
   };
-  const selected = project?.selected;
+  const selected = editor.selected;
   return (
     <Wrapper>
       <Bar>
@@ -68,12 +68,11 @@ const Explorer: FunctionComponent = () => {
           <IconButton icon={Bin} onClick={handleDelete} />
         </div>
       </Bar>
-      {project &&
-        project.files.map((file: NotebookType, index: number) => (
-          <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
-            {file.name || file.title}
-          </Item>
-        ))}
+      {files?.map((file: NotebookType, index: number) => (
+        <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
+          {file.name || file.title}
+        </Item>
+      ))}
     </Wrapper>
   );
 };

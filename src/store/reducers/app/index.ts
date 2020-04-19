@@ -7,7 +7,7 @@
  */
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
-import { StateType, ProjectType, NotebookType, CellFormatEnum, CellType } from '../../../types';
+import { StateType, NotebookType, CellFormatEnum, CellType } from '../../../types';
 import { getCurrentNotebook } from '../../selectors';
 
 const generateId = () =>
@@ -16,21 +16,28 @@ const generateId = () =>
     .substr(2, 9);
 
 const handlers = {
-  [INITIALIZE + DONE]: (state: StateType, action: { project: ProjectType }) => {
-    let { project } = action;
-    if (!project) {
-      ({ project } = state);
+  [INITIALIZE + DONE]: (state: StateType, action: Partial<StateType>) => {
+    let { document } = action;
+    if (!document) {
+      ({ document } = state);
     }
-    return { ...state, project, init: true };
+    let { files } = action;
+    if (!files) {
+      ({ files } = state);
+    }
+    let { editor } = action;
+    if (!editor) {
+      ({ editor } = state);
+    }
+    return { ...state, document, files, editor, init: true };
   },
   [APP.SETTITLE + DONE]: (state: StateType, action: { title: string }) => {
     const { title } = action;
-    return { ...state, project: { title } };
+    return { ...state, document: { ...document, title } };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: { title: string }) => {
     let { title } = action;
-    const { project } = state;
-    const { files } = project;
+    const { files, editor } = state;
     if (!title) {
       title = 'Notebook';
       let i = 1;
@@ -46,37 +53,41 @@ const handlers = {
       cells: [{ id: generateId(), raw: `# ${title}` }],
       localStorage: true,
     };
-    project.selected = files.length;
+    editor.selected = files.length;
     files.push(notebook);
-    return { ...state, project };
+    return { ...state, files, editor };
   },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormatEnum }) => {
-    const { project } = state;
-    const notebook = getCurrentNotebook(project);
+    const { files, editor } = state;
+    const notebook = getCurrentNotebook(editor, files);
     if (notebook) {
       const { raw = '', format } = action;
-      notebook.selectedCell = notebook.cells.length;
+      editor.selectedCell = notebook.cells.length;
       const cell: CellType = { id: generateId(), raw, format };
       notebook.cells.push(cell);
-      return { ...state, project };
+      return { ...state, files };
     }
     return state;
   },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
-    const { project } = state;
-    return { ...state, project: { ...project, selected } };
+    const { editor } = state;
+    return { ...state, editor: { ...editor, selected, selectedCell: undefined } };
   },
   [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
-    const { project } = state;
-    const { files } = project;
-    let notebook = getCurrentNotebook(project);
-    if (notebook && project.selected !== undefined) {
-      notebook = { ...notebook, selectedCell: selected };
-      files[project.selected] = notebook;
+    const { files, editor } = state;
+    let selectedCell;
+    const notebook = getCurrentNotebook(editor, files);
+    const length = notebook?.cells.length || 0;
+    if (selected < 0 && length) {
+      selectedCell = length - 1;
+    } else if (selected >= length && length) {
+      selectedCell = 0;
+    } else if (length) {
+      selectedCell = selected;
     }
-    return { ...state, project: { ...project, files } };
+    return { ...state, editor: { ...editor, selectedCell } };
   },
 };
 
