@@ -35,24 +35,34 @@ const handlers = {
     const { title } = action;
     return { ...state, document: { ...document, title } };
   },
-  [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: { title: string }) => {
-    let { title } = action;
+  [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
+    let { title = 'Notebook', cells } = action;
     const { files, editor } = state;
-    if (!title) {
-      title = 'Notebook';
-      let i = 1;
-      const it = (f: NotebookType) => f.title === title || f.name === title;
-      while (files.findIndex(it) !== -1) {
-        title = `Notebook${i}`;
-        i += 1;
-      }
+    let i = 1;
+    let it = (f: NotebookType) => f.title === title;
+    while (files.findIndex(it) !== -1) {
+      title = `Notebook${i}`;
+      i += 1;
+    }
+    if (cells) {
+      cells = cells.map(cell => ({ ...cell, id: generateId() }));
+    } else {
+      cells = [{ id: generateId(), raw: `# ${title}` }];
     }
     const notebook: NotebookType = {
       id: generateId(),
       title,
-      cells: [{ id: generateId(), raw: `# ${title}` }],
+      cells,
       localStorage: true,
     };
+    if (action.name) {
+      notebook.name = action.name;
+      it = (f: NotebookType) => f.name === notebook.name;
+      while (files.findIndex(it) !== -1) {
+        notebook.name = `Notebook${i}`;
+        i += 1;
+      }
+    }
     editor.selected = files.length;
     files.push(notebook);
     return { ...state, files, editor };
