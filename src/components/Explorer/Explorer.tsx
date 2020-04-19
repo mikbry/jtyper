@@ -14,6 +14,7 @@ import { Bin } from '@styled-icons/icomoon/Bin';
 import { useStore, useActions } from '../../store';
 import IconButton from '../IconButton';
 import Item from '../Item';
+import { getCurrentNotebook } from '../../store/selectors';
 import { NotebookType } from '../../types';
 
 const Wrapper = styled.div`
@@ -46,8 +47,8 @@ const Explorer: FunctionComponent = () => {
     createNotebook();
   };
   const handleDuplicate = () => {
-    // TODO
-    console.log('TODO handleDuplicate');
+    const notebook = getCurrentNotebook(editor, files);
+    createNotebook(notebook);
   };
   const handleDelete = () => {
     // TODO
@@ -57,15 +58,15 @@ const Explorer: FunctionComponent = () => {
     event.preventDefault();
     selectFile({ selected });
   };
-  const selected = editor.selected;
+  const { selected } = editor;
   return (
     <Wrapper>
       <Bar>
         Files
         <div>
           <IconButton icon={FileText2} onClick={handleCreate} />
-          <IconButton icon={Copy} onClick={handleDuplicate} />
-          <IconButton icon={Bin} onClick={handleDelete} />
+          <IconButton icon={Copy} disabled={selected === undefined} onClick={handleDuplicate} />
+          <IconButton icon={Bin} disabled={selected === undefined} onClick={handleDelete} />
         </div>
       </Bar>
       {files?.map((file: NotebookType, index: number) => (

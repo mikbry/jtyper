@@ -40,6 +40,7 @@ const Toolbar: FunctionComponent = () => {
   const { editor, files } = useStore();
   const { createCell, selectCell } = useActions();
   const { selectedCell } = editor;
+  const notebook = getCurrentNotebook(editor, files);
   const handleSave = () => {
     // TODO
     console.log('TODO handleSave');
@@ -55,7 +56,6 @@ const Toolbar: FunctionComponent = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
     selectCell({ selected });
   };
-  const notebook = getCurrentNotebook(editor, files);
   let editDiabled = true;
   let navDisabled = true;
   let runDisabled = true;

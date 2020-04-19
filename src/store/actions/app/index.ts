@@ -21,10 +21,9 @@ const setTitle = async (action: any, _prevState: StateType, dispatch: Function /
 };
 
 const createNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
-  const { title } = action;
   // TODO store project (selected, selectedCell) and new notebook
   // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
-  dispatch({ type: APP.CREATENOTEBOOK + DONE, title });
+  dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
 };
 
 const selectFile = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
