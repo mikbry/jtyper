@@ -42,4 +42,5 @@ export interface DocumentType {
 export interface EditorType {
   selected?: number;
   selectedCell?: number;
+  readOnly?: boolean;
 }

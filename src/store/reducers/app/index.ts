@@ -67,6 +67,18 @@ const handlers = {
     files.push(notebook);
     return { ...state, files, editor };
   },
+  [APP.DELETENOTEBOOK + DONE]: (state: StateType, action: { index: number }) => {
+    const { index } = action;
+    const { files, editor } = state;
+    files.splice(index, 1);
+    editor.selectedCell = undefined;
+    if (files.length === 0) {
+      editor.selected = undefined;
+    } else if (editor.selected && editor.selected >= files.length) {
+      editor.selected = files.length - 1;
+    }
+    return { ...state, files, editor };
+  },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormatEnum }) => {
     const { files, editor } = state;
     const notebook = getCurrentNotebook(editor, files);
