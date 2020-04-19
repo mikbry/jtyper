@@ -8,7 +8,8 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import Cell from '../Cell';
-import { useStore } from '../../store';
+import { useStore, useActions } from '../../store';
+import { getCurrentNotebook } from '../../store/selectors';
 import { CellType } from '../../types';
 
 const Wrapper = styled.div`
@@ -34,13 +35,21 @@ const Notebook: FunctionComponent = () => {
   };
 
   let content;
-  if (editor && selected !== undefined) {
-    const notebook = files[selected];
-    const selectedCell = editor.selectedCell;
+  const notebook = getCurrentNotebook(editor, files);
+  if (notebook) {
+    const { selectedCell = -1 } = notebook;
+    const { readOnly } = notebook;
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
-          <Cell key={cell.id} selected={index === selectedCell} onClick={() => handleSelectCell(index)}>
+          <Cell
+            key={cell.id}
+            editable={!readOnly}
+            selected={index === selectedCell}
+            onClick={() => {
+              if (!readOnly) handleSelectCell(index);
+            }}
+          >
             {cell.raw}
           </Cell>
         ))}
