@@ -37,17 +37,22 @@ const Bar = styled.div`
 `;
 
 const Toolbar: FunctionComponent = () => {
-  const { project } = useStore();
-  const { createCell } = useActions();
+  const { editor, files } = useStore();
+  const { createCell, selectCell } = useActions();
   const handleSave = () => {
     // TODO
     console.log('TODO handleSave');
   };
   const handleCreate = () => {
-    // TODO
     createCell();
   };
-  const notebook = getCurrentNotebook(project);
+  const handleUp = () => {
+    selectCell(0);
+  };
+  const handleDown = () => {
+    selectCell(0);
+  };
+  const notebook = getCurrentNotebook(editor, files);
   let editDiabled = true;
   let navDisabled = true;
   let runDisabled = true;
@@ -73,8 +78,8 @@ const Toolbar: FunctionComponent = () => {
         <IconButton icon={Paste} disabled={editDiabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleSave} />
-        <IconButton icon={ArrowDown} disabled={navDisabled} onClick={handleSave} />
+        <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleUp} />
+        <IconButton icon={ArrowDown} disabled={navDisabled} onClick={handleDown} />
       </Bar>
       <Bar>
         <IconButton icon={Next2} disabled={runDisabled} onClick={handleSave}>

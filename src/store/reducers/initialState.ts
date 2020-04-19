@@ -8,21 +8,23 @@
 import { StateType } from '../../types';
 
 const initialState: StateType = {
-  project: {
+  document: {
     title: 'project',
+  },
+  files: [
+    {
+      id: 'dfggf',
+      name: 'Home',
+      readOnly: true,
+      cells: [
+        { raw: '# Header', id: 'a' },
+        { raw: 'lorem ipsum', id: 'b' },
+        { raw: `print('hellow world !')`, id: 'c' },
+      ],
+    },
+  ],
+  editor: {
     selected: 0,
-    files: [
-      {
-        id: 'dfggf',
-        name: 'Home',
-        readOnly: true,
-        cells: [
-          { raw: '# Header', id: 'a' },
-          { raw: 'lorem ipsum', id: 'b' },
-          { raw: `print('hellow world !')`, id: 'c' },
-        ],
-      },
-    ],
   },
 };
 

@@ -42,11 +42,11 @@ const Icon = styled(Book)`
 `;
 
 const Header: FunctionComponent = () => {
-  const { project } = useStore();
+  const { document: project } = useStore();
   return (
     <Styled>
       <Icon />
-      jtyper : {project?.title || 'undefined'}
+      jtyper : {project.title}
       <Toolbar />
     </Styled>
   );

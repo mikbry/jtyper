@@ -26,20 +26,21 @@ const NoContent = styled.div`
 `;
 
 const Notebook: FunctionComponent = () => {
-  const { project } = useStore();
-  const selected = project?.selected;
+  const { editor, files } = useStore();
+  const selected = editor.selected;
 
   const handleSelectCell = (index: number) => {
     console.log('TODO handleSelectCell', index);
   };
 
   let content;
-  if (project && selected !== undefined) {
-    const notebook = project.files[selected];
+  if (editor && selected !== undefined) {
+    const notebook = files[selected];
+    const selectedCell = editor.selectedCell;
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
-          <Cell key={cell.id} selected={index === selected} onClick={() => handleSelectCell(index)}>
+          <Cell key={cell.id} selected={index === selectedCell} onClick={() => handleSelectCell(index)}>
             {cell.raw}
           </Cell>
         ))}
