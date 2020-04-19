@@ -26,6 +26,13 @@ const createNotebook = async (action: any, _prevState: StateType, dispatch: Func
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
 };
 
+const deleteNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+  const { index } = action;
+  // TODO store project (selected, selectedCell) and new notebook
+  // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
+  dispatch({ type: APP.DELETENOTEBOOK + DONE, index });
+};
+
 const selectFile = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { selected } = action;
   // TODO store project
@@ -50,6 +57,7 @@ const selectCell = async (action: any, _prevState: StateType, dispatch: Function
 const auth = {
   [INITIALIZE]: { init },
   [APP.CREATENOTEBOOK]: { createNotebook },
+  [APP.DELETENOTEBOOK]: { deleteNotebook },
   [APP.SETTITLE]: { setTitle },
   [APP.CREATECELL]: { createCell },
   [APP.SELECTFILE]: { selectFile },

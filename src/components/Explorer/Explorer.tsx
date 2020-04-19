@@ -41,18 +41,17 @@ const Bar = styled.div`
 
 const Explorer: FunctionComponent = () => {
   const { files, editor } = useStore();
-  const { createNotebook, selectFile } = useActions();
+  const { createNotebook, deleteNotebook, selectFile } = useActions();
+  const notebook = getCurrentNotebook(editor, files);
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     createNotebook();
   };
   const handleDuplicate = () => {
-    const notebook = getCurrentNotebook(editor, files);
     createNotebook(notebook);
   };
   const handleDelete = () => {
-    // TODO
-    console.log('TODO handleDelete');
+    deleteNotebook({ index: editor.selected });
   };
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();
@@ -66,7 +65,11 @@ const Explorer: FunctionComponent = () => {
         <div>
           <IconButton icon={FileText2} onClick={handleCreate} />
           <IconButton icon={Copy} disabled={selected === undefined} onClick={handleDuplicate} />
-          <IconButton icon={Bin} disabled={selected === undefined} onClick={handleDelete} />
+          <IconButton
+            icon={Bin}
+            disabled={notebook ? notebook.readOnly || selected === undefined : selected === undefined}
+            onClick={handleDelete}
+          />
         </div>
       </Bar>
       {files?.map((file: NotebookType, index: number) => (
