@@ -39,6 +39,7 @@ const Bar = styled.div`
 const Toolbar: FunctionComponent = () => {
   const { editor, files } = useStore();
   const { createCell, selectCell } = useActions();
+  const { selectedCell } = editor;
   const handleSave = () => {
     // TODO
     console.log('TODO handleSave');
@@ -47,10 +48,12 @@ const Toolbar: FunctionComponent = () => {
     createCell();
   };
   const handleUp = () => {
-    selectCell(0);
+    const selected = selectedCell === undefined ? 0 : selectedCell - 1;
+    selectCell({ selected });
   };
   const handleDown = () => {
-    selectCell(0);
+    const selected = selectedCell === undefined ? 0 : selectedCell + 1;
+    selectCell({ selected });
   };
   const notebook = getCurrentNotebook(editor, files);
   let editDiabled = true;
@@ -59,9 +62,8 @@ const Toolbar: FunctionComponent = () => {
   if (notebook) {
     const { readOnly } = notebook;
     editDiabled = !!readOnly;
-    // TODO
-    navDisabled = false;
-    runDisabled = false;
+    navDisabled = !!readOnly; // Not working for runnable cells
+    runDisabled = false; // TODO
   }
 
   return (

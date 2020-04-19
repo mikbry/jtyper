@@ -78,18 +78,15 @@ const handlers = {
     const { selected } = action;
     const { files, editor } = state;
     let selectedCell;
-    if (selected !== undefined && editor.selected) {
-      const notebook = getCurrentNotebook(editor, files);
-      const length = notebook?.cells.length || 0;
-      if (selected < 0 && length) {
-        selectedCell = length - 1;
-      } else if (selected > length && length) {
-        selectedCell = 0;
-      } else if (length) {
-        selectedCell = selected;
-      }
+    const notebook = getCurrentNotebook(editor, files);
+    const length = notebook?.cells.length || 0;
+    if (selected < 0 && length) {
+      selectedCell = length - 1;
+    } else if (selected >= length && length) {
+      selectedCell = 0;
+    } else if (length) {
+      selectedCell = selected;
     }
-    console.log('selectedCell=', selectedCell);
     return { ...state, editor: { ...editor, selectedCell } };
   },
 };
