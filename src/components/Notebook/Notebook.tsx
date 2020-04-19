@@ -28,16 +28,15 @@ const NoContent = styled.div`
 
 const Notebook: FunctionComponent = () => {
   const { editor, files } = useStore();
-  const selected = editor.selected;
-
-  const handleSelectCell = (index: number) => {
-    console.log('TODO handleSelectCell', index);
+  const { selectCell } = useActions();
+  const handleSelectCell = (selected: number) => {
+    selectCell({ selected });
   };
 
   let content;
   const notebook = getCurrentNotebook(editor, files);
   if (notebook) {
-    const { selectedCell = -1 } = notebook;
+    const { selectedCell = -1 } = editor;
     const { readOnly } = notebook;
     content = (
       <>

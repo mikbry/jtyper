@@ -72,7 +72,7 @@ const handlers = {
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
     const { editor } = state;
-    return { ...state, editor: { ...editor, selected } };
+    return { ...state, editor: { ...editor, selected, selectedCell: undefined } };
   },
   [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
