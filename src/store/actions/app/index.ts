@@ -47,6 +47,12 @@ const createCell = async (action: any, _prevState: StateType, dispatch: Function
   dispatch({ type: APP.CREATECELL + DONE, cellType: type });
 };
 
+const updateCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+  // TODO store editor (selectedCell), and current notebook
+  // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
+  dispatch({ ...action, type: APP.UPDATECELL + DONE });
+};
+
 const selectCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { selected } = action;
   // TODO store editor
@@ -80,6 +86,7 @@ const app: ActionsType = {
   [APP.DELETENOTEBOOK]: { deleteNotebook },
   [APP.SETTITLE]: { setTitle },
   [APP.CREATECELL]: { createCell },
+  [APP.UPDATECELL]: { updateCell },
   [APP.SELECTFILE]: { selectFile },
   [APP.SELECTCELL]: { selectCell },
   [APP.CUT]: { cut },
