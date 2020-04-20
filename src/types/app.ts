@@ -43,4 +43,5 @@ export interface EditorType {
   selected?: number;
   selectedCell?: number;
   readOnly?: boolean;
+  copyBuffer?: Partial<CellType>;
 }

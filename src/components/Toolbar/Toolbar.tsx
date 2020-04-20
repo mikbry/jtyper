@@ -38,15 +38,29 @@ const Bar = styled.div`
 
 const Toolbar: FunctionComponent = () => {
   const { editor, files } = useStore();
-  const { createCell, selectCell } = useActions();
+  const { createCell, selectCell, cut, copy, paste } = useActions();
   const { selectedCell } = editor;
   const notebook = getCurrentNotebook(editor, files);
   const handleSave = () => {
     // TODO
-    console.log('TODO handleSave');
   };
   const handleCreate = () => {
     createCell();
+  };
+  const handleCut = () => {
+    if (notebook && selectedCell !== undefined) {
+      const cell = notebook.cells[selectedCell];
+      cut({ cell, selected: selectedCell });
+    }
+  };
+  const handleCopy = () => {
+    if (notebook && selectedCell !== undefined) {
+      const cell = notebook.cells[selectedCell];
+      copy({ cell });
+    }
+  };
+  const handlePaste = () => {
+    paste();
   };
   const handleUp = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell - 1;
@@ -56,12 +70,12 @@ const Toolbar: FunctionComponent = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
     selectCell({ selected });
   };
-  let editDiabled = true;
+  let editDisabled = true;
   let navDisabled = true;
   let runDisabled = true;
   if (notebook) {
     const { readOnly } = notebook;
-    editDiabled = !!readOnly;
+    editDisabled = !!readOnly;
     navDisabled = !!readOnly; // Not working for runnable cells
     runDisabled = false; // TODO
   }
@@ -69,15 +83,15 @@ const Toolbar: FunctionComponent = () => {
   return (
     <Styled>
       <Bar>
-        <IconButton icon={FloppyDisk} disabled={editDiabled} onClick={handleSave} />
+        <IconButton icon={FloppyDisk} disabled={editDisabled} onClick={handleSave} />
       </Bar>
       <Bar>
-        <IconButton icon={Plus} disabled={editDiabled} onClick={handleCreate} />
+        <IconButton icon={Plus} disabled={editDisabled} onClick={handleCreate} />
       </Bar>
       <Bar>
-        <IconButton icon={Scissors} disabled={editDiabled} onClick={handleSave} />
-        <IconButton icon={Copy} disabled={editDiabled} onClick={handleSave} />
-        <IconButton icon={Paste} disabled={editDiabled} onClick={handleSave} />
+        <IconButton icon={Scissors} disabled={editDisabled || selectedCell === undefined} onClick={handleCut} />
+        <IconButton icon={Copy} disabled={editDisabled || selectedCell === undefined} onClick={handleCopy} />
+        <IconButton icon={Paste} disabled={editDisabled || editor.copyBuffer === undefined} onClick={handlePaste} />
       </Bar>
       <Bar>
         <IconButton icon={ArrowUp} disabled={navDisabled} onClick={handleUp} />

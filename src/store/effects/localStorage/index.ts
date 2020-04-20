@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, INITIALIZE, DONE } from '../../../constants';
+import { ActionsType } from '../../../types';
 
 const get = async ({ name }: any) => {
   const raw = window.localStorage.getItem(name) || '{}';
@@ -24,6 +25,10 @@ const set = async ({ name, ...data }: any) => {
   }
 };
 
-const auth = { [INITIALIZE]: { get }, [APP.SETTITLE + DONE]: { set }, [APP.SELECTFILE + DONE]: { set } };
+const storage: ActionsType = {
+  [INITIALIZE]: { get },
+  [APP.SETTITLE + DONE]: { set },
+  [APP.SELECTFILE + DONE]: { set },
+};
 
-export default auth;
+export default storage;
