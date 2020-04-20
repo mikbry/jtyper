@@ -7,6 +7,7 @@
  */
 import React, { KeyboardEvent, FunctionComponent, useState, useEffect, useRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
+import Highlighter from '../Highlighter';
 
 interface Props {
   selected?: boolean;
@@ -104,7 +105,7 @@ const Cell: FunctionComponent<Props> = ({
       ref={cellRef}
       suppressContentEditableWarning
     >
-      {value}
+      {selected ? value : <Highlighter value={value} />}
     </Styled>
   );
 };
