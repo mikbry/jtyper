@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, INITIALIZE, DONE } from '../../../constants';
-import { ActionType, StateType } from '../../../types';
+import { ActionType, ActionsType, StateType } from '../../../types';
 
 const init = async (_action: ActionType, _prevState: StateType, dispatch: Function, initEffects: Function) => {
   const { project } = await initEffects(INITIALIZE, { name: 'app' });
@@ -21,40 +21,60 @@ const setTitle = async (action: any, _prevState: StateType, dispatch: Function /
 };
 
 const createNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
-  // TODO store project (selected, selectedCell) and new notebook
+  // TODO store editor (selected, selectedCell) and new notebook
   // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
 };
 
 const deleteNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { index } = action;
-  // TODO store project (selected, selectedCell) and new notebook
+  // TODO store editor (selected, selectedCell) and new notebook
   // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
   dispatch({ type: APP.DELETENOTEBOOK + DONE, index });
 };
 
 const selectFile = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { selected } = action;
-  // TODO store project
+  // TODO store editor
   // await initEffects(APP.SELECTFILE + DONE, { name: 'app' });
   dispatch({ type: APP.SELECTFILE + DONE, selected });
 };
 
 const createCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { type } = action;
-  // TODO store project (selectedCell), and current notebook
+  // TODO store editor (selectedCell), and current notebook
   // await initEffects(APP.CREATENOTEBOOK, { name: 'app', title });
   dispatch({ type: APP.CREATECELL + DONE, cellType: type });
 };
 
 const selectCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
   const { selected } = action;
-  // TODO store project
+  // TODO store editor
   // await initEffects(APP.SELECTCELL + DONE, { name: 'app' });
   dispatch({ type: APP.SELECTCELL + DONE, selected });
 };
 
-const auth = {
+const cut = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+  const { selected, cell } = action;
+  // TODO store editor, files
+  // await initEffects(APP.SELECTCELL + DONE, { name: 'app' });
+  dispatch({ type: APP.COPY + DONE, selected, cell });
+};
+
+const copy = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+  const { cell } = action;
+  // TODO store editor
+  // await initEffects(APP.SELECTCELL + DONE, { name: 'app' });
+  dispatch({ type: APP.COPY + DONE, cell });
+};
+
+const paste = async (_action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+  // TODO store editor, files
+  // await initEffects(APP.SELECTCELL + DONE, { name: 'app' });
+  dispatch({ type: APP.PASTE + DONE });
+};
+
+const app: ActionsType = {
   [INITIALIZE]: { init },
   [APP.CREATENOTEBOOK]: { createNotebook },
   [APP.DELETENOTEBOOK]: { deleteNotebook },
@@ -62,6 +82,9 @@ const auth = {
   [APP.CREATECELL]: { createCell },
   [APP.SELECTFILE]: { selectFile },
   [APP.SELECTCELL]: { selectCell },
+  [APP.CUT]: { cut },
+  [APP.COPY]: { copy },
+  [APP.PASTE]: { paste },
 };
 
-export default auth;
+export default app;

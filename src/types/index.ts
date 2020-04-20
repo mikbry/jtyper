@@ -31,4 +31,8 @@ export interface ReducerType {
   [key: string]: Function;
 }
 
+export type ActionsType = Record<string, Record<string, Function>>;
+export type ActionnablesType = Record<string, Function>;
+export type EffectsType = Array<{ name: string; type: string; func: Function }>;
+
 export { NotebookType, EditorType, DocumentType, CellType, CellFormatEnum, CodeEnum };

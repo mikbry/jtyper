@@ -14,3 +14,15 @@ export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType
   }
   return notebook;
 };
+
+export const validateSelectedCell = (selected: number, length: number): number | undefined => {
+  let selectedCell;
+  if (selected < 0 && length) {
+    selectedCell = length - 1;
+  } else if (selected >= length && length) {
+    selectedCell = 0;
+  } else if (length) {
+    selectedCell = selected;
+  }
+  return selectedCell;
+};

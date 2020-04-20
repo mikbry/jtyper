@@ -8,7 +8,7 @@
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormatEnum, CellType } from '../../../types';
-import { getCurrentNotebook } from '../../selectors';
+import { getCurrentNotebook, validateSelectedCell } from '../../selectors';
 
 const generateId = () =>
   Math.random()
@@ -99,17 +99,35 @@ const handlers = {
   [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
     const { files, editor } = state;
-    let selectedCell;
+
     const notebook = getCurrentNotebook(editor, files);
     const length = notebook?.cells.length || 0;
-    if (selected < 0 && length) {
-      selectedCell = length - 1;
-    } else if (selected >= length && length) {
-      selectedCell = 0;
-    } else if (length) {
-      selectedCell = selected;
-    }
+    const selectedCell = validateSelectedCell(selected, length);
     return { ...state, editor: { ...editor, selectedCell } };
+  },
+  [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
+    const { selected, cell } = action;
+    const { files, editor } = state;
+    let { selectedCell } = editor;
+    const notebook = getCurrentNotebook(editor, files);
+    if (notebook && selected !== undefined) {
+      // Cut selected
+      notebook.cells.splice(selected, 1);
+      const length = notebook?.cells.length || 0;
+      selectedCell = validateSelectedCell(selected, length);
+    }
+    const copyBuffer = { format: cell.format, raw: cell.raw };
+    return { ...state, editor: { ...editor, selectedCell, copyBuffer }, files };
+  },
+  [APP.PASTE + DONE]: (state: StateType) => {
+    const { files, editor } = state;
+    const { selectedCell = 0 } = editor;
+    const notebook = getCurrentNotebook(editor, files);
+    if (notebook && editor.copyBuffer) {
+      const cell: CellType = { id: generateId(), raw: editor.copyBuffer.raw || '', format: editor.copyBuffer.format };
+      notebook.cells.splice(selectedCell, 0, cell);
+    }
+    return { ...state, editor: { ...editor, selectedCell }, files };
   },
 };
 

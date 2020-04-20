@@ -6,10 +6,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { combineEffects } from '../combine';
-import auth from './localStorage';
+import storage from './localStorage';
 
 export default () => {
-  const effects: any = combineEffects(auth, null);
+  const effects: any = combineEffects(storage, []);
   return effects;
 };
 

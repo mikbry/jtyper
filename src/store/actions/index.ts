@@ -9,6 +9,6 @@ import { combineActions } from '../combine';
 import app from './app';
 
 export default () => {
-  const actions = combineActions(app, null);
+  const actions = combineActions(app, {});
   return actions;
 };
