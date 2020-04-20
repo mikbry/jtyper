@@ -28,13 +28,19 @@ const NoContent = styled.div`
 
 const Notebook: FunctionComponent = () => {
   const { editor, files } = useStore();
-  const { selectCell } = useActions();
+  const { selectCell, updateCell } = useActions();
   const handleSelectCell = (selected: number) => {
     selectCell({ selected });
   };
+  const notebook = getCurrentNotebook(editor, files);
+  const handleCellChange = (index: number, value: string) => {
+    if (notebook) {
+      const cell = { ...notebook.cells[index], raw: value };
+      updateCell(cell);
+    }
+  };
 
   let content;
-  const notebook = getCurrentNotebook(editor, files);
   if (notebook) {
     const { selectedCell = -1 } = editor;
     const { readOnly } = notebook;
@@ -43,14 +49,16 @@ const Notebook: FunctionComponent = () => {
         {notebook.cells.map((cell: CellType, index: number) => (
           <Cell
             key={cell.id}
+            value={cell.raw}
             editable={!readOnly}
             selected={index === selectedCell}
+            onChange={value => {
+              if (!readOnly) handleCellChange(index, value);
+            }}
             onClick={() => {
               if (!readOnly) handleSelectCell(index);
             }}
-          >
-            {cell.raw}
-          </Cell>
+          />
         ))}
       </>
     );
@@ -61,4 +69,5 @@ const Notebook: FunctionComponent = () => {
 
   return <Wrapper>{content}</Wrapper>;
 };
+
 export default Notebook;

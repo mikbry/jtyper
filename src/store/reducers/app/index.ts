@@ -8,7 +8,7 @@
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormatEnum, CellType } from '../../../types';
-import { getCurrentNotebook, validateSelectedCell } from '../../selectors';
+import { getCurrentNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
 
 const generateId = () =>
   Math.random()
@@ -87,6 +87,17 @@ const handlers = {
       editor.selectedCell = notebook.cells.length;
       const cell: CellType = { id: generateId(), raw, format };
       notebook.cells.push(cell);
+      return { ...state, files };
+    }
+    return state;
+  },
+  [APP.UPDATECELL + DONE]: (state: StateType, action: CellType) => {
+    const { files, editor } = state;
+    const notebook = getCurrentNotebook(editor, files);
+    const cell = getNotebookCell(action.id, notebook);
+    if (cell) {
+      cell.raw = action.raw;
+      cell.format = action.format;
       return { ...state, files };
     }
     return state;

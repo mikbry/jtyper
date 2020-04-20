@@ -5,13 +5,15 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { FunctionComponent } from 'react';
+import React, { KeyboardEvent, FunctionComponent, useState, useEffect, useRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 interface Props {
   selected?: boolean;
   editable?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
+  onChange?: (value: string) => void;
+  value?: string;
 }
 
 interface StyledProps extends Props {
@@ -41,20 +43,70 @@ const Styled = styled.div`
   }
 `;
 
-const Cell: FunctionComponent<Props> = ({ selected = false, editable = false, children, onClick }) => (
-  <Styled
-    role='button'
-    selected={selected}
-    editable={editable}
-    onKeyPress={() => {
-      /* TODO */
-    }}
-    onClick={onClick}
-    tabIndex={0}
-    selecting={selected}
-  >
-    {children}
-  </Styled>
-);
+const Cell: FunctionComponent<Props> = ({
+  selected = false,
+  editable = false,
+  value = '',
+  onClick,
+  onChange = () => {
+    /* */
+  },
+}) => {
+  // const [cellValue, setCellValue] = useState(value);
+  const [editMode, setEditMode] = useState(false);
+  const prevVal = useRef<string>();
+  const cellRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    // setCell
+  }, []);
+  const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    // TODO
+    e.preventDefault();
+    if (editable) {
+      setEditMode(true);
+      if (cellRef.current) {
+        prevVal.current = cellRef.current.innerText;
+      }
+    }
+    onClick(e);
+  };
+  const handleBlur = () => {
+    if (cellRef.current) onChange(cellRef.current.innerText);
+  };
+  const handleKey = (e: KeyboardEvent) => {
+    // TODO
+    if (editMode) {
+      const { keyCode } = e;
+      if (keyCode === 27) {
+        setEditMode(false);
+        if (cellRef.current) onChange(cellRef.current.innerText);
+      } else {
+        return;
+      }
+      e.preventDefault();
+    }
+  };
+  const handleInput = () => {
+    // if (cellRef.current) setCellValue(cellRef.current.innerText);
+  };
+  return (
+    <Styled
+      role='button'
+      selected={selected}
+      editable={editable}
+      onInput={handleInput}
+      onClick={handleClick}
+      onKeyDown={handleKey}
+      onBlur={handleBlur}
+      tabIndex={0}
+      selecting={selected}
+      contentEditable={editMode}
+      ref={cellRef}
+      suppressContentEditableWarning
+    >
+      {value}
+    </Styled>
+  );
+};
 
 export default Cell;
