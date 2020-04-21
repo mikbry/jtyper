@@ -5,30 +5,35 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { APP, INITIALIZE, DONE } from '../../../constants';
+import { APP, INITIALIZE, FETCH } from '../../../constants';
 import { ActionsType } from '../../../types';
 
-const get = async ({ name }: any) => {
-  const raw = window.localStorage.getItem(name) || '{}';
-  const data = JSON.parse(raw);
+const get = async ({ name, defaultValue }: any) => {
+  const raw = window.localStorage.getItem(name) || undefined;
+  let data = defaultValue;
+  if (raw) {
+    data = JSON.parse(raw);
+  }
   // TODO check data
   return data;
 };
 
-const set = async ({ name, ...data }: any) => {
-  if (Object.keys(data).length === 0) {
-    window.localStorage.removeItem(name);
-  } else {
-    const json = JSON.stringify(data);
-    // TODO check json
-    window.localStorage.setItem(name, json);
-  }
+const set = async (data: any) => {
+  const names = Object.keys(data);
+  names.forEach(name => {
+    if (!data[name]) {
+      window.localStorage.removeItem(name);
+    } else {
+      const json = JSON.stringify(data[name]);
+      // TODO check json
+      window.localStorage.setItem(name, json);
+    }
+  });
 };
 
 const storage: ActionsType = {
   [INITIALIZE]: { get },
-  [APP.SETTITLE + DONE]: { set },
-  [APP.SELECTFILE + DONE]: { set },
+  [APP.LOCALSAVE + FETCH]: { set },
 };
 
 export default storage;

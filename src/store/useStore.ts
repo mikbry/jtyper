@@ -23,8 +23,8 @@ const useStore = (): LocalContextType => {
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   };
-  const { document = { title: 'noname' }, files = [], editor = {} } = state;
-  return { document, files, editor, dispatch };
+  const { document = { title: 'noname' }, files = [], editor = {}, saved } = state;
+  return { document, files, editor, saved, dispatch };
 };
 
 export default useStore;
