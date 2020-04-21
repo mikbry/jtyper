@@ -9,6 +9,7 @@ export const INITIALIZE = 'INITIAL_STATE';
 
 export const REQUEST = ':REQUEST';
 export const DONE = ':DONE';
+export const FETCH = ':FETCH';
 
 export const APP = {
   INIT: 'APP_INIT',
@@ -23,4 +24,5 @@ export const APP = {
   CUT: 'APP_CUT',
   COPY: 'APP_COPY',
   PASTE: 'APP_PASTE',
+  LOCALSAVE: 'APP_LOCALSAVE',
 };

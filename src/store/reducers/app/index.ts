@@ -29,11 +29,11 @@ const handlers = {
     if (!editor) {
       ({ editor } = state);
     }
-    return { ...state, document, files, editor, init: true };
+    return { ...state, document, files, editor, init: true, saved: true };
   },
   [APP.SETTITLE + DONE]: (state: StateType, action: { title: string }) => {
     const { title } = action;
-    return { ...state, document: { ...document, title } };
+    return { ...state, document: { ...document, title }, saved: false };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     let { title = 'Notebook', cells } = action;
@@ -65,7 +65,7 @@ const handlers = {
     }
     editor.selected = files.length;
     files.push(notebook);
-    return { ...state, files, editor };
+    return { ...state, files, editor, saved: false };
   },
   [APP.DELETENOTEBOOK + DONE]: (state: StateType, action: { index: number }) => {
     const { index } = action;
@@ -77,7 +77,7 @@ const handlers = {
     } else if (editor.selected && editor.selected >= files.length) {
       editor.selected = files.length - 1;
     }
-    return { ...state, files, editor };
+    return { ...state, files, editor, saved: false };
   },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormatEnum }) => {
     const { files, editor } = state;
@@ -87,7 +87,7 @@ const handlers = {
       editor.selectedCell = notebook.cells.length;
       const cell: CellType = { id: generateId(), raw, format };
       notebook.cells.push(cell);
-      return { ...state, files };
+      return { ...state, files, saved: false };
     }
     return state;
   },
@@ -98,14 +98,14 @@ const handlers = {
     if (cell) {
       cell.raw = action.raw;
       cell.format = action.format;
-      return { ...state, files };
+      return { ...state, files, saved: false };
     }
     return state;
   },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
     const { editor } = state;
-    return { ...state, editor: { ...editor, selected, selectedCell: undefined } };
+    return { ...state, editor: { ...editor, selected, selectedCell: undefined }, saved: false };
   },
   [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
@@ -114,7 +114,7 @@ const handlers = {
     const notebook = getCurrentNotebook(editor, files);
     const length = notebook?.cells.length || 0;
     const selectedCell = validateSelectedCell(selected, length);
-    return { ...state, editor: { ...editor, selectedCell } };
+    return { ...state, editor: { ...editor, selectedCell }, saved: false };
   },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
     const { selected, cell } = action;
@@ -128,7 +128,7 @@ const handlers = {
       selectedCell = validateSelectedCell(selected, length);
     }
     const copyBuffer = { format: cell.format, raw: cell.raw };
-    return { ...state, editor: { ...editor, selectedCell, copyBuffer }, files };
+    return { ...state, editor: { ...editor, selectedCell, copyBuffer }, files, saved: false };
   },
   [APP.PASTE + DONE]: (state: StateType) => {
     const { files, editor } = state;
@@ -138,8 +138,9 @@ const handlers = {
       const cell: CellType = { id: generateId(), raw: editor.copyBuffer.raw || '', format: editor.copyBuffer.format };
       notebook.cells.splice(selectedCell, 0, cell);
     }
-    return { ...state, editor: { ...editor, selectedCell }, files };
+    return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
   },
+  [APP.LOCALSAVE + DONE]: (state: StateType) => ({ ...state, saved: true }),
 };
 
 export default handlers;

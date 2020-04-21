@@ -37,12 +37,12 @@ const Bar = styled.div`
 `;
 
 const Toolbar: FunctionComponent = () => {
-  const { editor, files } = useStore();
-  const { createCell, selectCell, cut, copy, paste } = useActions();
+  const { editor, files, saved } = useStore();
+  const { save, createCell, selectCell, cut, copy, paste } = useActions();
   const { selectedCell } = editor;
   const notebook = getCurrentNotebook(editor, files);
   const handleSave = () => {
-    // TODO
+    save();
   };
   const handleCreate = () => {
     createCell();
@@ -83,7 +83,7 @@ const Toolbar: FunctionComponent = () => {
   return (
     <Styled>
       <Bar>
-        <IconButton icon={FloppyDisk} disabled={editDisabled} onClick={handleSave} />
+        <IconButton icon={FloppyDisk} disabled={saved} onClick={handleSave} />
       </Bar>
       <Bar>
         <IconButton icon={Plus} disabled={editDisabled} onClick={handleCreate} />

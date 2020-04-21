@@ -16,6 +16,7 @@ export interface StateType {
   document: DocumentType;
   files: Array<NotebookType>;
   editor: EditorType;
+  saved?: boolean;
 }
 
 export interface ActionType {
