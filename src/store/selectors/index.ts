@@ -6,6 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { getCurrentNotebook, validateSelectedCell, getNotebookCell } from './app';
+import { getCurrentNotebook, validateSelectedCell, getNotebookCell, getCurrentCell } from './app';
 
-export { getCurrentNotebook, validateSelectedCell, getNotebookCell };
+export { getCurrentNotebook, validateSelectedCell, getNotebookCell, getCurrentCell };

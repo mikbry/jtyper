@@ -21,9 +21,9 @@ import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
 
 import { useStore, useActions } from '../../store';
-import { getCurrentNotebook } from '../../store/selectors';
+import { getCurrentNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
-import Select from '../Select';
+import Select, { OptionType } from '../Select';
 
 const Styled = styled.div`
   margin-left: auto;
@@ -37,11 +37,17 @@ const Bar = styled.div`
   border: 1px solid ${props => props.theme.palette.group};
 `;
 
+const StyledSelect = styled(Select)`
+  min-width: 76px;
+  width: 76px;
+`;
+
 const Toolbar: FunctionComponent = () => {
   const { editor, files, saved } = useStore();
-  const { save, createCell, selectCell, cut, copy, paste } = useActions();
+  const { save, createCell, updateCell, selectCell, cut, copy, paste } = useActions();
   const { selectedCell } = editor;
   const notebook = getCurrentNotebook(editor, files);
+  const cell = getCurrentCell(editor, notebook);
   const handleSave = () => {
     save();
   };
@@ -49,14 +55,12 @@ const Toolbar: FunctionComponent = () => {
     createCell();
   };
   const handleCut = () => {
-    if (notebook && selectedCell !== undefined) {
-      const cell = notebook.cells[selectedCell];
+    if (cell) {
       cut({ cell, selected: selectedCell });
     }
   };
   const handleCopy = () => {
-    if (notebook && selectedCell !== undefined) {
-      const cell = notebook.cells[selectedCell];
+    if (cell) {
       copy({ cell });
     }
   };
@@ -71,8 +75,8 @@ const Toolbar: FunctionComponent = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
     selectCell({ selected });
   };
-  const handleFormatChange = (value: string) => {
-    console.log('TODO handleFormatChange', value);
+  const handleFormatChange = (format: string) => {
+    updateCell({ ...cell, format });
   };
   let editDisabled = true;
   let navDisabled = true;
@@ -83,11 +87,17 @@ const Toolbar: FunctionComponent = () => {
     navDisabled = !!readOnly; // Not working for runnable cells
     runDisabled = false; // TODO
   }
-  const options = [
-    { key: 'o1', value: 'markdown', selected: true },
+  const options: Array<OptionType> = [
+    { key: 'o1', value: 'markdown' },
     { key: 'o2', value: 'code' },
     { key: 'o3', value: 'raw' },
   ];
+  if (cell && cell.format) {
+    const option = options.find(o => o.value === cell.format);
+    if (option) option.selected = true;
+  }
+  let selectPlaceholder = 'No format';
+  if (selectedCell === undefined) selectPlaceholder = 'No selection';
   return (
     <Styled>
       <Bar>
@@ -113,7 +123,12 @@ const Toolbar: FunctionComponent = () => {
         <IconButton icon={History} disabled={runDisabled} onClick={handleSave} />
         <IconButton icon={Forward3} disabled={runDisabled} onClick={handleSave} />
       </Bar>
-      <Select options={options} disabled={editDisabled} onChange={handleFormatChange} />
+      <StyledSelect
+        options={options}
+        disabled={editDisabled || selectedCell === undefined}
+        placeholder={selectPlaceholder}
+        onChange={handleFormatChange}
+      />
     </Styled>
   );
 };
