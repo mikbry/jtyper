@@ -23,6 +23,7 @@ import { Forward3 } from '@styled-icons/icomoon/Forward3';
 import { useStore, useActions } from '../../store';
 import { getCurrentNotebook } from '../../store/selectors';
 import IconButton from '../IconButton';
+import Select from '../Select';
 
 const Styled = styled.div`
   margin-left: auto;
@@ -70,6 +71,9 @@ const Toolbar: FunctionComponent = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
     selectCell({ selected });
   };
+  const handleFormatChange = (value: string) => {
+    console.log('TODO handleFormatChange', value);
+  };
   let editDisabled = true;
   let navDisabled = true;
   let runDisabled = true;
@@ -79,7 +83,11 @@ const Toolbar: FunctionComponent = () => {
     navDisabled = !!readOnly; // Not working for runnable cells
     runDisabled = false; // TODO
   }
-
+  const options = [
+    { key: 'o1', value: 'markdown', selected: true },
+    { key: 'o2', value: 'code' },
+    { key: 'o3', value: 'raw' },
+  ];
   return (
     <Styled>
       <Bar>
@@ -105,6 +113,7 @@ const Toolbar: FunctionComponent = () => {
         <IconButton icon={History} disabled={runDisabled} onClick={handleSave} />
         <IconButton icon={Forward3} disabled={runDisabled} onClick={handleSave} />
       </Bar>
+      <Select options={options} disabled={editDisabled} onChange={handleFormatChange} />
     </Styled>
   );
 };
