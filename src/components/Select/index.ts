@@ -6,6 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import Select from './Select';
+import Select, { OptionType } from './Select';
+
+export { OptionType };
 
 export default Select;

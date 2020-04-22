@@ -7,7 +7,7 @@
  */
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
-import { StateType, NotebookType, CellFormatEnum, CellType } from '../../../types';
+import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
 import { getCurrentNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
 
 const generateId = () =>
@@ -79,7 +79,7 @@ const handlers = {
     }
     return { ...state, files, editor, saved: false };
   },
-  [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormatEnum }) => {
+  [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormat }) => {
     const { files, editor } = state;
     const notebook = getCurrentNotebook(editor, files);
     if (notebook) {

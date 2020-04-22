@@ -8,7 +8,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
-type Option = {
+export type OptionType = {
   key: string;
   value: string;
   selected?: boolean;
@@ -17,7 +17,7 @@ type Option = {
 interface Props {
   disabled?: boolean;
   placeholder?: string;
-  options: Array<Option>;
+  options: Array<OptionType>;
   onChange: Function;
 }
 
@@ -36,10 +36,11 @@ const Wrapper = styled.div`
   font-size: 0.8em;
   height: 36px;
   line-height: 36px;
-  height: 38px;
+  width: 96px;
   display: inline-block;
   cursor: pointer;
   position: relative;
+  text-align: center;
 
   &:hover {
     color: ${props => (props.disabled ? props.theme.palette.surface : 'white')};

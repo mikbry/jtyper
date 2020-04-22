@@ -15,6 +15,15 @@ export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType
   return notebook;
 };
 
+export const getCurrentCell = (editor: EditorType, notebook: NotebookType | undefined): CellType | undefined => {
+  let cell;
+  const { selectedCell } = editor;
+  if (notebook !== undefined && selectedCell !== undefined) {
+    cell = notebook.cells[selectedCell];
+  }
+  return cell;
+};
+
 export const getNotebookCell = (id: string, notebook: NotebookType | undefined): CellType | undefined => {
   let cell;
   if (notebook !== undefined) {
