@@ -17,9 +17,9 @@ const initialState: StateType = {
       name: 'Home',
       readOnly: true,
       cells: [
-        { raw: '# Header', id: 'a' },
+        { raw: '# Header', id: 'a', format: 'markdown' },
         { raw: 'lorem ipsum', id: 'b' },
-        { raw: `print('hellow world !')`, id: 'c' },
+        { raw: `print('hellow world !')`, id: 'c', format: 'code' },
       ],
     },
   ],

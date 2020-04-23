@@ -5426,6 +5426,16 @@ raw-loader@^4.0.0:
     loader-utils "^2.0.0"
     schema-utils "^2.6.5"
 
+react-codemirror-runmode@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-codemirror-runmode/-/react-codemirror-runmode-1.0.5.tgz#a80cd25cb1af4c9c6e9c84861c23165ce29d7111"
+  integrity sha512-6TzbODi0WSllc0VOwOjTpZxE9wUheMMpmBNydzR5o0NbbBLX0j73xutH/o85BTG9NKs06sFEBMvCsRKT6jRz8A==
+
+react-codemirror2@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-7.1.0.tgz#b874a275ad4f6f2ee5adb23b550c0f4b8b82776d"
+  integrity sha512-Rel0QbPnCTjHxgZYt6TkGw4icSZXNyONHb72a+1wWA+PlYJIvzFAv4pZlDPG0rpKpKmy4kSUlkoWgneH7w3A0g==
+
 react-dom@^16.12.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.13.1.tgz#c1bd37331a0486c078ee54c4740720993b2e0e7f"
