@@ -8,6 +8,7 @@
 import React, { FunctionComponent } from 'react';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
 import { UnControlled as CodeMirror2 } from 'react-codemirror2';
 import '../../styles/codemirror/theme/ayu-dark.css';
 import '../../styles/codemirror/codemirror.css';
@@ -25,13 +26,14 @@ const modes: Record<string, string> = {
 };
 const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
   const mode = modes[language];
+  console.log('mode=', mode);
   return (
     <CodeMirror2
       value={value}
       detach
       options={{
-        mode,
         lineNumbers: true,
+        mode,
       }}
       onChange={(_editor, _data, newValue) => {
         if (onChange) onChange(newValue);
