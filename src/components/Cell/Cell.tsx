@@ -29,22 +29,30 @@ const Styled = styled.div`
   width: 100%;
   min-height: 64px;
   margin: 0;
-  padding: 0.6em;
+  padding: 0;
   width: auto;
   border: 1px solid
-    ${(props: StyledProps) => (props.selected ? props.theme.palette.secondary : props.theme.palette.background)};
+    ${(props: StyledProps) => (props.selected ? props.theme.palette.surface : props.theme.palette.notebook)};
 
   &:not(:last-child) {
     margin-bottom: 1.2em;
   }
 
   &:hover {
-    border: 1px solid ${props => (props.editable ? props.theme.palette.surface : props.theme.palette.background)};
+    border: 1px solid ${props => (props.editable ? props.theme.palette.secondary : props.theme.palette.notebook)};
   }
 
   &:focus {
     outline: none !important;
   }
+
+  & > span {
+    padding: 0.6em;
+  }
+`;
+
+const RawContent = styled.div`
+  padding: 0.6em;
 `;
 
 const Cell: FunctionComponent<Props> = ({
@@ -86,7 +94,8 @@ const Cell: FunctionComponent<Props> = ({
         <CodeHighlighter value={value} />
       );
   } else {
-    content = selected && editable ? <ContentEditable value={value} onChange={onChange} /> : <>{value}</>;
+    content =
+      selected && editable ? <ContentEditable value={value} onChange={onChange} /> : <RawContent>{value}</RawContent>;
   }
   return (
     <Styled

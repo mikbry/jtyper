@@ -21,7 +21,7 @@ export interface CellType {
 export interface NotebookType {
   id: string;
   title?: string;
-  name?: string;
+  filename?: string;
   folder?: string;
   code?: CodeEnum;
   readOnly?: boolean;

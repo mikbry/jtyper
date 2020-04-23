@@ -7,37 +7,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
+import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import { useStore, useActions } from '../../store';
 import IconButton from '../IconButton';
 import Item from '../Item';
 import { getCurrentNotebook } from '../../store/selectors';
 import { NotebookType } from '../../types';
-
-const Wrapper = styled.div`
-  position: fixed;
-  top: ${props => props.theme.spacing.headerHeight}px;
-  min-width: ${props => props.theme.spacing.explorerWidth}px;
-  min-height: calc(100% - 48px);
-  color: ${props => props.theme.palette.onSurface};
-  background: ${props => props.theme.palette.menu};
-`;
-
-const Bar = styled.div`
-  line-height: 26px;
-  height: 26px;
-  padding: 8px 4px;
-  display: flex;
-  background: ${props => props.theme.palette.primary};
-  border-top: 1px solid ${props => props.theme.palette.divider};
-  border-bottom: 2px solid ${props => props.theme.palette.divider};
-  & > div {
-    margin-left: auto;
-  }
-`;
 
 const Explorer: FunctionComponent = () => {
   const { files, editor } = useStore();
@@ -59,25 +37,29 @@ const Explorer: FunctionComponent = () => {
   };
   const { selected } = editor;
   return (
-    <Wrapper>
-      <Bar>
+    <>
+      <DrawerToolbar>
         Files
         <div>
-          <IconButton icon={FileText2} onClick={handleCreate} />
-          <IconButton icon={Copy} disabled={selected === undefined} onClick={handleDuplicate} />
+          <IconButton size={14} icon={FileText2} onClick={handleCreate} />
+          <IconButton size={14} icon={Copy} disabled={selected === undefined} onClick={handleDuplicate} />
           <IconButton
+            size={14}
             icon={Bin}
             disabled={notebook ? notebook.readOnly || selected === undefined : selected === undefined}
             onClick={handleDelete}
           />
         </div>
-      </Bar>
-      {files?.map((file: NotebookType, index: number) => (
-        <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
-          {file.name || file.title}
-        </Item>
-      ))}
-    </Wrapper>
+      </DrawerToolbar>
+      <li>
+        {files?.map((file: NotebookType, index: number) => (
+          <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
+            {file.title}
+          </Item>
+        ))}
+      </li>
+      <DrawerFooter>JTyper v0.1</DrawerFooter>
+    </>
   );
 };
 export default Explorer;

@@ -17,6 +17,7 @@ export interface StateType {
   files: Array<NotebookType>;
   editor: EditorType;
   saved?: boolean;
+  title?: string;
 }
 
 export interface ActionType {

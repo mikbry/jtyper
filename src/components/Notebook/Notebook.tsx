@@ -13,11 +13,10 @@ import { getCurrentNotebook } from '../../store/selectors';
 import { CellType } from '../../types';
 
 const Wrapper = styled.div`
-  padding: 0.6em;
   margin: 0.6em;
   width: 50vw;
-  background-color: white;
-  height: calc(100% - 48px);
+  background-color: ${props => props.theme.palette.notebook};
+  height: calc(100% - ${props => props.theme.spacing.headerHeight}px);
 `;
 
 const NoContent = styled.div`

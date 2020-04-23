@@ -18,26 +18,24 @@ interface StyledProps extends Props {
   theme: DefaultTheme;
 }
 
-const Styled = styled.div`
+const Styled = styled.ul`
   width: 100%;
   min-height: 24px;
   line-height: 24px;
   margin: 0;
   padding: 0.6em;
   width: auto;
-  color: ${(props: StyledProps) => (props.selecting ? props.theme.palette.selected : props.theme.palette.onSurface)};
+  color: ${(props: StyledProps) => (props.selecting ? props.theme.palette.onSelected : props.theme.palette.onSurface)};
+  background: ${(props: StyledProps) => (props.selecting ? props.theme.palette.selected : 'inherit')};
   border-top: 1px solid ${props => props.theme.palette.menu};
   border-bottom: 1px solid ${props => props.theme.palette.menu};
   cursor: pointer;
 
-  &:not(:last-child) {
-    margin-bottom: 1.2em;
-  }
-
   &:hover {
-    border-top: 1px solid ${props => props.theme.palette.onPrimary};
-    border-bottom: 1px solid ${props => props.theme.palette.onPrimary};
-    color: ${props => props.theme.palette.onPrimary};
+    border-top: 1px solid ${props => props.theme.palette.menu};
+    border-bottom: 1px solid ${props => props.theme.palette.menu};
+    background: ${props => props.theme.palette.hover};
+    color: ${props => props.theme.palette.onHover};
   }
 
   &:focus {
