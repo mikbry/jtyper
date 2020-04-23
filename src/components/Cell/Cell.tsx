@@ -5,9 +5,11 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { KeyboardEvent, FunctionComponent, useState, useEffect, useRef } from 'react';
+import React, { /* KeyboardEvent, */ FunctionComponent, /* useState, */ useEffect, useRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
+import { CodeHighlighter, Editor } from '../CodeMirror';
+import ContentEditable from '../ContentEditable';
 
 interface Props {
   selected?: boolean;
@@ -15,6 +17,7 @@ interface Props {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange?: (value: string) => void;
   value?: string;
+  format?: string;
 }
 
 interface StyledProps extends Props {
@@ -48,64 +51,58 @@ const Cell: FunctionComponent<Props> = ({
   selected = false,
   editable = false,
   value = '',
+  format = undefined,
   onClick,
   onChange = () => {
     /* */
   },
 }) => {
-  // const [cellValue, setCellValue] = useState(value);
-  const [editMode, setEditMode] = useState(false);
-  const prevVal = useRef<string>();
   const cellRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     // setCell
   }, []);
-  const handleClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    // TODO
-    e.preventDefault();
-    if (editable) {
-      setEditMode(true);
-      if (cellRef.current) {
-        prevVal.current = cellRef.current.innerText;
-      }
-    }
-    onClick(e);
-  };
   const handleBlur = () => {
-    if (cellRef.current) onChange(cellRef.current.innerText);
+    //  if (cellRef.current) onChange(cellRef.current.innerText);
   };
-  const handleKey = (e: KeyboardEvent) => {
-    // TODO
-    if (editMode) {
-      const { keyCode } = e;
-      if (keyCode === 27) {
-        setEditMode(false);
-        if (cellRef.current) onChange(cellRef.current.innerText);
-      } else {
-        return;
-      }
-      e.preventDefault();
-    }
+  const handleKey = (/* e: KeyboardEvent */) => {
+    //
   };
   const handleInput = () => {
-    // if (cellRef.current) setCellValue(cellRef.current.innerText);
+    //
   };
+  let content = <>{value}</>;
+  if (format === 'markdown') {
+    content =
+      selected && editable ? (
+        <Editor value={value} onChange={onChange} language='javascript' />
+      ) : (
+        <Highlighter value={value} />
+      );
+  } else if (format === 'code') {
+    content =
+      selected && editable ? (
+        <Editor value={value} onChange={onChange} language='markdown' />
+      ) : (
+        <CodeHighlighter value={value} />
+      );
+  } else {
+    content = selected && editable ? <ContentEditable value={value} onChange={onChange} /> : <>{value}</>;
+  }
   return (
     <Styled
       role='button'
       selected={selected}
       editable={editable}
       onInput={handleInput}
-      onClick={handleClick}
+      onClick={onClick}
       onKeyDown={handleKey}
       onBlur={handleBlur}
       tabIndex={0}
       selecting={selected}
-      contentEditable={editMode}
       ref={cellRef}
       suppressContentEditableWarning
     >
-      {selected ? value : <Highlighter value={value} />}
+      {content}
     </Styled>
   );
 };
