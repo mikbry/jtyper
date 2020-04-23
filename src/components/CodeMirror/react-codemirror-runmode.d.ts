@@ -3,12 +3,12 @@
 declare module 'react-codemirror-runmode' {
   export interface HighlighterProps {
     value: string;
-    codeMirror: any;
+    codeMirror: object;
     theme: string;
     language: string;
   }
 
-  function Highlighter(props): React.FC<HighlighterProps, any>;
+  function Highlighter(props): React.FC<HighlighterProps, React.ElementType>;
 
   export default Highlighter;
 }
