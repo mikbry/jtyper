@@ -16,6 +16,7 @@ interface Props {
 const Styled = styled.div`
   width: 100%;
   min-height: 64px;
+  padding: 0.6em;
 `;
 
 const Cell: FunctionComponent<Props> = ({

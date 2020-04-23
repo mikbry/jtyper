@@ -21,7 +21,6 @@ type Props = {
 
 const CodeHighlighter: FunctionComponent<Props> = ({ value }) => (
   <Highlighter
-    style={{ margin: '0', minHeight: '64px', height: '100%' }}
     className='CodeMirror cm-s-default jtyper-code'
     codeMirror={CodeMirror}
     theme='ayu-dark'

@@ -11,7 +11,9 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { StoreProvider } from './store';
 import Page from './components/Page';
+import AppBar from './components/AppBar';
 import Header from './components/Header';
+import Drawer from './components/Drawer';
 import Explorer from './components/Explorer';
 import Container from './components/Container';
 import Notebook from './components/Notebook';
@@ -24,9 +26,12 @@ const Wrapper = styled.div`
 const App: FunctionComponent = () => (
   <StoreProvider>
     <Page>
-      <Header />
+      <AppBar />
       <Wrapper>
-        <Explorer />
+        <Drawer>
+          <Header />
+          <Explorer />
+        </Drawer>
         <Container>
           <Notebook />
         </Container>

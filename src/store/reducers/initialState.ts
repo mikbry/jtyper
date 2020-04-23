@@ -14,7 +14,7 @@ const initialState: StateType = {
   files: [
     {
       id: 'dfggf',
-      name: 'Home',
+      title: 'Home',
       readOnly: true,
       cells: [
         { raw: '# Header', id: 'a', format: 'markdown' },

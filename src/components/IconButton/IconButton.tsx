@@ -6,20 +6,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import { StyledIcon } from '@styled-icons/styled-icon';
+
+type StyleProps = {
+  size?: number;
+  theme: DefaultTheme;
+};
 
 const Button = styled.button`
   height: ${props => props.theme.spacing.iconSize}px;
   line-height: 1;
   background: transparent;
   border: 0px;
-  margin: 3px;
   color: ${props => (props.disabled ? props.theme.palette.disabled : props.theme.palette.surface)};
   cursor: pointer;
   & > svg {
-    width: ${props => props.theme.spacing.iconSize}px;
-    height: ${props => props.theme.spacing.iconSize}px;
+    width: ${(props: StyleProps) => props.size || props.theme.spacing.iconSize}px;
+    height: ${(props: StyleProps) => props.size || props.theme.spacing.iconSize}px;
   }
   &:hover {
     color: ${props => (props.disabled ? props.theme.palette.disabled : 'white')};
@@ -28,6 +32,7 @@ const Button = styled.button`
 
 interface IconButtonProps {
   icon: StyledIcon;
+  size?: number;
   disabled?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
@@ -36,10 +41,10 @@ const onDummy = () => {
   /* */
 };
 
-const IconButton: FunctionComponent<IconButtonProps> = ({ icon: Icon, disabled = false, onClick, children }) => {
+const IconButton: FunctionComponent<IconButtonProps> = ({ icon: Icon, size, disabled = false, onClick, children }) => {
   const onC = disabled ? onDummy : onClick;
   return (
-    <Button onClick={onC} disabled={disabled}>
+    <Button onClick={onC} disabled={disabled} size={size}>
       <Icon />
       {children && <span>{children}</span>}
     </Button>

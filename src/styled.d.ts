@@ -20,13 +20,18 @@ declare module 'styled-components' {
       divider: string;
       group: string;
       selected: string;
+      onSelected: string;
+      hover: string;
+      onHover: string;
       disabled: string;
+      notebook: string;
     };
     fontFamily: string;
     spacing: {
       headerHeight: number;
-      explorerWidth: number;
+      drawerWidth: number;
       iconSize: number;
+      fullHeightDrawer?: boolean;
     };
   }
 }

@@ -9,31 +9,15 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Book } from '@styled-icons/icomoon/Book';
 import { useStore } from '../../store';
-import Toolbar from '../Toolbar';
 
 const Styled = styled.header`
-  position: fixed;
-  z-index: 3;
-  width: 100%;
+  width: {props.theme.spacing.drawerWidth}px;
+  padding-left: 0.6em;
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
   line-height: ${props => props.theme.spacing.headerHeight}px;
-  background: ${props => props.theme.palette.primary};
-  min-height: ${props => props.theme.spacing.headerHeight}px;
-  padding-left: 0.6em;
-  padding-right: 0.3em;
-  display: flex;
-  & > button {
-    align-self: flex-end;
-    line-height: 24px;
-  }
-  & > h6 {
-    color: white;
-    flex-grow: 1;
-    margin: 0;
-    padding: 0;
-    text-align: left;
-  }
+  min-height: ${props => props.theme.spacing.headerHeight * 2}px;
+  border-bottom: 1px solid ${props => props.theme.palette.divider};
 `;
 
 const Icon = styled(Book)`
@@ -42,12 +26,11 @@ const Icon = styled(Book)`
 `;
 
 const Header: FunctionComponent = () => {
-  const { document: project } = useStore();
+  const { document } = useStore();
   return (
     <Styled>
       <Icon />
-      jtyper : {project.title}
-      <Toolbar />
+      {document.title}
     </Styled>
   );
 };

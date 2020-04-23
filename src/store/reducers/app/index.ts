@@ -21,6 +21,7 @@ const handlers = {
     if (!document) {
       ({ document } = state);
     }
+    // TODO merge files
     let { files } = action;
     if (!files) {
       ({ files } = state);
@@ -29,17 +30,19 @@ const handlers = {
     if (!editor) {
       ({ editor } = state);
     }
-    return { ...state, document, files, editor, init: true, saved: true };
+    const notebook = getCurrentNotebook(editor, files);
+    const title = notebook?.title || '';
+    return { ...state, document, files, editor, init: true, saved: true, title };
   },
   [APP.SETTITLE + DONE]: (state: StateType, action: { title: string }) => {
     const { title } = action;
-    return { ...state, document: { ...document, title }, saved: false };
+    return { ...state, title };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     let { title = 'Notebook', cells } = action;
     const { files, editor } = state;
     let i = 1;
-    let it = (f: NotebookType) => f.title === title;
+    const it = (f: NotebookType) => f.title === title;
     while (files.findIndex(it) !== -1) {
       title = `Notebook${i}`;
       i += 1;
@@ -55,17 +58,9 @@ const handlers = {
       cells,
       localStorage: true,
     };
-    if (action.name) {
-      notebook.name = action.name;
-      it = (f: NotebookType) => f.name === notebook.name;
-      while (files.findIndex(it) !== -1) {
-        notebook.name = `Notebook${i}`;
-        i += 1;
-      }
-    }
     editor.selected = files.length;
     files.push(notebook);
-    return { ...state, files, editor, saved: false };
+    return { ...state, files, editor, saved: false, title };
   },
   [APP.DELETENOTEBOOK + DONE]: (state: StateType, action: { index: number }) => {
     const { index } = action;
@@ -77,7 +72,9 @@ const handlers = {
     } else if (editor.selected && editor.selected >= files.length) {
       editor.selected = files.length - 1;
     }
-    return { ...state, files, editor, saved: false };
+    const notebook = getCurrentNotebook(editor, files);
+    const title = notebook?.title || '';
+    return { ...state, files, editor, saved: false, title };
   },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormat }) => {
     const { files, editor } = state;
@@ -114,7 +111,8 @@ const handlers = {
     const notebook = getCurrentNotebook(editor, files);
     const length = notebook?.cells.length || 0;
     const selectedCell = validateSelectedCell(selected, length);
-    return { ...state, editor: { ...editor, selectedCell }, saved: false };
+    const title = notebook?.title || '';
+    return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
   },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
     const { selected, cell } = action;
