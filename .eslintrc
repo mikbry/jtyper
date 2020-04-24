@@ -36,6 +36,14 @@
     "arrow-body-style": ["error", "as-needed"],
     "import/prefer-default-export": "off",
     "react/prop-types": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.test.{ts,tsx}", "**/*.stories.tsx"],
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ],
     "prettier/prettier": ["error", {
         "trailingComma": "all",
         "singleQuote": true,
