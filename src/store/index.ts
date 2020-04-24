@@ -7,8 +7,7 @@
  */
 
 import StoreProvider from './StoreProvider';
-import useStore from './useStore';
 import useActions from './actions/useActions';
 import { initState } from './store';
 
-export { useStore, useActions, initState, StoreProvider };
+export { useActions, initState, StoreProvider };

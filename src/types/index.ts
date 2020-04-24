@@ -8,16 +8,16 @@
 import { Dispatch } from 'react';
 import { NotebookType, DocumentType, CellType, CellFormat, CodeEnum, EditorType } from './app';
 
-export interface LocalContextType extends StateType {
-  dispatch: Dispatch<ActionType>;
-}
-
 export interface StateType {
   document: DocumentType;
   files: Array<NotebookType>;
   editor: EditorType;
   saved?: boolean;
   title?: string;
+}
+
+export interface LocalContextType extends StateType {
+  dispatch: Dispatch<any>;
 }
 
 export interface ActionType {

@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { combineActionDispatchs } from '../combine';
-import useStore from '../useStore';
+import { useStore } from '../store';
 import app from './app';
 import { ActionnablesType } from '../../types';
 

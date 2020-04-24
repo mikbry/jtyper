@@ -7,10 +7,11 @@
  */
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import Cell from '../Cell';
-import { useStore, useActions } from '../../store';
+import { useActions } from '../../store';
 import { getCurrentNotebook } from '../../store/selectors';
-import { CellType } from '../../types';
+import { CellType, StateType } from '../../types';
 
 const Wrapper = styled.div`
   margin: 0.6em;
@@ -26,7 +27,7 @@ const NoContent = styled.div`
 `;
 
 const Notebook: FunctionComponent = () => {
-  const { editor, files } = useStore();
+  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const { selectCell, updateCell } = useActions();
   const handleSelectCell = (selected: number) => {
     selectCell({ selected });

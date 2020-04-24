@@ -112,6 +112,7 @@ const handlers = {
     const length = notebook?.cells.length || 0;
     const selectedCell = validateSelectedCell(selected, length);
     const title = notebook?.title || '';
+    console.log('selected cell done');
     return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
   },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {

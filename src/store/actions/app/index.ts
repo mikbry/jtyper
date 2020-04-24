@@ -8,74 +8,104 @@
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
 import { ActionType, ActionsType, StateType } from '../../../types';
 
-const init = async (_action: ActionType, _prevState: StateType, dispatch: Function, initEffects: Function) => {
-  const document = await initEffects(INITIALIZE, { name: 'document', defaultValue: undefined });
-  const files = await initEffects(INITIALIZE, { name: 'files', defaultValue: undefined });
-  const editor = await initEffects(INITIALIZE, { name: 'editor', defaultValue: undefined });
-  dispatch({ type: INITIALIZE + DONE, document, files, editor });
+const init = (_action: ActionType, _prevState: StateType, composer: Function) => async () => {
+  const document = await composer(INITIALIZE, { name: 'document', defaultValue: undefined });
+  const files = await composer(INITIALIZE, { name: 'files', defaultValue: undefined });
+  const editor = await composer(INITIALIZE, { name: 'editor', defaultValue: undefined });
+  return { type: INITIALIZE + DONE, document, files, editor };
 };
 
-const setTitle = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const setTitle = (action: any) => {
   const { title } = action;
-  // TODO store project (title)
-  dispatch({ type: APP.SETTITLE + DONE, title });
+  return [{ type: APP.SETTITLE + DONE, title }];
 };
 
-const createNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const createNotebook = (action: any) =>
   // TODO store editor (selected, selectedCell) and new notebook
-  dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
-};
+  [
+    { ...action, type: APP.CREATENOTEBOOK + DONE },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 
-const deleteNotebook = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const deleteNotebook = (action: any) => {
   const { index } = action;
   // TODO store editor (selected, selectedCell) and new notebook
-  dispatch({ type: APP.DELETENOTEBOOK + DONE, index });
+  return [
+    { type: APP.DELETENOTEBOOK + DONE, index },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const selectFile = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const selectFile = (action: any) => {
   const { selected } = action;
   // TODO store editor
-  dispatch({ type: APP.SELECTFILE + DONE, selected });
+  return [
+    { type: APP.SELECTFILE + DONE, selected },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const createCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const createCell = (action: any) => {
   const { type } = action;
   // TODO store editor (selectedCell), and current notebook
-  dispatch({ type: APP.CREATECELL + DONE, cellType: type });
+  return [
+    { type: APP.CREATECELL + DONE, cellType: type },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const updateCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const updateCell = (action: any) =>
   // TODO store editor (selectedCell), and current notebook
-  dispatch({ ...action, type: APP.UPDATECELL + DONE });
-};
+  [
+    { ...action, type: APP.UPDATECELL + DONE },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 
-const selectCell = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const selectCell = (action: any) => {
   const { selected } = action;
   // TODO store editor
-  dispatch({ type: APP.SELECTCELL + DONE, selected });
+  return [
+    { type: APP.SELECTCELL + DONE, selected },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const cut = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const cut = (action: any) => {
   const { selected, cell } = action;
   // TODO store editor, files
-  dispatch({ type: APP.COPY + DONE, selected, cell });
+  return [
+    { type: APP.COPY + DONE, selected, cell },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const copy = async (action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
+const copy = (action: any) => {
   const { cell } = action;
-  // TODO store editor
-  dispatch({ type: APP.COPY + DONE, cell });
+  return [
+    { type: APP.COPY + DONE, cell },
+    { type: APP.LOCALSAVE, editor: true },
+  ];
 };
 
-const paste = async (_action: any, _prevState: StateType, dispatch: Function /* , initEffects: Function */) => {
-  // TODO store editor, files
-  dispatch({ type: APP.PASTE + DONE });
-};
+const paste = () => [{ type: APP.PASTE + DONE }, { type: APP.LOCALSAVE, editor: true }];
 
-const save = async (_action: any, prevState: StateType, dispatch: Function, initEffects: Function) => {
+const save = (action: any, prevState: StateType, composeEffect: Function) => {
   const { document, files, editor } = prevState;
-  await initEffects(APP.LOCALSAVE + FETCH, { document, files, editor });
-  dispatch({ type: APP.LOCALSAVE + DONE });
+  let data: Partial<StateType>;
+  if (action.document) {
+    data = { document };
+  } else if (action.files) {
+    data = { files };
+  } else if (action.editor) {
+    data = { editor };
+  } else {
+    data = { document, files, editor };
+  }
+  console.log('data', data);
+  return async () => {
+    await composeEffect(APP.LOCALSAVE + FETCH, data);
+    return { type: APP.LOCALSAVE + DONE };
+  };
 };
 
 const app: ActionsType = {

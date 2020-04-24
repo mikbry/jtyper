@@ -19,8 +19,9 @@ import { Next2 } from '@styled-icons/icomoon/Next2';
 import { Stop2 } from '@styled-icons/icomoon//Stop2';
 import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
-
-import { useStore, useActions } from '../../store';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../store';
+import { StateType } from '../../types';
 import { getCurrentNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
@@ -43,7 +44,7 @@ const StyledSelect = styled(Select)`
 `;
 
 const Toolbar: FunctionComponent = () => {
-  const { editor, files, saved } = useStore();
+  const [files, editor, saved] = useSelector((state: StateType) => [state.files, state.editor, state.saved]);
   const { save, createCell, updateCell, selectCell, cut, copy, paste } = useActions();
   const { selectedCell } = editor;
   const notebook = getCurrentNotebook(editor, files);

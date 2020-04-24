@@ -10,15 +10,16 @@ import React, { FunctionComponent } from 'react';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
+import { useSelector } from 'react-redux';
+import { useActions } from '../../store';
+import { StateType, NotebookType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
-import { useStore, useActions } from '../../store';
 import IconButton from '../IconButton';
 import Item from '../Item';
 import { getCurrentNotebook } from '../../store/selectors';
-import { NotebookType } from '../../types';
 
 const Explorer: FunctionComponent = () => {
-  const { files, editor } = useStore();
+  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const { createNotebook, deleteNotebook, selectFile } = useActions();
   const notebook = getCurrentNotebook(editor, files);
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {

@@ -9,7 +9,7 @@ import app from './app';
 import initialState from './initialState';
 import { ReducerType } from '../../types';
 
-export const handlers: ReducerType = {
+export const reducers: ReducerType = {
   ...app,
 };
 

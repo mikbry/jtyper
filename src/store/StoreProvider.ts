@@ -5,8 +5,14 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import React, { FunctionComponent } from 'react';
+import { Provider } from 'react-redux';
+import { useStore } from './store';
 
-import React, { useReducer, useCallback, FunctionComponent } from 'react';
+const StoreProvider: FunctionComponent<{}> = ({ children }) =>
+  React.createElement(Provider, { store: useStore() }, children);
+
+/* import React, { useReducer, useCallback, FunctionComponent } from 'react';
 import context from './context';
 import store, { getInitialState } from './store';
 import { StateType, ActionType } from '../types';
@@ -27,6 +33,6 @@ const StoreProvider: FunctionComponent<{}> = ({ children }) => {
   const { Provider } = context;
   const props = { value: { ...state, dispatch } };
   return React.createElement(Provider, props, children);
-};
+}; */
 
 export default StoreProvider;

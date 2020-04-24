@@ -7,7 +7,8 @@
  */
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { useStore } from '../../store';
+import { useSelector } from 'react-redux';
+import { StateType } from '../../types';
 import Toolbar from '../Toolbar';
 
 const Styled = styled.header`
@@ -39,7 +40,7 @@ const Styled = styled.header`
 `;
 
 const AppBar: FunctionComponent = () => {
-  const { title } = useStore();
+  const title = useSelector((state: StateType) => state.title);
   return (
     <Styled>
       {title}

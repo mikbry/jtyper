@@ -12,6 +12,8 @@ import App from './App';
 import { initState } from './store';
 
 (async () => {
+  console.log('initState');
   await initState();
+  console.log('render');
   ReactDOM.render(React.createElement(App, {}), document.getElementById('root'));
 })().then();

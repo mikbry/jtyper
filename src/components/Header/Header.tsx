@@ -8,7 +8,8 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { Book } from '@styled-icons/icomoon/Book';
-import { useStore } from '../../store';
+import { useSelector } from 'react-redux';
+import { StateType } from '../../types';
 
 const Styled = styled.header`
   width: {props.theme.spacing.drawerWidth}px;
@@ -26,7 +27,7 @@ const Icon = styled(Book)`
 `;
 
 const Header: FunctionComponent = () => {
-  const { document } = useStore();
+  const document = useSelector((state: StateType) => state.document);
   return (
     <Styled>
       <Icon />
