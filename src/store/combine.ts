@@ -17,7 +17,7 @@ export const combineActionDispatchs = (
   types.forEach(type => {
     const action = actions[type];
     const name = Object.keys(action)[0];
-    to[name] = (payload: any) => dispatch({ type, ...payload });
+    to[name] = (payload: any) => dispatch(action[name](payload));
   });
   return to;
 };

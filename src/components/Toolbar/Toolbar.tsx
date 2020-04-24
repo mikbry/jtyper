@@ -44,7 +44,7 @@ const StyledSelect = styled(Select)`
 `;
 
 const Toolbar: FunctionComponent = () => {
-  const [files, editor, saved] = useSelector((state: StateType) => [state.files, state.editor, state.saved]);
+  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const { save, createCell, updateCell, selectCell, cut, copy, paste } = useActions();
   const { selectedCell } = editor;
   const notebook = getCurrentNotebook(editor, files);
@@ -102,7 +102,7 @@ const Toolbar: FunctionComponent = () => {
   return (
     <Styled>
       <Bar>
-        <IconButton icon={FloppyDisk} disabled={saved} onClick={handleSave} />
+        <IconButton icon={FloppyDisk} disabled={editDisabled} onClick={handleSave} />
       </Bar>
       <Bar>
         <IconButton icon={Plus} disabled={editDisabled} onClick={handleCreate} />

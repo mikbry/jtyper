@@ -8,14 +8,16 @@
 import { combineEffects } from '../combine';
 import storage from './localStorage';
 
+let effects: any;
+
 export default () => {
-  const effects: any = combineEffects(storage, []);
+  effects = combineEffects(storage, []);
   return effects;
 };
 
-export const composeEffects = async (effects: any, type: any, action: any) => {
+export const composeEffects = async (fx: any, type: any, action: any) => {
   const promises: any = [];
-  effects.forEach((effect: any) => {
+  fx.forEach((effect: any) => {
     if (effect.type === type) {
       const p = effect.func(action);
       promises.push(p);
@@ -29,3 +31,5 @@ export const composeEffects = async (effects: any, type: any, action: any) => {
   // TODO merge results
   return results;
 };
+
+export const composer = async (type: string, parameters: any) => composeEffects(effects, type, parameters);
