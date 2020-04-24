@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { StateType } from '../../types';
 import Toolbar from '../Toolbar';
+import { BasicTheme } from '../../themes';
 
 const Styled = styled.header`
   position: fixed;
@@ -38,6 +39,7 @@ const Styled = styled.header`
     text-align: left;
   }
 `;
+Styled.defaultProps = { theme: BasicTheme };
 
 const AppBar: FunctionComponent = () => {
   const title = useSelector((state: StateType) => state.title);
