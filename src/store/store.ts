@@ -12,6 +12,7 @@ import createEffects, { composeEffects } from './effects';
 import { initialState, reducers } from './reducers';
 import { StateType, ActionType } from '../types';
 import { INITIALIZE } from '../constants';
+import { composeEnhancers } from './devtools';
 
 interface FuncType {
   effects?: any;
@@ -27,7 +28,7 @@ let store: Store;
 
 const handler: Reducer = (state: StateType, firstAction: any) => {
   console.log('action=', firstAction.type);
-  if (firstAction.type.startsWith('@@redux/INIT')) {
+  if (firstAction.type.startsWith('@@redux/INIT') || firstAction.type.startsWith('@@INIT')) {
     return state;
   }
   let pipe = [firstAction];
@@ -59,7 +60,11 @@ const handler: Reducer = (state: StateType, firstAction: any) => {
 export const getInitialState = () => funcs.initialState;
 
 export const initStore = (state: StateType) => {
-  store = createStore(handler, state, applyMiddleware(thunk));
+  const middlewares = [thunk];
+  console.log('initStore start');
+  const enhancer = composeEnhancers(applyMiddleware(...middlewares));
+  store = createStore(handler, state, enhancer);
+  console.log('initStore', store);
 };
 
 export const initState = async () => {
