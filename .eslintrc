@@ -39,7 +39,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["**/*.test.{ts,tsx}", "**/*.stories.tsx", "**/jest.setup.ts"],
+        "devDependencies": ["**/*.test.{ts,tsx}", "**/*.stories.tsx", "**/jest.setup.ts", "**/test/*.{ts,tsx}"],
         "optionalDependencies": false,
         "peerDependencies": false
       }

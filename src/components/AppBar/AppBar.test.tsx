@@ -6,32 +6,16 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { setStore } from '../../store';
+import MockupProvider from '../../test/MockupProvider';
 import { BasicTheme } from '../../themes';
 
 import AppBar from './index';
 
-const MockupProvider: FunctionComponent<any> = ({ initialstate, theme = BasicTheme, children }) => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    editor: {},
-    dispatch: () => {
-      /* */
-    },
-    theme,
-    ...initialstate,
-  });
-  setStore(store);
-  return <Provider store={store}>{children}</Provider>;
-};
-
 test('AppBar should render correctly', () => {
   const { asFragment } = render(
-    <MockupProvider initialstate={{}}>
+    <MockupProvider>
       <AppBar>Content</AppBar>
     </MockupProvider>,
   );
@@ -50,7 +34,7 @@ test('AppBar should have a title', () => {
 
 test('AppBar should not have a title', () => {
   const { getByTestId } = render(
-    <MockupProvider initialstate={{}}>
+    <MockupProvider>
       <AppBar />
     </MockupProvider>,
   );

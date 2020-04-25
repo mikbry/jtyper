@@ -51,7 +51,7 @@ const selectFile = (action: any) => (dispatch: Dispatch<any>) => {
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
 };
 
-const createCell = (action: any) => (dispatch: Dispatch<any>) => {
+const createCell = (action: any = {}) => (dispatch: Dispatch<any>) => {
   const { type } = action;
   dispatch({ type: APP.CREATECELL + DONE, cellType: type });
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
