@@ -25,23 +25,27 @@ import { StateType } from '../../types';
 import { getCurrentNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
+import { BasicTheme } from '../../themes';
 
 const Styled = styled.div`
   margin-left: auto;
   margin-right: 64px;
   display: flex;
 `;
+Styled.defaultProps = { theme: BasicTheme };
 
 const Bar = styled.div`
   margin: 4px;
   line-height: 36px;
   border: 1px solid ${props => props.theme.palette.group};
 `;
+Bar.defaultProps = { theme: BasicTheme };
 
 const StyledSelect = styled(Select)`
   min-width: 76px;
   width: 76px;
 `;
+StyledSelect.defaultProps = { theme: BasicTheme };
 
 const Toolbar: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);

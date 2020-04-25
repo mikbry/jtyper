@@ -9,7 +9,6 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { StateType } from '../../types';
-import Toolbar from '../Toolbar';
 import { BasicTheme } from '../../themes';
 
 const Styled = styled.header`
@@ -41,12 +40,12 @@ const Styled = styled.header`
 `;
 Styled.defaultProps = { theme: BasicTheme };
 
-const AppBar: FunctionComponent = () => {
+const AppBar: FunctionComponent = ({ children }) => {
   const title = useSelector((state: StateType) => state.title);
   return (
-    <Styled>
+    <Styled data-testid='appbar'>
       {title}
-      <Toolbar />
+      {children}
     </Styled>
   );
 };

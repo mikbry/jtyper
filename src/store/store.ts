@@ -64,4 +64,8 @@ export const initState = async () => {
   initStore(state);
 };
 
+export const setStore = (s: Store) => {
+  store = s;
+};
+
 export const useStore = () => store;
