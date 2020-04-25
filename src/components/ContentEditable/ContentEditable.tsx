@@ -9,8 +9,8 @@ import React, { KeyboardEvent, FunctionComponent, useEffect, useRef } from 'reac
 import styled from 'styled-components';
 
 interface Props {
-  onChange?: (value: string) => void;
-  value?: string;
+  onChange: (value: string) => void;
+  value: string;
 }
 
 const Styled = styled.div`
@@ -19,14 +19,7 @@ const Styled = styled.div`
   padding: 0.6em;
 `;
 
-const Cell: FunctionComponent<Props> = ({
-  value = '',
-  onChange = () => {
-    /* */
-  },
-}) => {
-  const editMode = true;
-  // const prevVal = useRef<string>();
+const Cell: FunctionComponent<Props> = ({ value, onChange }) => {
   const cellRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     // setCell
@@ -38,16 +31,13 @@ const Cell: FunctionComponent<Props> = ({
     if (cellRef.current) onChange(cellRef.current.innerText);
   };
   const handleKey = (e: KeyboardEvent) => {
-    // TODO
-    if (editMode) {
-      const { keyCode } = e;
-      if (keyCode === 27) {
-        if (cellRef.current) onChange(cellRef.current.innerText);
-      } else {
-        return;
-      }
-      e.preventDefault();
+    const { keyCode } = e;
+    if (keyCode === 27) {
+      if (cellRef.current) onChange(cellRef.current.innerText);
+    } else {
+      return;
     }
+    e.preventDefault();
   };
   const handleInput = () => {
     // if (cellRef.current) setCellValue(cellRef.current.innerText);
@@ -60,9 +50,10 @@ const Cell: FunctionComponent<Props> = ({
       onKeyDown={handleKey}
       onBlur={handleBlur}
       tabIndex={0}
-      contentEditable={editMode}
+      contentEditable
       ref={cellRef}
       suppressContentEditableWarning
+      data-testid='contenteditable'
     >
       {value}
     </Styled>

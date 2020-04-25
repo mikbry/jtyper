@@ -37,6 +37,7 @@ const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
       onChange={(_editor, _data, newValue) => {
         if (onChange) onChange(newValue);
       }}
+      data-testid='code'
     />
   );
 };

@@ -2,7 +2,7 @@ node_modules
 **/config
 **/build
 .vscode
-**/coverage
+coverage
 **/*.DS_Store
 **/yarn-error.log
 **/dist

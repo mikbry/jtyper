@@ -10,17 +10,20 @@ import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
 import ContentEditable from '../ContentEditable';
+import { BasicTheme } from '../../themes';
 
 interface Props {
   selected?: boolean;
   editable?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
-  onChange?: (value: string) => void;
-  value?: string;
+  onChange: (value: string) => void;
+  children: string;
   format?: string;
 }
 
-interface StyledProps extends Props {
+interface StyledProps {
+  selected?: boolean;
+  editable?: boolean;
   selecting?: boolean;
   theme: DefaultTheme;
 }
@@ -50,6 +53,7 @@ const Styled = styled.div`
     padding: 0.6em;
   }
 `;
+Styled.defaultProps = { theme: BasicTheme };
 
 const RawContent = styled.div`
   padding: 0.6em;
@@ -58,14 +62,13 @@ const RawContent = styled.div`
 const Cell: FunctionComponent<Props> = ({
   selected = false,
   editable = false,
-  value = '',
   format = undefined,
   onClick,
-  onChange = () => {
-    /* */
-  },
+  onChange,
+  children,
 }) => {
   const cellRef = useRef<HTMLInputElement>(null);
+  const value = children;
   useEffect(() => {
     // setCell
   }, []);
@@ -73,9 +76,6 @@ const Cell: FunctionComponent<Props> = ({
     //  if (cellRef.current) onChange(cellRef.current.innerText);
   };
   const handleKey = (/* e: KeyboardEvent */) => {
-    //
-  };
-  const handleInput = () => {
     //
   };
   let content = <>{value}</>;
@@ -95,14 +95,17 @@ const Cell: FunctionComponent<Props> = ({
       );
   } else {
     content =
-      selected && editable ? <ContentEditable value={value} onChange={onChange} /> : <RawContent>{value}</RawContent>;
+      selected && editable ? (
+        <ContentEditable value={value} onChange={onChange} />
+      ) : (
+        <RawContent data-testid='rawcontent'>{value}</RawContent>
+      );
   }
   return (
     <Styled
       role='button'
       selected={selected}
       editable={editable}
-      onInput={handleInput}
       onClick={onClick}
       onKeyDown={handleKey}
       onBlur={handleBlur}

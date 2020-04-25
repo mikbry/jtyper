@@ -34,7 +34,11 @@ const SyntaxHighlighter: FunctionComponent<Props> = ({ value }) => {
       markdown = undefined;
     };
   }, [value]);
-  return <Styled ref={ref}>{value}</Styled>;
+  return (
+    <Styled ref={ref} data-testid='highlighter'>
+      {value}
+    </Styled>
+  );
 };
 
 export default SyntaxHighlighter;

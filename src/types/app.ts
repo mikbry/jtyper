@@ -6,10 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export enum CodeEnum {
-  'typescript',
-}
-
 export type CellFormat = 'markdown' | 'code' | 'raw' | undefined;
 
 export interface CellType {
@@ -23,7 +19,6 @@ export interface NotebookType {
   title?: string;
   filename?: string;
   folder?: string;
-  code?: CodeEnum;
   readOnly?: boolean;
   localStorage?: boolean;
   cells: Array<CellType>;

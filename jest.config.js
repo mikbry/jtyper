@@ -7,6 +7,7 @@ module.exports = {
   // using ts-jest
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
+    '\\.(css|less|scss)$': './src/test/stub-transformer.ts',
   },
 
   // Runs special logic, such as cleaning up components
@@ -27,6 +28,8 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.{test,stories}.{ts,tsx}',
     '!src/index.ts',
+    '!src/**/*.d.ts',
+    '!src/test/*',
     '!<rootDir>/node_modules/',
     '!<rootDir>/config/',
   ],

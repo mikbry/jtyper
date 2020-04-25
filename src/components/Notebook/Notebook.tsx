@@ -49,7 +49,6 @@ const Notebook: FunctionComponent = () => {
         {notebook.cells.map((cell: CellType, index: number) => (
           <Cell
             key={cell.id}
-            value={cell.raw}
             format={cell.format}
             editable={!readOnly}
             selected={index === selectedCell}
@@ -59,7 +58,9 @@ const Notebook: FunctionComponent = () => {
             onClick={() => {
               if (!readOnly) handleSelectCell(index);
             }}
-          />
+          >
+            {cell.raw}
+          </Cell>
         ))}
       </>
     );
