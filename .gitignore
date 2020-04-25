@@ -1,8 +1,9 @@
-.vscode
 node_modules
-*.DS_Store
-build
-coverage
-.nyc_output
-yarn-error.log
-tmp
+**/config
+**/build
+.vscode
+**/coverage
+**/*.DS_Store
+**/yarn-error.log
+**/dist
+**/__snapshots__

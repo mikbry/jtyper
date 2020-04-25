@@ -8,6 +8,7 @@
 import React, { FunctionComponent } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import { StyledIcon } from '@styled-icons/styled-icon';
+import { BasicTheme } from '../../themes';
 
 type StyleProps = {
   size?: number;
@@ -29,6 +30,7 @@ const Button = styled.button`
     color: ${props => (props.disabled ? props.theme.palette.disabled : 'white')};
   }
 `;
+Button.defaultProps = { theme: BasicTheme };
 
 interface IconButtonProps {
   icon: StyledIcon;

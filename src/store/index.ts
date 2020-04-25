@@ -8,6 +8,6 @@
 
 import StoreProvider from './StoreProvider';
 import useActions from './actions/useActions';
-import { initState } from './store';
+import { initState, setStore } from './store';
 
-export { useActions, initState, StoreProvider };
+export { useActions, initState, setStore, StoreProvider };

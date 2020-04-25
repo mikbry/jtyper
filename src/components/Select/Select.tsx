@@ -7,6 +7,7 @@
  */
 import React, { FunctionComponent, useState } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
+import { BasicTheme } from '../../themes';
 
 export type OptionType = {
   key: string;
@@ -59,6 +60,7 @@ const Wrapper = styled.div`
     display: ${(props: StyledProps) => (props.open ? 'inline-block' : 'none')};
   }
 `;
+Wrapper.defaultProps = { theme: BasicTheme };
 
 interface ItemProps {
   selecting?: boolean;
@@ -72,6 +74,7 @@ const Item = styled.li`
     color: white;
   }
 `;
+Item.defaultProps = { theme: BasicTheme };
 
 const Select: FunctionComponent<Props> = ({ options, disabled, placeholder, onChange }) => {
   const [open, setOpen] = useState(false);

@@ -22,6 +22,7 @@ module.exports = {
   // Module file extensions for importing
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'html'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.{test,stories}.{ts,tsx}',
@@ -29,5 +30,5 @@ module.exports = {
     '!<rootDir>/node_modules/',
     '!<rootDir>/config/',
   ],
-  setupFilesAfterEnv: ['./src/jest.setup.test.ts'],
+  setupFilesAfterEnv: ['./src/jest.setup.ts'],
 };

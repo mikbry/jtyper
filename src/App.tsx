@@ -12,6 +12,7 @@ import styled from 'styled-components';
 import { StoreProvider } from './store';
 import Page from './components/Page';
 import AppBar from './components/AppBar';
+import Toolbar from './components/Toolbar';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Explorer from './components/Explorer';
@@ -26,7 +27,9 @@ const Wrapper = styled.div`
 const App: FunctionComponent = () => (
   <StoreProvider>
     <Page>
-      <AppBar />
+      <AppBar>
+        <Toolbar />
+      </AppBar>
       <Wrapper>
         <Drawer>
           <Header />
