@@ -15,23 +15,15 @@ const Styled = styled.div`
   padding: 0.6em;
 `;
 
-const render = (markdown: Markdown, current: HTMLDivElement | null, value: string) => {
-  if (current) {
-    // eslint-disable-next-line no-param-reassign
-    current.innerHTML = markdown.render(value);
-  }
-};
+const markdown = new Markdown();
 
 const SyntaxHighlighter: FunctionComponent<Props> = ({ value }) => {
   const ref = useRef<HTMLDivElement>(null);
-  let markdown: Markdown | undefined;
   useEffect(() => {
-    if (!markdown) {
-      markdown = new Markdown();
-    }
-    render(markdown, ref.current, value);
+    /* istanbul ignore else */
+    if (ref.current) ref.current.innerHTML = markdown.render(value);
     return () => {
-      markdown = undefined;
+      //
     };
   }, [value]);
   return (

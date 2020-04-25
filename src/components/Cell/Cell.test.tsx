@@ -8,7 +8,9 @@
  */
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MockupProvider from '../../test/MockupProvider';
+
 import FakeMouseEvent from '../../test/FakeMouseEvent';
 // import { BasicTheme } from '../../themes';
 
@@ -126,6 +128,7 @@ test('Cell with code should display CodeHighlighter', () => {
 });
 
 test('editable & selected Cell with code should display Editor', () => {
+  jest.useFakeTimers();
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
@@ -138,4 +141,40 @@ test('editable & selected Cell with code should display Editor', () => {
   expect(content).toHaveClass('react-codemirror2');
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
+});
+
+test('editable & selected Cell with code should be changed', async () => {
+  const onClick = jest.fn();
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { getByRole } = render(
+    <MockupProvider>
+      <Cell onClick={onClick} onChange={onChange} format='code' editable selected>
+        {' '}
+      </Cell>
+    </MockupProvider>,
+  );
+  const content = getByRole('button').firstChild as HTMLElement;
+  expect(content?.textContent?.trim()).toBe('');
+  const container = content?.firstChild as HTMLElement;
+  const helloword = 'Hello world';
+  const textarea: HTMLTextAreaElement = content?.firstChild?.firstChild?.firstChild as HTMLTextAreaElement;
+  if (textarea) {
+    fireEvent(
+      textarea,
+      new FakeMouseEvent('keydown', {
+        bubbles: true,
+        key: 'a',
+        keyCode: 97,
+        charCode: 97,
+      }),
+    );
+    jest.advanceTimersByTime(1000);
+    expect(container).toHaveClass('CodeMirror-focused');
+    await userEvent.type(textarea, helloword);
+  }
+  expect(onChange).toHaveBeenCalledTimes(helloword.length);
+  expect(value).toBe(` ${helloword}`);
 });

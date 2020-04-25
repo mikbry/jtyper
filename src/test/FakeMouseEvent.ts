@@ -16,12 +16,15 @@ interface MouseEventInitExt extends MouseEventInit {
   y?: number;
   touches?: Array<{ pageX: number; pageY: number }>;
   key?: string;
+  keyCode?: number;
+  charCode?: number;
+  which?: number;
 }
 
 // See : https://github.com/testing-library/react-testing-library/issues/268
 class FakeMouseEvent extends MouseEvent {
   constructor(type: string, values: MouseEventInitExt) {
-    const { pageX, pageY, offsetX, offsetY, x, y, key, touches, ...mouseValues } = values;
+    const { pageX, pageY, offsetX, offsetY, x, y, key, touches, keyCode, charCode, ...mouseValues } = values;
     super(type, mouseValues);
 
     Object.assign(this, {
@@ -33,6 +36,8 @@ class FakeMouseEvent extends MouseEvent {
       y: y || 0,
       touches,
       key,
+      keyCode,
+      charCode,
     });
   }
 }
