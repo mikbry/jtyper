@@ -12,7 +12,7 @@ export const combineActionDispatchs = (
   dispatch: Function,
   _to: ActionnablesType,
 ): ActionnablesType => {
-  const to = _to || {};
+  const to = _to;
   const types = Object.keys(actions);
   types.forEach(type => {
     const action = actions[type];
@@ -23,7 +23,7 @@ export const combineActionDispatchs = (
 };
 
 export const combineActions = (actions: ActionsType, _to: ActionnablesType): ActionnablesType => {
-  const to = _to || {};
+  const to = _to;
   const types = Object.keys(actions);
   types.forEach(type => {
     const action: Record<string, Function> = actions[type];
@@ -34,7 +34,7 @@ export const combineActions = (actions: ActionsType, _to: ActionnablesType): Act
 };
 
 export const combineEffects = (effects: Record<string, Record<string, Function>>, _to: EffectsType): EffectsType => {
-  const to = _to || [];
+  const to = _to;
   const types = Object.keys(effects);
   types.forEach(type => {
     const effect = effects[type];

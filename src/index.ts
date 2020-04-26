@@ -9,9 +9,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { initState } from './store';
+import { initialState } from './store/reducers';
+import { initStore } from './store';
 
 (async () => {
-  await initState();
+  await initStore(initialState);
   ReactDOM.render(React.createElement(App, {}), document.getElementById('root'));
 })().then();

@@ -28,6 +28,7 @@ module.exports = {
     'src/**/*.{ts,tsx}',
     '!src/**/*.{test,stories}.{ts,tsx}',
     '!src/index.ts',
+    '!src/store/devtools.ts',
     '!src/**/*.d.ts',
     '!src/test/*',
     '!<rootDir>/node_modules/',

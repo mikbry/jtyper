@@ -12,6 +12,7 @@ import thunk from 'redux-thunk';
 import configureStore, { MockStore } from 'redux-mock-store';
 import { DefaultTheme } from 'styled-components';
 import { setStore } from '../store';
+
 import { StateType } from '../types';
 import { BasicTheme } from '../themes';
 import { initEffects } from '../store/effects';

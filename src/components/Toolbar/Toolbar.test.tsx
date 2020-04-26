@@ -9,7 +9,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Toolbar from './index';
-import MockupProvider from '../../test/MockupProvider';
+import { MockupProvider, renderWithProvider } from '../../test';
 import { StateType } from '../../types';
 import { BasicTheme } from '../../themes';
 
@@ -53,16 +53,12 @@ test('Toolbar without notebook should have all items disabled', () => {
   });
 });
 
-test('Toolbar with notebook should have only paste disabled', () => {
+test('Toolbar with notebook should have only paste disabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByRole('button');
   expect(items.length).toBe(12);
   expect(items[0]).toHaveStyleRule('color', BasicTheme.palette.surface);
