@@ -7,11 +7,12 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
+import { initialState } from './store/reducers';
 import App from './App';
-import { initState } from './store';
+import { initStore } from './store';
 
 test('App should launch correctly', async () => {
-  await initState();
+  await initStore(initialState);
   const { asFragment } = render(<App />);
   expect(asFragment()).toMatchSnapshot();
 });
