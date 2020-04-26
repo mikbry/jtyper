@@ -15,20 +15,23 @@ const Styled = styled.div`
   padding: 0.6em;
 `;
 
-const markdown = new Markdown();
-
-const setText = (ref: React.RefObject<HTMLDivElement>, value: string) => {
+const render = (ref: React.RefObject<HTMLDivElement>, value: string, m: Markdown | undefined): Markdown | undefined => {
   const { current } = ref;
-  if (current) current.innerText = value;
+  let markdown = m;
+  if (current && !markdown) {
+    markdown = new Markdown();
+  }
+  if (current && markdown) current.innerHTML = markdown.render(value);
+  return markdown;
 };
 
 const SyntaxHighlighter: FunctionComponent<Props> = ({ value }) => {
   const ref = useRef<HTMLDivElement>(null);
-  setText(ref, '');
+  let markdown: Markdown | undefined = render(ref, value, undefined);
   useEffect(() => {
-    setText(ref, markdown.render(value));
+    markdown = render(ref, value, markdown);
     return () => {
-      //
+      markdown = undefined;
     };
   }, [value]);
   return (

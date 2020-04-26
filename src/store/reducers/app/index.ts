@@ -34,10 +34,6 @@ const handlers = {
     const title = notebook?.title || '';
     return { ...state, document, files, editor, init: true, saved: true, title };
   },
-  [APP.SETTITLE + DONE]: (state: StateType, action: { title: string }) => {
-    const { title } = action;
-    return { ...state, title };
-  },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     let { title = 'Notebook', cells } = action;
     const { files, editor } = state;
