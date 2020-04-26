@@ -10,10 +10,12 @@ import storage from './localStorage';
 
 let effects: any;
 
-export default () => {
-  effects = combineEffects(storage, []);
+export const initEffects = (fx: any) => {
+  effects = combineEffects(fx, []);
   return effects;
 };
+
+export default () => initEffects(storage);
 
 export const composeEffects = async (fx: any, type: any, action: any) => {
   const promises: any = [];

@@ -7,6 +7,7 @@
  */
 import React, { FunctionComponent } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
+import { BasicTheme } from '../../themes';
 
 interface Props {
   selected?: boolean;
@@ -42,6 +43,7 @@ const Styled = styled.ul`
     outline: none !important;
   }
 `;
+Styled.defaultProps = { theme: BasicTheme };
 
 const Item: FunctionComponent<Props> = ({ selected, children, onClick }) => (
   <Styled
@@ -52,6 +54,7 @@ const Item: FunctionComponent<Props> = ({ selected, children, onClick }) => (
     onClick={onClick}
     tabIndex={0}
     selecting={selected}
+    data-testid='item'
   >
     {children}
   </Styled>
