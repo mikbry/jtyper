@@ -11,7 +11,8 @@ import { useSelector } from 'react-redux';
 import Cell from '../Cell';
 import { useActions } from '../../store';
 import { getCurrentNotebook } from '../../store/selectors';
-import { CellType, StateType } from '../../types';
+import { CellType, StateType, NotebookType } from '../../types';
+import { BasicTheme } from '../../themes';
 
 const Wrapper = styled.div`
   margin: 0.6em;
@@ -19,6 +20,7 @@ const Wrapper = styled.div`
   background-color: ${props => props.theme.palette.notebook};
   height: calc(100% - ${props => props.theme.spacing.headerHeight}px);
 `;
+Wrapper.defaultProps = { theme: BasicTheme };
 
 const NoContent = styled.div`
   text-align: center;
@@ -32,15 +34,13 @@ const Notebook: FunctionComponent = () => {
   const handleSelectCell = (selected: number) => {
     selectCell({ selected });
   };
-  const notebook = getCurrentNotebook(editor, files);
-  const handleCellChange = (index: number, value: string) => {
-    if (notebook) {
-      const cell = { ...notebook.cells[index], raw: value };
-      updateCell(cell);
-    }
+  const handleCellChange = (index: number, value: string, notebook: NotebookType) => {
+    const cell = { ...notebook.cells[index], raw: value };
+    updateCell(cell);
   };
-
   let content;
+
+  const notebook = getCurrentNotebook(editor, files);
   if (notebook) {
     const { selectedCell = -1 } = editor;
     const { readOnly } = notebook;
@@ -53,7 +53,7 @@ const Notebook: FunctionComponent = () => {
             editable={!readOnly}
             selected={index === selectedCell}
             onChange={value => {
-              if (!readOnly) handleCellChange(index, value);
+              handleCellChange(index, value, notebook);
             }}
             onClick={() => {
               if (!readOnly) handleSelectCell(index);
