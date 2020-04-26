@@ -17,11 +17,16 @@ const Styled = styled.div`
 
 const markdown = new Markdown();
 
+const setText = (ref: React.RefObject<HTMLDivElement>, value: string) => {
+  const { current } = ref;
+  if (current) current.innerText = value;
+};
+
 const SyntaxHighlighter: FunctionComponent<Props> = ({ value }) => {
   const ref = useRef<HTMLDivElement>(null);
+  setText(ref, '');
   useEffect(() => {
-    /* istanbul ignore else */
-    if (ref.current) ref.current.innerHTML = markdown.render(value);
+    setText(ref, markdown.render(value));
     return () => {
       //
     };
