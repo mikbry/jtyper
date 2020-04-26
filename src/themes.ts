@@ -22,7 +22,7 @@ const BasicTheme: DefaultTheme = {
     onSelected: 'white',
     hover: 'rgba(255, 255, 255, 0.7)',
     onHover: 'white',
-    disabled: 'rgba(255, 255, 255, 0.4)',
+    disabled: 'rgba(255,255,255,0.4)',
     notebook: 'white',
   },
   fontFamily: 'sans-serif',
