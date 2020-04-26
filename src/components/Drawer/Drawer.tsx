@@ -8,6 +8,7 @@
  */
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
+import { BasicTheme } from '../../themes';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -18,6 +19,7 @@ const Wrapper = styled.div`
   color: ${props => props.theme.palette.onSurface};
   background: ${props => props.theme.palette.menu};
 `;
+Wrapper.defaultProps = { theme: BasicTheme };
 
-const Drawer: FunctionComponent = ({ children }) => <Wrapper>{children}</Wrapper>;
+const Drawer: FunctionComponent = ({ children }) => <Wrapper data-testid='drawer'>{children}</Wrapper>;
 export default Drawer;

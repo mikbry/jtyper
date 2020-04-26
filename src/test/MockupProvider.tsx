@@ -8,31 +8,41 @@
  */
 import React, { FunctionComponent } from 'react';
 import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import configureStore, { MockStore } from 'redux-mock-store';
 import { DefaultTheme } from 'styled-components';
 import { setStore } from '../store';
 import { StateType } from '../types';
 import { BasicTheme } from '../themes';
+import { initEffects } from '../store/effects';
 
 type MockupProviderProps = {
   initialstate?: Partial<StateType>;
   theme?: DefaultTheme;
+  dispatch?: Function;
 };
+
+let store: MockStore;
+
 const MockupProvider: FunctionComponent<MockupProviderProps> = ({
   initialstate = {},
   theme = BasicTheme,
   children,
+  dispatch = () => {
+    /* */
+  },
 }) => {
-  const mockStore = configureStore([]);
-  const store = mockStore({
-    editor: {},
-    dispatch: () => {
-      /* */
-    },
-    theme,
-    ...initialstate,
-  });
-  setStore(store);
+  if (!store || initialstate) {
+    initEffects([]);
+    const mockStore = configureStore([thunk]);
+    store = mockStore({
+      editor: {},
+      dispatch,
+      theme,
+      ...initialstate,
+    });
+    setStore(store);
+  }
   return <Provider store={store}>{children}</Provider>;
 };
 export default MockupProvider;

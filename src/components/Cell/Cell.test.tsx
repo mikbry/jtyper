@@ -10,9 +10,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockupProvider from '../../test/MockupProvider';
-
 import FakeMouseEvent from '../../test/FakeMouseEvent';
-// import { BasicTheme } from '../../themes';
 
 import Cell from './index';
 

@@ -39,12 +39,8 @@ interface IconButtonProps {
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const onDummy = () => {
-  /* */
-};
-
 const IconButton: FunctionComponent<IconButtonProps> = ({ icon: Icon, size, disabled = false, onClick, children }) => {
-  const onC = disabled ? onDummy : onClick;
+  const onC = disabled ? undefined : onClick;
   return (
     <Button onClick={onC} disabled={disabled} size={size}>
       <Icon />

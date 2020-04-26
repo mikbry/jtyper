@@ -19,8 +19,14 @@ const Styled = styled.div`
   padding: 0.6em;
 `;
 
-const Cell: FunctionComponent<Props> = ({ value, onChange }) => {
-  const cellRef = useRef<HTMLInputElement>(null);
+const getText = (ref: React.RefObject<HTMLInputElement>) => {
+  if (ref.current) return ref.current.innerText;
+  return '';
+};
+
+const ContentEditable: FunctionComponent<Props> = ({ value, onChange }) => {
+  const elRef = useRef<HTMLInputElement>(null);
+  getText(elRef);
   useEffect(() => {
     // setCell
   }, []);
@@ -28,30 +34,26 @@ const Cell: FunctionComponent<Props> = ({ value, onChange }) => {
     // TODO
   };
   const handleBlur = () => {
-    if (cellRef.current) onChange(cellRef.current.innerText);
+    onChange(getText(elRef));
   };
   const handleKey = (e: KeyboardEvent) => {
     const { keyCode } = e;
     if (keyCode === 27) {
-      if (cellRef.current) onChange(cellRef.current.innerText);
+      onChange(getText(elRef));
     } else {
       return;
     }
     e.preventDefault();
   };
-  const handleInput = () => {
-    // if (cellRef.current) setCellValue(cellRef.current.innerText);
-  };
   return (
     <Styled
       role='button'
-      onInput={handleInput}
       onClick={handleClick}
       onKeyDown={handleKey}
       onBlur={handleBlur}
       tabIndex={0}
       contentEditable
-      ref={cellRef}
+      ref={elRef}
       suppressContentEditableWarning
       data-testid='contenteditable'
     >
@@ -60,4 +62,4 @@ const Cell: FunctionComponent<Props> = ({ value, onChange }) => {
   );
 };
 
-export default Cell;
+export default ContentEditable;

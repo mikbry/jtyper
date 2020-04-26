@@ -47,7 +47,7 @@ const Explorer: FunctionComponent = () => {
           <IconButton
             size={14}
             icon={Bin}
-            disabled={notebook ? notebook.readOnly || selected === undefined : selected === undefined}
+            disabled={notebook ? notebook.readOnly : selected === undefined}
             onClick={handleDelete}
           />
         </div>

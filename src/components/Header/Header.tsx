@@ -10,9 +10,10 @@ import styled from 'styled-components';
 import { Book } from '@styled-icons/icomoon/Book';
 import { useSelector } from 'react-redux';
 import { StateType } from '../../types';
+import { BasicTheme } from '../../themes';
 
 const Styled = styled.header`
-  width: {props.theme.spacing.drawerWidth}px;
+  width: ${props => props.theme.spacing.drawerWidth}px;
   padding-left: 0.6em;
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
@@ -20,6 +21,7 @@ const Styled = styled.header`
   min-height: ${props => props.theme.spacing.headerHeight * 2}px;
   border-bottom: 1px solid ${props => props.theme.palette.divider};
 `;
+Styled.defaultProps = { theme: BasicTheme };
 
 const Icon = styled(Book)`
   width: 24px;
