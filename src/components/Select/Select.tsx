@@ -17,6 +17,7 @@ export type OptionType = {
 
 interface Props {
   disabled?: boolean;
+  open?: boolean;
   placeholder?: string;
   options: Array<OptionType>;
   onChange: Function;
@@ -29,7 +30,13 @@ interface StyledProps {
 }
 
 const Wrapper = styled.div`
-  color: ${(props: StyledProps) => (props.open ? props.theme.palette.selected : props.theme.palette.surface)};
+  color: ${(props: StyledProps) =>
+    // eslint-disable-next-line no-nested-ternary
+    props.open
+      ? props.theme.palette.selected
+      : props.disabled
+      ? props.theme.palette.disabled
+      : props.theme.palette.surface};
   border: 1px solid ${(props: StyledProps) => props.theme.palette.group};
   top: 0;
   padding: 0 16px;
@@ -76,8 +83,8 @@ const Item = styled.li`
 `;
 Item.defaultProps = { theme: BasicTheme };
 
-const Select: FunctionComponent<Props> = ({ options, disabled, placeholder, onChange }) => {
-  const [open, setOpen] = useState(false);
+const Select: FunctionComponent<Props> = ({ options, disabled, open: o = false, placeholder, onChange }) => {
+  const [open, setOpen] = useState(o);
   const onOpen = () => {
     if (!disabled) setOpen(!open);
   };
@@ -108,6 +115,7 @@ const Select: FunctionComponent<Props> = ({ options, disabled, placeholder, onCh
                 onChange(option.value, option.key);
               }
             }}
+            data-testid='item'
           >
             {option.value}
           </Item>

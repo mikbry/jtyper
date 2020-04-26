@@ -60,14 +60,10 @@ const Toolbar: FunctionComponent = () => {
     createCell();
   };
   const handleCut = () => {
-    if (cell) {
-      cut({ cell, selected: selectedCell });
-    }
+    cut({ cell, selected: selectedCell });
   };
   const handleCopy = () => {
-    if (cell) {
-      copy({ cell });
-    }
+    copy({ cell });
   };
   const handlePaste = () => {
     paste();
@@ -99,6 +95,7 @@ const Toolbar: FunctionComponent = () => {
   ];
   if (cell && cell.format) {
     const option = options.find(o => o.value === cell.format);
+    /* istanbul ignore next */
     if (option) option.selected = true;
   }
   let selectPlaceholder = 'No format';

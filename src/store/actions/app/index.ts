@@ -17,8 +17,6 @@ const init = (_action: ActionType, _prevState: StateType, fxComposer: Function) 
   return { type: INITIALIZE + DONE, document, files, editor };
 };
 
-const setTitle = ({ title }: { title: string }) => [{ type: APP.SETTITLE + DONE, title }];
-
 const save = (action: any = {}) => (dispatch: Dispatch, prevState: any) => {
   const { document, files, editor } = prevState();
   let data: Partial<StateType>;
@@ -89,7 +87,6 @@ const app: ActionsType = {
   [INITIALIZE]: { init },
   [APP.CREATENOTEBOOK]: { createNotebook },
   [APP.DELETENOTEBOOK]: { deleteNotebook },
-  [APP.SETTITLE]: { setTitle },
   [APP.CREATECELL]: { createCell },
   [APP.UPDATECELL]: { updateCell },
   [APP.SELECTFILE]: { selectFile },
