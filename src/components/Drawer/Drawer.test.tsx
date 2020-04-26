@@ -33,7 +33,7 @@ test('Drawer should have a fullHeightDrawer', () => {
   const { getByTestId } = render(
     <MockupProvider initialstate={{ title: '' }} theme={theme}>
       <Drawer>content</Drawer>
-    </MockupProvider>
+    </MockupProvider>,
   );
   const appbar = getByTestId('drawer');
   expect(appbar).toHaveStyleRule('top', `0px`);
@@ -46,7 +46,7 @@ test('Drawer should not have a fullHeightDrawer', () => {
   const { getByTestId } = render(
     <MockupProvider initialstate={{ title: '' }} theme={theme}>
       <Drawer>content</Drawer>
-    </MockupProvider>
+    </MockupProvider>,
   );
   const appbar = getByTestId('drawer');
   expect(appbar).toHaveStyleRule('top', `${theme.spacing.headerHeight}px`);
