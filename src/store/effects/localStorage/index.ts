@@ -21,13 +21,16 @@ const get = async ({ name, defaultValue }: any) => {
 const set = async (data: any) => {
   const names = Object.keys(data);
   names.forEach(name => {
-    if (!data[name]) {
+    const json = JSON.stringify(data[name]);
+    // TODO check json
+    window.localStorage.setItem(name, json);
+    /* if (!data[name]) {
       window.localStorage.removeItem(name);
     } else {
       const json = JSON.stringify(data[name]);
       // TODO check json
       window.localStorage.setItem(name, json);
-    }
+    } */
   });
 };
 

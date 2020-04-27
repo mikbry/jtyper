@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { createStore, applyMiddleware, Reducer, Store } from 'redux';
+import { createStore, applyMiddleware, Reducer, Store, AnyAction } from 'redux';
 import thunk from 'redux-thunk';
 import { init } from './actions';
 import createEffects, { composer } from './effects';
@@ -15,7 +15,7 @@ import { composeEnhancers } from './devtools';
 
 let store: Store;
 
-const handler: Reducer = (state: StateType, action: any) => {
+const handler: Reducer = (state: StateType, action: AnyAction) => {
   if (reducers[action.type]) {
     return reducers[action.type](state, action);
   }

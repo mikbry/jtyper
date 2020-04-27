@@ -22,13 +22,8 @@ export const getCurrentCell = (editor: EditorType, notebook: NotebookType | unde
   return cell;
 };
 
-export const getNotebookCell = (id: string, notebook: NotebookType | undefined): CellType | undefined => {
-  let cell;
-  if (notebook !== undefined) {
-    cell = notebook.cells.find(c => c.id === id);
-  }
-  return cell;
-};
+export const getNotebookCell = (id: string, notebook: NotebookType): CellType | undefined =>
+  notebook.cells.find(c => c.id === id);
 
 export const validateSelectedCell = (selected: number, length: number): number | undefined => {
   let selectedCell;

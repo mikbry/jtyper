@@ -200,3 +200,16 @@ test('Toolbar with notebook and selected cell should change format', async () =>
   expect(items[0]).toHaveStyleRule('color', BasicTheme.palette.selected);
   fireEvent.click(items[1]);
 });
+
+test('Toolbar with notebook and selected cell should cut', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0, copyBuffer: {} },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state, real: true });
+  const items = getAllByRole('button');
+  fireEvent.click(items[2]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(undefined);
+  expect(newState.files[0].cells.length).toBe(0);
+});

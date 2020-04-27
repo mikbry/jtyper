@@ -36,13 +36,16 @@ export const composeEffects = async (fx: any, type: any, action: any) => {
       promises.push(p);
     }
   });
-  if (promises.length === 1) {
+  const data = await promises[0];
+  return data;
+
+  /* if (promises.length === 1) {
     const data = await promises[0];
     return data;
   }
   const results = await Promise.all(promises);
   // TODO merge results
-  return results;
+  return results; */
 };
 
 export const composer = async (type: string, parameters: any) => composeEffects(effects, type, parameters);
