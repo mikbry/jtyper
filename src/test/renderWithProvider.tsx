@@ -7,8 +7,9 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { initialState } from '../store/reducers';
-import { StoreProvider, initStore } from '../store';
+import { initStore } from '../store';
 import MockupProvider from './MockupProvider';
 import { StateType } from '../types';
 
@@ -17,8 +18,8 @@ type Opts = { state?: Partial<StateType>; real?: boolean; dispatch?: Function };
 const renderWithProvider = async (El: JSX.Element, { state, real = false, dispatch }: Opts) => {
   if (real) {
     const iState = { ...initialState, ...state };
-    await initStore(iState);
-    return render(<StoreProvider>{El}</StoreProvider>);
+    const store = await initStore(iState, true);
+    return render(<Provider store={store}>{El}</Provider>);
   }
   return render(
     <MockupProvider initialstate={state} dispatch={dispatch}>

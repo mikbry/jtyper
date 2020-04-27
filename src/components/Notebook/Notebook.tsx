@@ -7,9 +7,9 @@
  */
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
-import { useActions } from '../../store';
+import { selectCell, updateCell } from '../../store/actions';
 import { getCurrentNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
@@ -30,13 +30,13 @@ const NoContent = styled.div`
 
 const Notebook: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
-  const { selectCell, updateCell } = useActions();
+  const dispatch = useDispatch();
   const handleSelectCell = (selected: number) => {
-    selectCell({ selected });
+    dispatch(selectCell({ selected }));
   };
   const handleCellChange = (index: number, value: string, notebook: NotebookType) => {
     const cell = { ...notebook.cells[index], raw: value };
-    updateCell(cell);
+    dispatch(updateCell(cell));
   };
   let content;
 

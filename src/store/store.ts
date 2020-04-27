@@ -7,56 +7,35 @@
  */
 import { createStore, applyMiddleware, Reducer, Store } from 'redux';
 import thunk from 'redux-thunk';
-import createActions from './actions';
+import { init } from './actions';
 import createEffects, { composer } from './effects';
 import { reducers } from './reducers';
-import { StateType, ActionType } from '../types';
-import { INITIALIZE } from '../constants';
+import { StateType } from '../types';
 import { composeEnhancers } from './devtools';
-
-interface FuncType {
-  effects?: any;
-  actions?: any;
-  reducers?: any;
-  initialState?: StateType;
-}
-const funcs: Partial<FuncType> = {};
 
 let store: Store;
 
 const handler: Reducer = (state: StateType, action: any) => {
-  console.log('action=', action.type);
-  if (action.type.startsWith('@@')) {
-    return state;
-  }
   if (reducers[action.type]) {
     return reducers[action.type](state, action);
   }
   return state;
 };
 
-export const initStore = async (initialState: StateType) => {
-  funcs.actions = createActions();
-  funcs.effects = createEffects();
-  funcs.reducers = reducers;
-  let state = initialState;
-  const dispatch = (action: ActionType) => {
-    const func: Function = reducers[action.type];
-    state = func(state, action);
-  };
-  const doInit = funcs.actions[INITIALIZE](null, null, composer);
+export const initStore = async (initialState: StateType, disableEffects = false) => {
+  /* const utils: Partial<FuncType> = {};
+  utils.actions = createActions();
+  utils.effects = createEffects();
+  utils.reducers = reducers; */
+  createEffects();
+  const fxComposer = disableEffects ? undefined : composer;
+  const doInit = init(fxComposer);
   const action = await doInit();
-  dispatch(action);
-  funcs.initialState = state;
-  // Make store immutable
-  Object.freeze(funcs);
+  const state = reducers[action.type](initialState, action);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   store = createStore(handler, state, enhancer);
+  // Make store immutable
+  // Object.freeze(utils);
+  return store;
 };
-
-export const setStore = (s: Store) => {
-  store = s;
-};
-
-export const useStore = () => store;

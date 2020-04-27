@@ -7,14 +7,17 @@
  */
 import { Dispatch } from 'redux';
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
-import { ActionType, ActionsType, StateType } from '../../../types';
+import { StateType } from '../../../types';
 import { composer } from '../../effects';
 
-const init = (_action: ActionType, _prevState: StateType, fxComposer: Function) => async () => {
-  const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
-  const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });
-  const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
-  return { type: INITIALIZE + DONE, document, files, editor };
+const init = (fxComposer: any) => async () => {
+  if (fxComposer) {
+    const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
+    const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });
+    const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
+    return { type: INITIALIZE + DONE, document, files, editor };
+  }
+  return { type: INITIALIZE + DONE };
 };
 
 const save = (action: any = {}) => (dispatch: Dispatch, prevState: any) => {
@@ -32,7 +35,7 @@ const save = (action: any = {}) => (dispatch: Dispatch, prevState: any) => {
   composer(APP.LOCALSAVE + FETCH, data).then(() => dispatch({ type: APP.LOCALSAVE + DONE }));
 };
 
-const createNotebook = (action: any) => (dispatch: Dispatch<any>) => {
+const createNotebook = (action: any | undefined = {}) => (dispatch: Dispatch<any>) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
 };
@@ -83,18 +86,4 @@ const paste = () => (dispatch: Dispatch<any>) => {
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
 };
 
-const app: ActionsType = {
-  [INITIALIZE]: { init },
-  [APP.CREATENOTEBOOK]: { createNotebook },
-  [APP.DELETENOTEBOOK]: { deleteNotebook },
-  [APP.CREATECELL]: { createCell },
-  [APP.UPDATECELL]: { updateCell },
-  [APP.SELECTFILE]: { selectFile },
-  [APP.SELECTCELL]: { selectCell },
-  [APP.CUT]: { cut },
-  [APP.COPY]: { copy },
-  [APP.PASTE]: { paste },
-  [APP.LOCALSAVE]: { save },
-};
-
-export default app;
+export { init, createNotebook, deleteNotebook, createCell, selectCell, updateCell, selectFile, cut, copy, paste, save };

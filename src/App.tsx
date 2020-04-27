@@ -9,7 +9,8 @@
 
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
-import { StoreProvider } from './store';
+import { Provider } from 'react-redux';
+import { Store } from 'redux';
 import Page from './components/Page';
 import AppBar from './components/AppBar';
 import Toolbar from './components/Toolbar';
@@ -24,8 +25,12 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const App: FunctionComponent = () => (
-  <StoreProvider>
+type Props = {
+  store: Store;
+};
+
+const App: FunctionComponent<Props> = ({ store }) => (
+  <Provider store={store}>
     <Page>
       <AppBar>
         <Toolbar />
@@ -40,7 +45,7 @@ const App: FunctionComponent = () => (
         </Container>
       </Wrapper>
     </Page>
-  </StoreProvider>
+  </Provider>
 );
 
 export default App;

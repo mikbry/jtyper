@@ -6,8 +6,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import StoreProvider from './StoreProvider';
-import useActions from './actions/useActions';
-import { initStore, setStore } from './store';
+import { initStore } from './store';
 
-export { useActions, initStore, setStore, StoreProvider };
+export { initStore };

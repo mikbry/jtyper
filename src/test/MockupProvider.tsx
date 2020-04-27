@@ -11,7 +11,6 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import configureStore, { MockStore } from 'redux-mock-store';
 import { DefaultTheme } from 'styled-components';
-import { setStore } from '../store';
 
 import { StateType } from '../types';
 import { BasicTheme } from '../themes';
@@ -42,7 +41,6 @@ const MockupProvider: FunctionComponent<MockupProviderProps> = ({
       theme,
       ...initialstate,
     });
-    setStore(store);
   }
   return <Provider store={store}>{children}</Provider>;
 };

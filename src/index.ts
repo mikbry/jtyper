@@ -13,6 +13,6 @@ import { initialState } from './store/reducers';
 import { initStore } from './store';
 
 (async () => {
-  await initStore(initialState);
-  ReactDOM.render(React.createElement(App, {}), document.getElementById('root'));
+  const store = await initStore(initialState);
+  ReactDOM.render(React.createElement(App, { store }), document.getElementById('root'));
 })().then();

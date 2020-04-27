@@ -10,8 +10,8 @@ import React, { FunctionComponent } from 'react';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
-import { useSelector } from 'react-redux';
-import { useActions } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { createNotebook, deleteNotebook, selectFile } from '../../store/actions';
 import { StateType, NotebookType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
@@ -20,21 +20,21 @@ import { getCurrentNotebook } from '../../store/selectors';
 
 const Explorer: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
-  const { createNotebook, deleteNotebook, selectFile } = useActions();
+  const dispatch = useDispatch();
   const notebook = getCurrentNotebook(editor, files);
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    createNotebook();
+    dispatch(createNotebook());
   };
   const handleDuplicate = () => {
-    createNotebook(notebook);
+    dispatch(createNotebook(notebook));
   };
   const handleDelete = () => {
-    deleteNotebook({ index: editor.selected });
+    dispatch(deleteNotebook({ index: editor.selected }));
   };
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();
-    selectFile({ selected });
+    dispatch(selectFile({ selected }));
   };
   const { selected } = editor;
   return (
