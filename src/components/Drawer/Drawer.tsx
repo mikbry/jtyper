@@ -13,7 +13,7 @@ import { BasicTheme } from '../../themes';
 const Wrapper = styled.div`
   position: fixed;
   top: ${props => (props.theme.spacing.fullHeightDrawer ? '0' : props.theme.spacing.headerHeight)}px;
-  min-width: ${props => props.theme.spacing.drawerWidth}px;
+  width: ${props => props.theme.spacing.drawerWidth}px;
   min-height: ${props =>
     props.theme.spacing.fullHeightDrawer ? '100%' : `calc(100% - ${props.theme.spacing.headerHeight}px)`};
   color: ${props => props.theme.palette.onSurface};
