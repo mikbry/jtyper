@@ -1,6 +1,11 @@
 .jtyper-code {
-  margin: 0;
+  margin: 0 96px 0 0;
   height: 100%;
+  width: calc(100% - 236px);
   padding: 12px;
-  min-height: 64px;
+}
+
+.CodeMirror {
+  min-height: 32px;
+  height: initial;
 }
