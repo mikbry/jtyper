@@ -12,7 +12,7 @@ import App from './App';
 import { initStore } from './store';
 
 test('App should launch correctly', async () => {
-  await initStore(initialState);
-  const { asFragment } = render(<App />);
+  const store = await initStore(initialState);
+  const { asFragment } = render(<App store={store} />);
   expect(asFragment()).toMatchSnapshot();
 });

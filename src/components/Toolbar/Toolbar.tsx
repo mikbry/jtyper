@@ -19,10 +19,10 @@ import { Next2 } from '@styled-icons/icomoon/Next2';
 import { Stop2 } from '@styled-icons/icomoon//Stop2';
 import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
-import { useSelector } from 'react-redux';
-import { useActions } from '../../store';
+import { useSelector, useDispatch } from 'react-redux';
+import { save, createCell, updateCell, selectCell, cut, copy, paste } from '../../store/actions';
 import { StateType } from '../../types';
-import { getCurrentNotebook, getCurrentCell } from '../../store/selectors';
+import { getNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
 import { BasicTheme } from '../../themes';
@@ -49,35 +49,35 @@ StyledSelect.defaultProps = { theme: BasicTheme };
 
 const Toolbar: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
-  const { save, createCell, updateCell, selectCell, cut, copy, paste } = useActions();
+  const dispatch = useDispatch();
   const { selectedCell } = editor;
-  const notebook = getCurrentNotebook(editor, files);
+  const notebook = getNotebook(editor.selected, files);
   const cell = getCurrentCell(editor, notebook);
   const handleSave = () => {
-    save();
+    dispatch(save());
   };
   const handleCreate = () => {
-    createCell();
+    dispatch(createCell());
   };
   const handleCut = () => {
-    cut({ cell, selected: selectedCell });
+    dispatch(cut({ cell, selected: selectedCell }));
   };
   const handleCopy = () => {
-    copy({ cell });
+    dispatch(copy({ cell }));
   };
   const handlePaste = () => {
-    paste();
+    dispatch(paste());
   };
   const handleUp = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell - 1;
-    selectCell({ selected });
+    dispatch(selectCell({ selected }));
   };
   const handleDown = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
-    selectCell({ selected });
+    dispatch(selectCell({ selected }));
   };
   const handleFormatChange = (format: string) => {
-    updateCell({ ...cell, format });
+    dispatch(updateCell({ ...cell, format }));
   };
   let editDisabled = true;
   let navDisabled = true;

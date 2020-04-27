@@ -81,16 +81,12 @@ test('Toolbar with notebook should have only paste disabled', async () => {
   });
 });
 
-test('Toolbar with notebook and no selectedCell should have edit & format disabled', () => {
+test('Toolbar with notebook and no selectedCell should have edit & format disabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByRole('button');
   expect(items.length).toBe(12);
   expect(items[0]).toHaveStyleRule('color', BasicTheme.palette.surface);
@@ -113,16 +109,36 @@ test('Toolbar with notebook and no selectedCell should have edit & format disabl
   });
 });
 
-test('Toolbar with notebook and paste should have all enaabled', () => {
+test('Toolbar with notebook and no selectedCell should use up', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state, real: true });
+  const items = getAllByRole('button');
+  fireEvent.click(items[5]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(0);
+});
+
+test('Toolbar with notebook and no selectedCell should use down', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state, real: true });
+  const items = getAllByRole('button');
+  fireEvent.click(items[6]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(0);
+});
+
+test('Toolbar with notebook and paste should have all enaabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0, copyBuffer: { raw: 'text' } },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByRole('button');
   expect(items.length).toBe(12);
   expect(items[0]).toHaveStyleRule('color', BasicTheme.palette.surface);
@@ -173,16 +189,12 @@ test('Toolbar with readOnly notebook should have only running buttons enabled', 
   expect(items[11].innerText).toBe(undefined);
 });
 
-test('Toolbar with notebook and selected cell should change format', () => {
+test('Toolbar with notebook and selected cell should change format', async () => {
   const state: Partial<StateType> = {
-    editor: { selected: 0, selectedCell: 0 },
+    editor: { selected: 0, selectedCell: 0, copyBuffer: {} },
     files: [{ id: '1', readOnly: true, title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByTestId } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { getAllByTestId } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByTestId('item');
   expect(items.length).toBe(3);
   expect(items[0]).toHaveStyleRule('color', BasicTheme.palette.selected);

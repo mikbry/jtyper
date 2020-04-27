@@ -7,13 +7,11 @@
  */
 import { EditorType, NotebookType, CellType } from '../../../types';
 
-export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType | undefined => {
-  let notebook;
-  if (editor.selected !== undefined) {
-    notebook = files[editor.selected];
-  }
-  return notebook;
-};
+export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType =>
+  files[editor.selected as number] as NotebookType;
+
+export const getNotebook = (selected: number | undefined, files: Array<NotebookType>): NotebookType | undefined =>
+  selected !== undefined ? files[selected] : undefined;
 
 export const getCurrentCell = (editor: EditorType, notebook: NotebookType | undefined): CellType | undefined => {
   let cell;

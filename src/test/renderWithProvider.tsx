@@ -7,24 +7,35 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
+import { Store } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import configureStore from 'redux-mock-store';
+import { DefaultTheme } from 'styled-components';
 import { initialState } from '../store/reducers';
-import { StoreProvider, initStore } from '../store';
-import MockupProvider from './MockupProvider';
+import { initStore } from '../store';
 import { StateType } from '../types';
+import { initEffects } from '../store/effects';
 
-type Opts = { state?: Partial<StateType>; real?: boolean; dispatch?: Function };
+type Opts = { state?: Partial<StateType>; real?: boolean; dispatch?: Function; store?: Store; theme?: DefaultTheme };
 
-const renderWithProvider = async (El: JSX.Element, { state, real = false, dispatch }: Opts) => {
+const renderWithProvider = async (El: JSX.Element, { state, real = false, dispatch, store: s, theme }: Opts) => {
+  let store = s;
   if (real) {
     const iState = { ...initialState, ...state };
-    await initStore(iState);
-    return render(<StoreProvider>{El}</StoreProvider>);
+    store = await initStore(iState, true);
+  } else if (!store || state) {
+    initEffects([]);
+    const mockStore = configureStore([thunk]);
+    store = mockStore({
+      editor: {},
+      dispatch,
+      theme,
+      ...state,
+    });
   }
-  return render(
-    <MockupProvider initialstate={state} dispatch={dispatch}>
-      {El}
-    </MockupProvider>,
-  );
+  const result = render(<Provider store={store}>{El}</Provider>);
+  return { ...result, store };
 };
 
 export default renderWithProvider;
