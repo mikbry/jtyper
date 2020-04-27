@@ -7,6 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
+import { Dispatch, AnyAction } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import configureStore, { MockStore } from 'redux-mock-store';
@@ -41,6 +42,14 @@ const MockupProvider: FunctionComponent<MockupProviderProps> = ({
       theme,
       ...initialstate,
     });
+    const storeDispatch = store.dispatch;
+    store.dispatch = ((action: AnyAction) => {
+      storeDispatch(action);
+      if (dispatch) {
+        const state = store.getState();
+        dispatch(state);
+      }
+    }) as Dispatch<AnyAction>;
   }
   return <Provider store={store}>{children}</Provider>;
 };

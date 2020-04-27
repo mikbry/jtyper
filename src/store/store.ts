@@ -23,10 +23,6 @@ const handler: Reducer = (state: StateType, action: any) => {
 };
 
 export const initStore = async (initialState: StateType, disableEffects = false) => {
-  /* const utils: Partial<FuncType> = {};
-  utils.actions = createActions();
-  utils.effects = createEffects();
-  utils.reducers = reducers; */
   createEffects();
   const fxComposer = disableEffects ? undefined : composer;
   const doInit = init(fxComposer);
@@ -35,7 +31,5 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   store = createStore(handler, state, enhancer);
-  // Make store immutable
-  // Object.freeze(utils);
   return store;
 };

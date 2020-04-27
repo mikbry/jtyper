@@ -23,11 +23,13 @@ const init = (fxComposer: any) => async () => {
 const save = (action: any = {}) => (dispatch: Dispatch, prevState: any) => {
   const { document, files, editor } = prevState();
   let data: Partial<StateType>;
-  if (action.document) {
+  // Not used for instance
+  /* if (action.document) {
     data = { document };
   } else if (action.files) {
     data = { files };
-  } else if (action.editor) {
+  } else */
+  if (action.editor) {
     data = { editor };
   } else {
     data = { document, files, editor };

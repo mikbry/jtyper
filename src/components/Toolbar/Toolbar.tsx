@@ -22,7 +22,7 @@ import { Forward3 } from '@styled-icons/icomoon/Forward3';
 import { useSelector, useDispatch } from 'react-redux';
 import { save, createCell, updateCell, selectCell, cut, copy, paste } from '../../store/actions';
 import { StateType } from '../../types';
-import { getCurrentNotebook, getCurrentCell } from '../../store/selectors';
+import { getNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
 import { BasicTheme } from '../../themes';
@@ -51,7 +51,7 @@ const Toolbar: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const dispatch = useDispatch();
   const { selectedCell } = editor;
-  const notebook = getCurrentNotebook(editor, files);
+  const notebook = getNotebook(editor.selected, files);
   const cell = getCurrentCell(editor, notebook);
   const handleSave = () => {
     dispatch(save());

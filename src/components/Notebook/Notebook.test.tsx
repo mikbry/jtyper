@@ -7,10 +7,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Notebook from './index';
-import MockupProvider from '../../test/MockupProvider';
+import { renderWithProvider } from '../../test';
 import { StateType } from '../../types';
 
 beforeAll(() => {
@@ -26,23 +26,15 @@ beforeAll(() => {
   });
 });
 
-test('Notebook should render correctly', () => {
+test('Notebook should render correctly', async () => {
   const state: Partial<StateType> = {};
-  const { asFragment } = render(
-    <MockupProvider initialstate={state}>
-      <Notebook />
-    </MockupProvider>,
-  );
+  const { asFragment } = await renderWithProvider(<Notebook />, { state });
   expect(asFragment()).toMatchSnapshot();
 });
 
-test('Notebook without notebook should display "No content"', () => {
+test('Notebook without notebook should display "No content"', async () => {
   const state: Partial<StateType> = {};
-  const { getAllByText } = render(
-    <MockupProvider initialstate={state}>
-      <Notebook />
-    </MockupProvider>,
-  );
+  const { getAllByText } = await renderWithProvider(<Notebook />, { state });
   expect(getAllByText('No content')).toBeDefined();
 });
 
@@ -51,11 +43,7 @@ test('Notebook selected with data should display content', async () => {
     editor: { selected: 0, selectedCell: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Notebook />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
   const cells = getAllByRole('button');
   expect(cells.length).toBe(1);
   expect(cells[0].textContent).toBe('text');
@@ -66,16 +54,12 @@ test('Notebook selected with data should display content', async () => {
   await userEvent.type(textarea, 'new text');
 });
 
-test('Notebook readonly selected with data should display content', () => {
+test('Notebook readonly selected with data should display content', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0 },
     files: [{ id: '1', title: 'notebook', readOnly: true, cells: [{ id: '1', raw: 'text' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Notebook />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
   const cells = getAllByRole('button');
   expect(cells.length).toBe(1);
   expect(cells[0].textContent).toBe('text');

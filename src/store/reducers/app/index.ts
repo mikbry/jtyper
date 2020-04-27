@@ -8,7 +8,7 @@
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
-import { getCurrentNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
+import { getCurrentNotebook, getNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
 
 const generateId = () =>
   Math.random()
@@ -35,7 +35,7 @@ const handlers = {
     return { ...state, document, files, editor, init: true, saved: true, title };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
-    let { title = 'Notebook', cells } = action;
+    let { title = 'Notebook' } = action;
     const { files, editor } = state;
     let i = 1;
     const it = (f: NotebookType) => f.title === title;
@@ -43,11 +43,7 @@ const handlers = {
       title = `Notebook${i}`;
       i += 1;
     }
-    if (cells) {
-      cells = cells.map(cell => ({ ...cell, id: generateId() }));
-    } else {
-      cells = [{ id: generateId(), raw: `# ${title}` }];
-    }
+    const cells = [{ id: generateId(), raw: `# ${title}` }];
     const notebook: NotebookType = {
       id: generateId(),
       title,
@@ -65,35 +61,29 @@ const handlers = {
     editor.selectedCell = undefined;
     if (files.length === 0) {
       editor.selected = undefined;
-    } else if (editor.selected && editor.selected >= files.length) {
+    } else if (editor.selected !== undefined && editor.selected >= files.length) {
       editor.selected = files.length - 1;
     }
-    const notebook = getCurrentNotebook(editor, files);
+    const notebook = getNotebook(editor.selected, files);
     const title = notebook?.title || '';
     return { ...state, files, editor, saved: false, title };
   },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormat }) => {
     const { files, editor } = state;
     const notebook = getCurrentNotebook(editor, files);
-    if (notebook) {
-      const { raw = '', format } = action;
-      editor.selectedCell = notebook.cells.length;
-      const cell: CellType = { id: generateId(), raw, format };
-      notebook.cells.push(cell);
-      return { ...state, files, saved: false };
-    }
-    return state;
+    const { raw = '', format } = action;
+    editor.selectedCell = notebook.cells.length;
+    const cell: CellType = { id: generateId(), raw, format };
+    notebook.cells.push(cell);
+    return { ...state, files, saved: false };
   },
   [APP.UPDATECELL + DONE]: (state: StateType, action: CellType) => {
     const { files, editor } = state;
     const notebook = getCurrentNotebook(editor, files);
-    const cell = getNotebookCell(action.id, notebook);
-    if (cell) {
-      cell.raw = action.raw;
-      cell.format = action.format;
-      return { ...state, files, saved: false };
-    }
-    return state;
+    const cell = getNotebookCell(action.id, notebook) as CellType;
+    cell.raw = action.raw;
+    cell.format = action.format;
+    return { ...state, files, saved: false };
   },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
@@ -105,9 +95,9 @@ const handlers = {
     const { files, editor } = state;
 
     const notebook = getCurrentNotebook(editor, files);
-    const length = notebook?.cells.length || 0;
+    const { length } = notebook.cells;
     const selectedCell = validateSelectedCell(selected, length);
-    const title = notebook?.title || '';
+    const { title } = notebook;
     return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
   },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
@@ -118,7 +108,7 @@ const handlers = {
     if (notebook && selected !== undefined) {
       // Cut selected
       notebook.cells.splice(selected, 1);
-      const length = notebook?.cells.length || 0;
+      const { length } = notebook.cells;
       selectedCell = validateSelectedCell(selected, length);
     }
     const copyBuffer = { format: cell.format, raw: cell.raw };
@@ -126,12 +116,15 @@ const handlers = {
   },
   [APP.PASTE + DONE]: (state: StateType) => {
     const { files, editor } = state;
-    const { selectedCell = 0 } = editor;
+    const copyBuffer: Partial<CellType> = editor.copyBuffer as Partial<CellType>;
+    const selectedCell: number = editor.selectedCell as number;
     const notebook = getCurrentNotebook(editor, files);
-    if (notebook && editor.copyBuffer) {
-      const cell: CellType = { id: generateId(), raw: editor.copyBuffer.raw || '', format: editor.copyBuffer.format };
-      notebook.cells.splice(selectedCell, 0, cell);
-    }
+    const cell: CellType = {
+      id: generateId(),
+      raw: copyBuffer.raw as string,
+      format: copyBuffer.format,
+    };
+    notebook.cells.splice(selectedCell, 0, cell);
     return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
   },
   [APP.LOCALSAVE + DONE]: (state: StateType) => ({ ...state, saved: true }),

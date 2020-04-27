@@ -16,12 +16,12 @@ import { StateType, NotebookType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
 import Item from '../Item';
-import { getCurrentNotebook } from '../../store/selectors';
+import { getNotebook } from '../../store/selectors';
 
 const Explorer: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const dispatch = useDispatch();
-  const notebook = getCurrentNotebook(editor, files);
+  const notebook = getNotebook(editor.selected, files);
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     dispatch(createNotebook());

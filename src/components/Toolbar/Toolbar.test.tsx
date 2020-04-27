@@ -109,6 +109,30 @@ test('Toolbar with notebook and no selectedCell should have edit & format disabl
   });
 });
 
+test('Toolbar with notebook and no selectedCell should use up', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state, real: true });
+  const items = getAllByRole('button');
+  fireEvent.click(items[5]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(0);
+});
+
+test('Toolbar with notebook and no selectedCell should use down', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state, real: true });
+  const items = getAllByRole('button');
+  fireEvent.click(items[6]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(0);
+});
+
 test('Toolbar with notebook and paste should have all enaabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0, copyBuffer: { raw: 'text' } },
@@ -167,7 +191,7 @@ test('Toolbar with readOnly notebook should have only running buttons enabled', 
 
 test('Toolbar with notebook and selected cell should change format', async () => {
   const state: Partial<StateType> = {
-    editor: { selected: 0, selectedCell: 0 },
+    editor: { selected: 0, selectedCell: 0, copyBuffer: {} },
     files: [{ id: '1', readOnly: true, title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
   const { getAllByTestId } = await renderWithProvider(<Toolbar />, { state, real: true });

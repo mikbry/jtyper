@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
 import { selectCell, updateCell } from '../../store/actions';
-import { getCurrentNotebook } from '../../store/selectors';
+import { getNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
 
@@ -40,7 +40,7 @@ const Notebook: FunctionComponent = () => {
   };
   let content;
 
-  const notebook = getCurrentNotebook(editor, files);
+  const notebook = getNotebook(editor.selected, files);
   if (notebook) {
     const { selectedCell = -1 } = editor;
     const { readOnly } = notebook;
