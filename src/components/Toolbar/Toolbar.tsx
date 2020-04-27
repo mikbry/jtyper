@@ -93,11 +93,8 @@ const Toolbar: FunctionComponent = () => {
     { key: 'o2', value: 'code' },
     { key: 'o3', value: 'raw' },
   ];
-  if (cell && cell.format) {
-    const option = options.find(o => o.value === cell.format);
-    /* istanbul ignore next */
-    if (option) option.selected = true;
-  }
+  const option = options.find(o => o.value === cell?.format);
+  if (option) option.selected = true;
   let selectPlaceholder = 'No format';
   if (selectedCell === undefined) selectPlaceholder = 'No selection';
   return (

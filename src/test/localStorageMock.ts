@@ -18,9 +18,16 @@ const localStorageMock = (() => {
     clear() {
       store = {};
     },
+    fill(data: Record<string, any>) {
+      Object.keys(data).forEach(key => {
+        this.setItem(key, JSON.stringify(data[key]));
+      });
+    },
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
+
+export default localStorageMock;
