@@ -12,7 +12,7 @@ import Markdown from 'markdown-it';
 type Props = { value: string };
 
 const Styled = styled.div`
-  padding: 0.6em;
+  padding: 0;
 `;
 
 const render = (ref: React.RefObject<HTMLDivElement>, value: string, m: Markdown | undefined): Markdown | undefined => {
