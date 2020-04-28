@@ -25,7 +25,7 @@ const renderWithProvider = async (El: JSX.Element, { state, real = false, dispat
     const iState = { ...initialState, ...state };
     store = await initStore(iState, true);
   } else if (!store || state) {
-    initEffects([]);
+    initEffects({});
     const mockStore = configureStore([thunk]);
     store = mockStore({
       editor: {},

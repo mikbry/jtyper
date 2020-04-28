@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ParserType, SandboxType } from '../../../types/sandbox';
+import { ParserType, SandboxType, RestType } from '../../../types';
 import Parser from './Parser';
 
 class Sandbox implements SandboxType {
@@ -19,9 +19,50 @@ class Sandbox implements SandboxType {
 
   error: Error | undefined;
 
+  console: {
+    clear: Function;
+    error: Function;
+    info: Function;
+    log: Function;
+    warn: Function;
+  };
+
+  originalConsole: {
+    clear: Function;
+    error: Function;
+    info: Function;
+    log: Function;
+    warn: Function;
+  };
+
   constructor() {
     this.parser = new Parser();
     this.reset();
+
+    const { clear, error, info, log, warn } = console;
+    this.originalConsole = { clear, error, info, log, warn };
+    this.console = {
+      clear: (...args: RestType) => {
+        // TODO
+        this.originalConsole.clear.apply(this, args);
+      },
+      error: (...args: RestType) => {
+        // TODO
+        this.originalConsole.error.apply(this, args);
+      },
+      info: (...args: RestType) => {
+        // TODO
+        this.originalConsole.info.apply(this, args);
+      },
+      log: (...args: RestType) => {
+        // TODO
+        this.originalConsole.log.apply(this, args);
+      },
+      warn: (...args: RestType) => {
+        // TODO
+        this.originalConsole.warn.apply(this, args);
+      },
+    };
   }
 
   reset() {
@@ -59,7 +100,7 @@ class Sandbox implements SandboxType {
         this.error = error;
         this.lastFunc = undefined;
         this.lastCode = undefined;
-        console.log('preprocessing error', error);
+        this.console.log('preprocessing error', error);
         this.out = 'Syntax error';
       }
     }
@@ -71,7 +112,7 @@ class Sandbox implements SandboxType {
           this.print(resp);
         }
       } catch (error) {
-        console.log('execution error', error);
+        this.console.log('execution error', error);
         this.error = error;
       }
     }

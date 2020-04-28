@@ -6,12 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
-import { StateType, DispatchType, CellType, CellFormat, NotebookType } from '../../../types';
+import { StateType, DispatchType, CellType, CellFormat, NotebookType, ComposerType } from '../../../types';
 import { getCurrentNotebook, findNotebookCodeCell, getNotebookCellIndex } from '../../selectors';
 import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
 
-const init = (fxComposer: any) => async () => {
+const init = (fxComposer?: ComposerType) => async () => {
   if (fxComposer) {
     const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
     const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });

@@ -18,9 +18,9 @@ const localStorageMock = (() => {
     clear() {
       store = {};
     },
-    fill(data: Record<string, any>) {
+    fill(data: Record<string, string>) {
       Object.keys(data).forEach(key => {
-        this.setItem(key, JSON.stringify(data[key]));
+        this.setItem(key, data[key]);
       });
     },
   };
