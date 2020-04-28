@@ -5,7 +5,8 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Dispatch } from 'react';
+import { Action, AnyAction } from 'redux';
+import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
 import { SandboxType, ParserType } from './sandbox';
 
@@ -18,14 +19,9 @@ export interface StateType {
   sandbox?: SandboxType;
 }
 
-export interface LocalContextType extends StateType {
-  dispatch: Dispatch<any>;
-}
+export type ActionType = AnyAction | Action<any> | ThunkAction<void, StateType, unknown, AnyAction>;
 
-export interface ActionType {
-  type: string;
-  payload: {};
-}
+export type DispatchType = ThunkDispatch<StateType, unknown, AnyAction>;
 
 export interface MiddlewareType {
   [key: string]: Function;

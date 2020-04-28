@@ -30,7 +30,7 @@ const Explorer: FunctionComponent = () => {
     dispatch(createNotebook(notebook));
   };
   const handleDelete = () => {
-    dispatch(deleteNotebook({ index: editor.selected }));
+    dispatch(deleteNotebook({ index: editor.selected as number }));
   };
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();

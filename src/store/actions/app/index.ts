@@ -5,9 +5,9 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Dispatch } from 'redux';
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
-import { StateType, SandboxType, CellType } from '../../../types';
+import { StateType, DispatchType, CellType, CellFormat, NotebookType } from '../../../types';
+import { getCurrentNotebook, findNotebookCodeCell, getNotebookCellIndex } from '../../selectors';
 import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
 
@@ -22,7 +22,10 @@ const init = (fxComposer: any) => async () => {
   return { type: INITIALIZE + DONE };
 };
 
-const save = (action: any = {}) => (dispatch: Dispatch, prevState: Function) => {
+const save = (action: { document?: boolean; files?: boolean; editor?: boolean } | undefined = {}) => (
+  dispatch: DispatchType,
+  prevState: Function,
+) => {
   const { document, files, editor } = prevState();
   let data: Partial<StateType>;
   // Not used for instance
@@ -31,7 +34,7 @@ const save = (action: any = {}) => (dispatch: Dispatch, prevState: Function) => 
   } else if (action.files) {
     data = { files };
   } else */
-  if (action.editor) {
+  if (action && action.editor) {
     data = { editor };
   } else {
     data = { document, files, editor };
@@ -39,66 +42,74 @@ const save = (action: any = {}) => (dispatch: Dispatch, prevState: Function) => 
   composer(APP.LOCALSAVE + FETCH, data).then(() => dispatch({ type: APP.LOCALSAVE + DONE }));
 };
 
-const createNotebook = (action: any | undefined = {}) => (dispatch: Dispatch<any>) => {
+const createNotebook = (action: Partial<NotebookType> | undefined = {}) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const deleteNotebook = (action: any) => (dispatch: Dispatch<any>) => {
+const deleteNotebook = (action: { index: number }) => (dispatch: DispatchType) => {
   const { index } = action;
   dispatch({ type: APP.DELETENOTEBOOK + DONE, index });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const selectFile = (action: any) => (dispatch: Dispatch<any>) => {
+const selectFile = (action: { selected: number }) => (dispatch: DispatchType) => {
   const { selected } = action;
   dispatch({ type: APP.SELECTFILE + DONE, selected });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const createCell = (action: any = {}) => (dispatch: Dispatch<any>) => {
-  const { type } = action;
-  dispatch({ type: APP.CREATECELL + DONE, cellType: type });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+const createCell = (action: { raw?: string; format?: CellFormat } | undefined = {}) => (dispatch: DispatchType) => {
+  dispatch({ type: APP.CREATECELL + DONE, ...action });
+  dispatch(save({ editor: true }));
 };
 
-const updateCell = (action: any) => (dispatch: Dispatch<any>) => {
+const updateCell = (action: CellType) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.UPDATECELL + DONE });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-type RunCellType = { cell: CellType; next: number };
-const runCell = ({ cell, next }: RunCellType) => async (dispatch: Dispatch<any>, state: Function) => {
-  if (cell.format === 'code') {
-    const sandbox = state().sandbox as SandboxType;
+type RunCellType = { cell: CellType; next?: number };
+const runCell = ({ cell: c, next }: RunCellType) => async (dispatch: DispatchType, getState: Function) => {
+  const { editor, files, sandbox } = getState();
+  const notebook = getCurrentNotebook(editor, files);
+  let cell = c;
+  if (!cell) {
+    cell = findNotebookCodeCell(notebook) as CellType;
+  }
+  if (cell && cell.format === 'code') {
     const out = await sandbox.execute(cell.raw);
     dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
   }
-  dispatch({ type: APP.SELECTCELL + DONE, selected: next });
-  dispatch(save({ type: APP.LOCALSAVE, files: true }));
+  let selected = next;
+  if (cell && selected === undefined) {
+    selected = getNotebookCellIndex(notebook, cell) + 1;
+  }
+  dispatch({ type: APP.SELECTCELL + DONE, selected });
+  dispatch(save({ files: true, editor: true }));
 };
 
-const selectCell = (action: any) => (dispatch: Dispatch<any>) => {
+const selectCell = (action: { selected: number }) => (dispatch: DispatchType) => {
   const { selected } = action;
   dispatch({ type: APP.SELECTCELL + DONE, selected });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const cut = (action: any) => (dispatch: Dispatch<any>) => {
+const cut = (action: { cell: CellType; selected: number }) => (dispatch: DispatchType) => {
   const { selected, cell } = action;
   dispatch({ type: APP.COPY + DONE, selected, cell });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const copy = (action: any) => (dispatch: Dispatch<any>) => {
+const copy = (action: { cell: CellType }) => (dispatch: DispatchType) => {
   const { cell } = action;
   dispatch({ type: APP.COPY + DONE, cell });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
-const paste = () => (dispatch: Dispatch<any>) => {
+const paste = () => (dispatch: DispatchType) => {
   dispatch({ type: APP.PASTE + DONE });
-  dispatch(save({ type: APP.LOCALSAVE, editor: true }));
+  dispatch(save({ editor: true }));
 };
 
 export {

@@ -21,7 +21,7 @@ import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
 import { useSelector, useDispatch } from 'react-redux';
 import { save, createCell, updateCell, runCell, selectCell, cut, copy, paste } from '../../store/actions';
-import { StateType, CellType } from '../../types';
+import { StateType, CellType, CellFormat } from '../../types';
 import { getNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
@@ -60,10 +60,10 @@ const Toolbar: FunctionComponent = () => {
     dispatch(createCell());
   };
   const handleCut = () => {
-    dispatch(cut({ cell, selected: selectedCell }));
+    dispatch(cut({ cell: cell as CellType, selected: selectedCell as number }));
   };
   const handleCopy = () => {
-    dispatch(copy({ cell }));
+    dispatch(copy({ cell: cell as CellType }));
   };
   const handlePaste = () => {
     dispatch(paste());
@@ -76,11 +76,13 @@ const Toolbar: FunctionComponent = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
     dispatch(selectCell({ selected }));
   };
-  const handleFormatChange = (format: string) => {
-    dispatch(updateCell({ ...cell, format }));
+  const handleFormatChange = (value: string) => {
+    const c: CellType = { ...cell } as CellType;
+    c.format = value as CellFormat;
+    dispatch(updateCell(c));
   };
   const handleRun = () => {
-    const next = (selectedCell as number) + 1;
+    const next = selectedCell === undefined ? undefined : selectedCell + 1;
     dispatch(runCell({ cell: cell as CellType, next }));
   };
   let editDisabled = true;

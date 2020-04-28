@@ -25,6 +25,9 @@ export const getCurrentCell = (editor: EditorType, notebook: NotebookType | unde
 export const getNotebookCell = (id: string, notebook: NotebookType): CellType | undefined =>
   notebook.cells.find(c => c.id === id);
 
+export const findNotebookCodeCell = (notebook: NotebookType, start = 0): CellType | undefined =>
+  notebook.cells.find((c, index) => c.format === 'code' && start <= index);
+
 export const validateSelectedCell = (selected: number, length: number): number | undefined => {
   let selectedCell;
   if (selected < 0 && length) {
@@ -36,3 +39,6 @@ export const validateSelectedCell = (selected: number, length: number): number |
   }
   return selectedCell;
 };
+
+export const getNotebookCellIndex = (notebook: NotebookType, cell: CellType): number =>
+  notebook.cells.findIndex(c => c.id === cell.id) as number;
