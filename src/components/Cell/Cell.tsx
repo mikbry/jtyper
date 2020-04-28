@@ -19,7 +19,7 @@ interface Props {
   onChange: (value: string) => void;
   children: string;
   format?: string;
-  out?: string;
+  out?: string[];
 }
 
 interface StyledProps {
@@ -152,10 +152,17 @@ const Cell: FunctionComponent<Props> = ({
         <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
         {content}
       </Line>
-      {out && (
+      {out && out.length && out.map && (
         <Line>
           <Prompt selected={selected} />
-          <OutContent>{out}</OutContent>
+          <OutContent>
+            {out.map(o => (
+              <>
+                <span>{o}</span>
+                <br />
+              </>
+            ))}
+          </OutContent>
         </Line>
       )}
     </Styled>

@@ -15,7 +15,7 @@ class Sandbox implements SandboxType {
 
   lastFunc: Function | undefined;
 
-  out: string | undefined;
+  out: string[] = [];
 
   error: Error | undefined;
 
@@ -38,37 +38,48 @@ class Sandbox implements SandboxType {
   constructor() {
     this.parser = new Parser();
     this.reset();
-
     const { clear, error, info, log, warn } = console;
     this.originalConsole = { clear, error, info, log, warn };
     this.console = {
       clear: (...args: RestType) => {
-        // TODO
         this.originalConsole.clear.apply(this, args);
+        this.appendConsole(args);
       },
       error: (...args: RestType) => {
-        // TODO
         this.originalConsole.error.apply(this, args);
+        this.appendConsole(args);
       },
       info: (...args: RestType) => {
-        // TODO
         this.originalConsole.info.apply(this, args);
+        this.appendConsole(args);
       },
       log: (...args: RestType) => {
-        // TODO
         this.originalConsole.log.apply(this, args);
+        this.appendConsole(args);
       },
       warn: (...args: RestType) => {
-        // TODO
         this.originalConsole.warn.apply(this, args);
+        args.forEach(a => this.out.push(JSON.stringify(a)));
       },
     };
+  }
+
+  appendConsole(args: RestType) {
+    args.forEach(a => {
+      let s = a;
+      if (a.toString) {
+        s = a.toString();
+      } else {
+        s = JSON.stringify(a);
+      }
+      this.out.push(s);
+    });
   }
 
   reset() {
     this.lastCode = undefined;
     this.lastFunc = undefined;
-    this.out = undefined;
+    this.out = [];
     this.error = undefined;
   }
 
@@ -80,12 +91,12 @@ class Sandbox implements SandboxType {
   }
 
   clear() {
-    this.out = '';
+    this.out = [];
   }
 
   print(text: string) {
-    if (!this.out) this.out = '';
-    this.out += text;
+    if (!this.out) this.out = [];
+    this.out.push(text);
   }
 
   async execute(code: string) {
@@ -101,7 +112,6 @@ class Sandbox implements SandboxType {
         this.lastFunc = undefined;
         this.lastCode = undefined;
         this.console.log('preprocessing error', error);
-        this.out = 'Syntax error';
       }
     }
     if (this.lastFunc) {
