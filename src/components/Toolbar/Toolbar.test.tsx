@@ -7,29 +7,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import Toolbar from './index';
-import { MockupProvider, renderWithProvider } from '../../test';
+import { renderWithProvider } from '../../test';
 import { StateType } from '../../types';
 import { BasicTheme } from '../../themes';
+import initSandbox from '../../store/effects/sandbox';
 
-test('Toolbar should render correctly', () => {
+test('Toolbar should render correctly', async () => {
   const state: Partial<StateType> = {};
-  const { asFragment } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { asFragment } = await renderWithProvider(<Toolbar />, { state });
   expect(asFragment()).toMatchSnapshot();
 });
 
-test('Toolbar without notebook should have all items disabled', () => {
-  const state: Partial<StateType> = {};
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+test('Toolbar without notebook should have all items disabled', async () => {
+  const sandbox = await initSandbox();
+  const state: Partial<StateType> = { sandbox };
+  const { getAllByRole } = await renderWithProvider(<Toolbar />, { state });
   const items = getAllByRole('button');
   expect(items.length).toBe(12);
   // all disabled
@@ -54,9 +48,11 @@ test('Toolbar without notebook should have all items disabled', () => {
 });
 
 test('Toolbar with notebook should have only paste disabled', async () => {
+  const sandbox = await initSandbox();
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+    sandbox,
   };
   const { getAllByRole } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByRole('button');
@@ -82,9 +78,11 @@ test('Toolbar with notebook should have only paste disabled', async () => {
 });
 
 test('Toolbar with notebook and no selectedCell should have edit & format disabled', async () => {
+  const sandbox = await initSandbox();
   const state: Partial<StateType> = {
     editor: { selected: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+    sandbox,
   };
   const { getAllByRole } = await renderWithProvider(<Toolbar />, { state, real: true });
   const items = getAllByRole('button');
@@ -133,7 +131,7 @@ test('Toolbar with notebook and no selectedCell should use down', async () => {
   expect(newState.editor.selectedCell).toBe(0);
 });
 
-test('Toolbar with notebook and paste should have all enaabled', async () => {
+test('Toolbar with notebook and paste should have all enabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0, copyBuffer: { raw: 'text' } },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
@@ -161,16 +159,12 @@ test('Toolbar with notebook and paste should have all enaabled', async () => {
   });
 });
 
-test('Toolbar with readOnly notebook should have only running buttons enabled', () => {
+test('Toolbar with readOnly notebook should have only running buttons enabled', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0 },
     files: [{ id: '1', readOnly: true, title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = render(
-    <MockupProvider initialstate={state}>
-      <Toolbar />
-    </MockupProvider>,
-  );
+  const { getAllByRole } = await renderWithProvider(<Toolbar />, { state });
   const items = getAllByRole('button');
   expect(items.length).toBe(12);
   // all disabled

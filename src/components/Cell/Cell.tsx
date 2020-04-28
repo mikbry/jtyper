@@ -19,6 +19,7 @@ interface Props {
   onChange: (value: string) => void;
   children: string;
   format?: string;
+  out?: string;
 }
 
 interface StyledProps {
@@ -37,6 +38,7 @@ const chooseBorderColor = (props: StyledProps, hover = false) => {
 const Styled = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
   width: auto;
@@ -49,7 +51,7 @@ const Styled = styled.div`
   &:hover {
     border: 1px solid ${props => chooseBorderColor(props, true)};
   }
-  &:hover > aside {
+  &:hover > div aside {
     border-left: 4px solid ${props => chooseBorderColor(props, true)};
   }
 
@@ -73,15 +75,27 @@ const Prompt = styled.aside`
 `;
 Prompt.defaultProps = { theme: BasicTheme };
 
+const Line = styled.div`
+  display: flex;
+`;
+
 const RawContent = styled.div`
   min-height: calc(32px - 1.2em);
   padding: 0.6em 0;
+`;
+
+const OutContent = styled.div`
+  min-height: calc(32px - 1.2em);
+  padding: 0.6em 0;
+  font-size: 13px;
+  font-familiy: 13px;
 `;
 
 const Cell: FunctionComponent<Props> = ({
   selected = false,
   editable = false,
   format = undefined,
+  out = undefined,
   onClick,
   onChange,
   children,
@@ -134,8 +148,16 @@ const Cell: FunctionComponent<Props> = ({
       ref={cellRef}
       suppressContentEditableWarning
     >
-      <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
-      {content}
+      <Line>
+        <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
+        {content}
+      </Line>
+      {out && (
+        <Line>
+          <Prompt selected={selected} />
+          <OutContent>{out}</OutContent>
+        </Line>
+      )}
     </Styled>
   );
 };

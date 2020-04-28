@@ -28,9 +28,9 @@ export const getNotebookCell = (id: string, notebook: NotebookType): CellType | 
 export const validateSelectedCell = (selected: number, length: number): number | undefined => {
   let selectedCell;
   if (selected < 0 && length) {
-    selectedCell = length - 1;
-  } else if (selected >= length && length) {
     selectedCell = 0;
+  } else if (selected >= length && length) {
+    selectedCell = length - 1;
   } else if (length) {
     selectedCell = selected;
   }

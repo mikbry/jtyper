@@ -12,6 +12,7 @@ export interface CellType {
   format?: 'markdown' | 'code' | 'raw';
   id: string;
   raw: string;
+  out?: string;
 }
 
 export interface NotebookType {
