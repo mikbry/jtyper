@@ -30,9 +30,10 @@ const handlers = {
     if (!editor) {
       ({ editor } = state);
     }
+    const { sandbox } = action;
     const notebook = getCurrentNotebook(editor, files);
     const title = notebook?.title || '';
-    return { ...state, document, files, editor, init: true, saved: true, title };
+    return { ...state, document, files, editor, init: true, saved: true, title, sandbox };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     let { title = 'Notebook' } = action;
@@ -83,6 +84,9 @@ const handlers = {
     const cell = getNotebookCell(action.id, notebook) as CellType;
     cell.raw = action.raw;
     cell.format = action.format;
+    if (cell.format === 'code') {
+      cell.out = action.out;
+    }
     return { ...state, files, saved: false };
   },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {

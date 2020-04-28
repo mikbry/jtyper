@@ -48,7 +48,7 @@ test('Notebook selected with data should display content', async () => {
   expect(cells.length).toBe(1);
   expect(cells[0].textContent).toBe('text');
   fireEvent.click(cells[0]);
-  const content = cells[0].firstChild as HTMLElement;
+  const content = cells[0].firstChild?.childNodes[1] as HTMLElement;
   const textarea: HTMLTextAreaElement = content?.firstChild?.firstChild?.firstChild as HTMLTextAreaElement;
   await userEvent.type(textarea, 'another text');
   await userEvent.type(textarea, 'new text');

@@ -11,6 +11,7 @@ import {
   deleteNotebook,
   createCell,
   updateCell,
+  runCell,
   selectFile,
   selectCell,
   cut,
@@ -19,4 +20,17 @@ import {
   save,
 } from './app';
 
-export { init, createNotebook, deleteNotebook, createCell, updateCell, selectFile, selectCell, cut, copy, paste, save };
+export {
+  init,
+  createNotebook,
+  deleteNotebook,
+  createCell,
+  updateCell,
+  runCell,
+  selectFile,
+  selectCell,
+  cut,
+  copy,
+  paste,
+  save,
+};

@@ -50,6 +50,7 @@ const Notebook: FunctionComponent = () => {
           <Cell
             key={cell.id}
             format={cell.format}
+            out={cell.out}
             editable={!readOnly}
             selected={index === selectedCell}
             onChange={value => {

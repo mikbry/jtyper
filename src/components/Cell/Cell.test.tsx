@@ -105,7 +105,7 @@ test('editable & selected Cell with markdown should display Editor', () => {
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild;
+  const content = getByRole('button').firstChild?.childNodes[1];
   expect(content).toHaveClass('react-codemirror2');
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
@@ -120,7 +120,7 @@ test('Cell with code should display CodeHighlighter', () => {
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild;
+  const content = getByRole('button').firstChild?.childNodes[1];
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
 });
@@ -135,7 +135,7 @@ test('editable & selected Cell with code should display Editor', () => {
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild;
+  const content = getByRole('button').firstChild?.childNodes[1];
   expect(content).toHaveClass('react-codemirror2');
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
@@ -154,7 +154,7 @@ test('editable & selected Cell with code should be changed', async () => {
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild as HTMLElement;
+  const content = getByRole('button').firstChild?.childNodes[1] as HTMLElement;
   expect(content?.textContent?.trim()).toBe('');
   const container = content?.firstChild as HTMLElement;
   const helloword = 'Hello world';

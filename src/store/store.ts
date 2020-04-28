@@ -26,8 +26,8 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   createEffects();
   const fxComposer = disableEffects ? undefined : composer;
   const doInit = init(fxComposer);
-  const action = await doInit();
-  const state = reducers[action.type](initialState, action);
+  let state = await doInit();
+  state = reducers[state.type](initialState, state);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   store = createStore(handler, state, enhancer);

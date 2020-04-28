@@ -7,6 +7,7 @@
  */
 import { Dispatch } from 'react';
 import { NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
+import { SandboxType, ParserType } from './sandbox';
 
 export interface StateType {
   document: DocumentType;
@@ -14,6 +15,7 @@ export interface StateType {
   editor: EditorType;
   saved?: boolean;
   title?: string;
+  sandbox?: SandboxType;
 }
 
 export interface LocalContextType extends StateType {
@@ -37,4 +39,4 @@ export type ActionsType = Record<string, Record<string, Function>>;
 export type ActionnablesType = Record<string, Function>;
 export type EffectsType = Array<{ name: string; type: string; func: Function }>;
 
-export { NotebookType, EditorType, DocumentType, CellType, CellFormat };
+export { NotebookType, EditorType, DocumentType, CellType, CellFormat, SandboxType, ParserType };

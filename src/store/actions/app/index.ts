@@ -7,20 +7,22 @@
  */
 import { Dispatch } from 'redux';
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
-import { StateType } from '../../../types';
+import { StateType, SandboxType, CellType } from '../../../types';
 import { composer } from '../../effects';
+import initSandbox from '../../effects/sandbox';
 
 const init = (fxComposer: any) => async () => {
   if (fxComposer) {
     const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
     const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });
     const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
-    return { type: INITIALIZE + DONE, document, files, editor };
+    const sandbox = await initSandbox();
+    return { type: INITIALIZE + DONE, document, files, editor, sandbox };
   }
   return { type: INITIALIZE + DONE };
 };
 
-const save = (action: any = {}) => (dispatch: Dispatch, prevState: any) => {
+const save = (action: any = {}) => (dispatch: Dispatch, prevState: Function) => {
   const { document, files, editor } = prevState();
   let data: Partial<StateType>;
   // Not used for instance
@@ -65,6 +67,17 @@ const updateCell = (action: any) => (dispatch: Dispatch<any>) => {
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
 };
 
+type RunCellType = { cell: CellType; next: number };
+const runCell = ({ cell, next }: RunCellType) => async (dispatch: Dispatch<any>, state: Function) => {
+  if (cell.format === 'code') {
+    const sandbox = state().sandbox as SandboxType;
+    const out = await sandbox.execute(cell.raw);
+    dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
+  }
+  dispatch({ type: APP.SELECTCELL + DONE, selected: next });
+  dispatch(save({ type: APP.LOCALSAVE, files: true }));
+};
+
 const selectCell = (action: any) => (dispatch: Dispatch<any>) => {
   const { selected } = action;
   dispatch({ type: APP.SELECTCELL + DONE, selected });
@@ -88,4 +101,17 @@ const paste = () => (dispatch: Dispatch<any>) => {
   dispatch(save({ type: APP.LOCALSAVE, editor: true }));
 };
 
-export { init, createNotebook, deleteNotebook, createCell, selectCell, updateCell, selectFile, cut, copy, paste, save };
+export {
+  init,
+  createNotebook,
+  deleteNotebook,
+  createCell,
+  selectCell,
+  updateCell,
+  runCell,
+  selectFile,
+  cut,
+  copy,
+  paste,
+  save,
+};
