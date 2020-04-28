@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-explicit-any: ["error", { "ignoreRestArgs": false }] */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
@@ -5,7 +6,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { Action, AnyAction } from 'redux';
+import { AnyAction } from 'redux';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
 import { SandboxType, ParserType } from './sandbox';
@@ -19,7 +20,7 @@ export interface StateType {
   sandbox?: SandboxType;
 }
 
-export type ActionType = AnyAction | Action<any> | ThunkAction<void, StateType, unknown, AnyAction>;
+export type ActionType = AnyAction | ThunkAction<void, StateType, unknown, AnyAction>;
 
 export type DispatchType = ThunkDispatch<StateType, unknown, AnyAction>;
 
@@ -34,5 +35,14 @@ export interface ReducerType {
 export type ActionsType = Record<string, Record<string, Function>>;
 export type ActionnablesType = Record<string, Function>;
 export type EffectsType = Array<{ name: string; type: string; func: Function }>;
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type RestType = any[];
+
+export type ComposerParameters = any;
+
+export type ComposerPromise = Promise<DocumentType | NotebookType[] | EditorType>;
+
+export type ComposerType = (type: string, parameters: ComposerParameters) => ComposerPromise;
 
 export { NotebookType, EditorType, DocumentType, CellType, CellFormat, SandboxType, ParserType };

@@ -21,9 +21,9 @@ test('App should launch correctly', async () => {
 
 test('store should be setup from localstorage', async () => {
   localStorageMock.fill({
-    document: { title: 'Project' },
-    editor: { selected: 0 },
-    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+    document: JSON.stringify({ title: 'Project' }),
+    editor: JSON.stringify({ selected: 0 }),
+    files: JSON.stringify([{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }]),
   });
   const store = await initStore(initialState);
   const state = store.getState();

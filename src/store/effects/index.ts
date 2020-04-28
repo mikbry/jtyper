@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { EffectsType } from '../../types';
+import { EffectsType, ComposerParameters, ComposerPromise } from '../../types';
 import storage from './localStorage';
 
 export const combineEffects = (effects: Record<string, Record<string, Function>>, _to: EffectsType): EffectsType => {
@@ -19,18 +19,20 @@ export const combineEffects = (effects: Record<string, Record<string, Function>>
   return to;
 };
 
-let effects: any;
+let effects: EffectsType;
 
-export const initEffects = (fx: any) => {
+export const initEffects = (fx: Record<string, Record<string, Function>>) => {
   effects = combineEffects(fx, []);
   return effects;
 };
 
 export default () => initEffects(storage);
 
-export const composeEffects = async (fx: any, type: any, action: any) => {
-  const promises: any = [];
-  fx.forEach((effect: any) => {
+type FxType = { type: string; func: Function };
+
+export const composeEffects = async (fx: Array<FxType>, type: string, action: ComposerParameters) => {
+  const promises: ComposerPromise[] = [];
+  fx.forEach((effect: FxType) => {
     if (effect.type === type) {
       const p = effect.func(action);
       promises.push(p);
@@ -48,4 +50,5 @@ export const composeEffects = async (fx: any, type: any, action: any) => {
   return results; */
 };
 
-export const composer = async (type: string, parameters: any) => composeEffects(effects, type, parameters);
+export const composer = async (type: string, parameters: ComposerParameters) =>
+  composeEffects(effects, type, parameters);

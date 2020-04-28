@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ParserType, SandboxType } from '../../../types/sandbox';
+import { ParserType, SandboxType, RestType } from '../../../types';
 import Parser from './Parser';
 
 class Sandbox implements SandboxType {
@@ -15,19 +15,71 @@ class Sandbox implements SandboxType {
 
   lastFunc: Function | undefined;
 
-  out: string | undefined;
+  out: string[] = [];
 
   error: Error | undefined;
+
+  console: {
+    clear: Function;
+    error: Function;
+    info: Function;
+    log: Function;
+    warn: Function;
+  };
+
+  originalConsole: {
+    clear: Function;
+    error: Function;
+    info: Function;
+    log: Function;
+    warn: Function;
+  };
 
   constructor() {
     this.parser = new Parser();
     this.reset();
+    const { clear, error, info, log, warn } = console;
+    this.originalConsole = { clear, error, info, log, warn };
+    this.console = {
+      clear: (...args: RestType) => {
+        this.originalConsole.clear.apply(this, args);
+        this.appendConsole(args);
+      },
+      error: (...args: RestType) => {
+        this.originalConsole.error.apply(this, args);
+        this.appendConsole(args);
+      },
+      info: (...args: RestType) => {
+        this.originalConsole.info.apply(this, args);
+        this.appendConsole(args);
+      },
+      log: (...args: RestType) => {
+        this.originalConsole.log.apply(this, args);
+        this.appendConsole(args);
+      },
+      warn: (...args: RestType) => {
+        this.originalConsole.warn.apply(this, args);
+        args.forEach(a => this.out.push(JSON.stringify(a)));
+      },
+    };
+  }
+
+  appendConsole(args: RestType) {
+    args.forEach(a => {
+      let s = a;
+      if (a.toString) {
+        s = a.toString();
+      } else {
+        s = JSON.stringify(a);
+      }
+      this.out.push(s);
+    });
   }
 
   reset() {
     this.lastCode = undefined;
     this.lastFunc = undefined;
-    this.out = undefined;
+    this.out = [];
     this.error = undefined;
   }
 
@@ -39,12 +91,12 @@ class Sandbox implements SandboxType {
   }
 
   clear() {
-    this.out = '';
+    this.out = [];
   }
 
   print(text: string) {
-    if (!this.out) this.out = '';
-    this.out += text;
+    if (!this.out) this.out = [];
+    this.out.push(text);
   }
 
   async execute(code: string) {
@@ -59,8 +111,7 @@ class Sandbox implements SandboxType {
         this.error = error;
         this.lastFunc = undefined;
         this.lastCode = undefined;
-        console.log('preprocessing error', error);
-        this.out = 'Syntax error';
+        this.console.log('preprocessing error', error);
       }
     }
     if (this.lastFunc) {
@@ -71,7 +122,7 @@ class Sandbox implements SandboxType {
           this.print(resp);
         }
       } catch (error) {
-        console.log('execution error', error);
+        this.console.log('execution error', error);
         this.error = error;
       }
     }
