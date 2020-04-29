@@ -14,6 +14,7 @@ import {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getFullCode,
 } from './app';
 
 export {
@@ -24,4 +25,5 @@ export {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getFullCode,
 };

@@ -7,7 +7,7 @@
  */
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
 import { StateType, DispatchType, CellType, CellFormat, NotebookType, ComposerType } from '../../../types';
-import { getCurrentNotebook, findNotebookCodeCell, getNotebookCellIndex } from '../../selectors';
+import { getCurrentNotebook, findNotebookCodeCell, getNotebookCellIndex, getFullCode } from '../../selectors';
 import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
 
@@ -28,7 +28,7 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
 ) => {
   const { document, files, editor } = prevState();
   let data: Partial<StateType>;
-  // Not used for instance
+  // Not used
   /* if (action.document) {
     data = { document };
   } else if (action.files) {
@@ -78,12 +78,13 @@ const runCell = ({ cell: c, next }: RunCellType) => async (dispatch: DispatchTyp
     cell = findNotebookCodeCell(notebook) as CellType;
   }
   if (cell && cell.format === 'code') {
-    const out = await sandbox.execute(cell.raw);
+    const code = getFullCode(notebook, cell.id);
+    const out = await sandbox.execute(code);
     dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
   }
   let selected = next;
   if (cell && selected === undefined) {
-    selected = getNotebookCellIndex(notebook, cell) + 1;
+    selected = getNotebookCellIndex(notebook, cell.id) + 1;
   }
   dispatch({ type: APP.SELECTCELL + DONE, selected });
   dispatch(save({ files: true, editor: true }));

@@ -31,7 +31,7 @@ const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
       value={value}
       detach
       options={{
-        lineNumbers: true,
+        lineNumbers: false,
         mode,
       }}
       onChange={(_editor, _data, newValue) => {

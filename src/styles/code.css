@@ -2,10 +2,11 @@
   margin: 0 96px 0 0;
   height: 100%;
   width: calc(100% - 236px);
-  padding: 12px;
+  padding: 0px;
 }
 
 .CodeMirror {
   min-height: 32px;
   height: initial;
+  background-color: whitesmoke;
 }

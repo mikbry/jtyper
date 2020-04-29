@@ -40,5 +40,16 @@ export const validateSelectedCell = (selected: number, length: number): number |
   return selectedCell;
 };
 
-export const getNotebookCellIndex = (notebook: NotebookType, cell: CellType): number =>
-  notebook.cells.findIndex(c => c.id === cell.id) as number;
+export const getNotebookCellIndex = (notebook: NotebookType, id: string): number =>
+  notebook.cells.findIndex(c => c.id === id) as number;
+
+export const getFullCode = (notebook: NotebookType, id: string): string[] => {
+  const index = getNotebookCellIndex(notebook, id);
+  const code: string[] = [];
+  notebook.cells.forEach((cell, i) => {
+    if (i <= index && cell.format === 'code') {
+      code.push(cell.raw);
+    }
+  });
+  return code;
+};

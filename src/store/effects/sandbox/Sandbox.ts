@@ -11,9 +11,9 @@ import Parser from './Parser';
 class Sandbox implements SandboxType {
   parser: ParserType | undefined;
 
-  lastCode: string | undefined;
+  lastCode: string[] | undefined;
 
-  lastFunc: Function | undefined;
+  lastFunc: string | undefined;
 
   out: string[] = [];
 
@@ -99,14 +99,25 @@ class Sandbox implements SandboxType {
     this.out.push(text);
   }
 
-  async execute(code: string) {
-    let func: Function = this.lastFunc as Function;
+  async execute(code: string[]) {
+    const funcs: string[] = [];
+    let func: string = this.lastFunc as string;
+    const scope = () => {
+      /* */
+      const { print } = this;
+      print('scope');
+    };
     if (this.lastCode !== code) {
       try {
-        const parsed = await this.parse(code);
-        // eslint-disable-next-line no-new-func
-        func = Function(parsed).bind(this);
-        this.lastFunc = func;
+        // eslint-disable-next-line no-restricted-syntax
+        for (const c of code) {
+          // eslint-disable-next-line no-await-in-loop
+          const parsed = await this.parse(c);
+          // eslint-disable-next-line no-new-func
+          func = parsed;
+          this.lastFunc = func;
+          funcs.push(func);
+        }
       } catch (error) {
         this.error = error;
         this.lastFunc = undefined;
@@ -116,8 +127,13 @@ class Sandbox implements SandboxType {
     }
     if (this.lastFunc) {
       try {
-        this.clear();
-        const resp = func();
+        let resp;
+        // eslint-disable-next-line no-restricted-syntax
+        for (func of funcs) {
+          this.clear();
+          // eslint-disable-next-line no-eval
+          resp = eval(func).bind(scope);
+        }
         if (resp) {
           this.print(resp);
         }
