@@ -24,6 +24,7 @@ const modes: Record<string, string> = {
   javascript: 'text/javascript',
   markdown: 'text/x-markdown',
 };
+
 const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
   const mode = modes[language];
   return (

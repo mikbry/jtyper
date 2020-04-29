@@ -15,3 +15,18 @@ export interface SandboxType {
   parse: Function;
   execute: Function;
 }
+
+export interface LoggerType {
+  print: Function;
+  out: string[];
+}
+
+export interface VariableType {
+  type: string;
+  value?: any;
+}
+
+export interface CodeType {
+  script: string;
+  variables: Record<string, VariableType>;
+}
