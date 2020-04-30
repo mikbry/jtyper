@@ -5,10 +5,11 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { RestType } from '../../../types';
+import { RestType, LogEntryType } from '../../../types';
+import { generateId } from '../../selectors';
 
 class Logger {
-  out: string[] = [];
+  out: LogEntryType[] = [];
 
   clear: Function;
 
@@ -51,7 +52,7 @@ class Logger {
     };
     this.warn = (...args: RestType) => {
       this.originalConsole.warn.apply(this, args);
-      args.forEach(a => this.out.push(JSON.stringify(a)));
+      args.forEach(a => this.out.push({ id: generateId(), type: 'text', text: JSON.stringify(a) }));
     };
   }
 
@@ -63,14 +64,13 @@ class Logger {
       } else {
         s = JSON.stringify(a);
       }
-      this.out.push(s);
+      this.out.push({ id: generateId(), type: 'text', text: s });
     });
   }
 
   print(text: string) {
     if (!this.out) this.out = [];
-    console.log('print=', text);
-    this.out.push(text);
+    this.out.push({ id: generateId(), type: 'text', text });
   }
 }
 

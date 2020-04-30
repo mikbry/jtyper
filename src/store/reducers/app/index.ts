@@ -8,12 +8,7 @@
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
-import { getCurrentNotebook, getNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
-
-const generateId = () =>
-  Math.random()
-    .toString(36)
-    .substr(2, 9);
+import { generateId, getCurrentNotebook, getNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
 
 const handlers = {
   [INITIALIZE + DONE]: (state: StateType, action: Partial<StateType>) => {

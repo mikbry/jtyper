@@ -7,6 +7,7 @@
  */
 
 import {
+  generateId,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,
@@ -18,6 +19,7 @@ import {
 } from './app';
 
 export {
+  generateId,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,

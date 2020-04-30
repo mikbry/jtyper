@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import * as acorn from 'acorn';
-import { ParserType, CodeType } from '../../../types/sandbox';
+import { ParserType, CodeType, ScopeType } from '../../../types/sandbox';
 
 interface ESTreeNode extends acorn.Node {
   body: ESTreeNode[];
@@ -20,7 +20,8 @@ interface ESTreeNode extends acorn.Node {
 class Parser implements ParserType {
   last: string | undefined;
 
-  async parse(input: string) {
+  async parse(input: string, scope: ScopeType) {
+    const { variables } = scope;
     let parsed = input;
     const code: CodeType = { variables: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
@@ -33,10 +34,11 @@ class Parser implements ParserType {
           const id = declaration.id as ESTreeNode;
           const name = id.name as string;
           code.variables[name] = { type, value: undefined };
+          variables[name] = { type, value: undefined };
         });
       }
     });
-    console.log('variables=', code.variables);
+    // console.log('variables=', variables);
     parsed = parsed.replace(/print\(/g, 'this.print(');
     this.last = parsed;
     code.script = parsed;

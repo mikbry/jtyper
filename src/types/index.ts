@@ -9,7 +9,7 @@
 import { AnyAction } from 'redux';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
 import { NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
-import { SandboxType, ParserType, LoggerType, VariableType } from './sandbox';
+import { SandboxType, ParserType, LogEntryType, LoggerType, VariableType, CodeType, ScopeType } from './sandbox';
 
 export interface StateType {
   document: DocumentType;
@@ -53,6 +53,9 @@ export {
   CellFormat,
   SandboxType,
   ParserType,
+  LogEntryType,
   LoggerType,
   VariableType,
+  CodeType,
+  ScopeType,
 };

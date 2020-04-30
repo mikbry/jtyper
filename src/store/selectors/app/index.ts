@@ -7,6 +7,11 @@
  */
 import { EditorType, NotebookType, CellType } from '../../../types';
 
+export const generateId = () =>
+  Math.random()
+    .toString(36)
+    .substr(2, 9);
+
 export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType =>
   files[editor.selected as number] as NotebookType;
 

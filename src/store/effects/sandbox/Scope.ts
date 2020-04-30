@@ -6,9 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LoggerType } from '../../../types';
+import { LoggerType, ScopeType, CodeType, VariableType } from '../../../types';
 
-class Scope {
+class Scope implements ScopeType {
+  variables: Record<string, VariableType> = {};
+
   code?: string;
 
   logger: LoggerType;
@@ -21,34 +23,30 @@ class Scope {
     this.logger.print(string);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  storeVars(target: any) {
-    console.log('storeVars', target);
-    return new Proxy(target, {
-      set(t, prop) {
-        console.log('set', t, prop);
-        return true;
-      },
-      get(t, prop) {
-        console.log('get', t, prop);
-        return (prop in t ? t : window)[prop];
-      },
-      apply(t, prop) {
-        console.log('apply', t, prop);
-        return (prop in t ? t : window)[prop];
-      },
+  bindCode(code: CodeType, runner: Function) {
+    const { script } = code;
+    let start = '';
+    let end = 'return {';
+    Object.keys(this.variables).forEach(varName => {
+      // console.log(varName, this.variables[varName], code.variables[varName]);
+      if (!code.variables[varName]) {
+        // Not present in code block, add it
+        start += this.variables[varName].type === 'const' ? 'const ' : 'let ';
+        start += varName;
+        // TODO transform value to its string representation
+        start += this.variables[varName].value === undefined ? ';\n' : ` = ${this.variables[varName].value};`;
+      }
+      end += ` ${varName},`;
     });
-  }
-
-  execute(code: string) {
-    this.code = code;
-    // const ext = `let vars = {};\nwith(this.storeVars({})) {\n${code}\n}\nreturn vars;`;
-    // console.log(ext);
-    // eslint-disable-next-line no-new-func
-    const func = new Function(code).bind(this);
-    this.storeVars(func);
-    const t = func();
-    console.log('scope this', t);
+    end += '};';
+    // console.log('start=', start);
+    // console.log('end=', end);
+    const response = runner(start + script + end, this);
+    // console.log('response=', response);
+    Object.keys(response).forEach(varName => {
+      // TODO sanitize response: NaN, Objects / Functions, ...
+      this.variables[varName].value = response[varName];
+    });
   }
 }
 

@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ParserType, SandboxType } from '../../../types';
+import { ParserType, SandboxType, CodeType, ScopeType } from '../../../types';
 import Parser from './Parser';
 import Scope from './Scope';
 import Logger from './Logger';
@@ -15,7 +15,7 @@ class Sandbox implements SandboxType {
 
   lastCode: string[] | undefined;
 
-  lastFunc: string | undefined;
+  lastFunc: CodeType | undefined;
 
   error: Error | undefined;
 
@@ -33,22 +33,27 @@ class Sandbox implements SandboxType {
     this.error = undefined;
   }
 
-  async parse(source: string) {
+  async parse(input: string, scope: ScopeType): Promise<CodeType> {
     if (this.parser) {
-      return this.parser.parse(source);
+      return this.parser.parse(input, scope);
     }
-    return source;
+    return { script: input, variables: {} };
+  }
+
+  static runner(script: string, scope: ScopeType) {
+    // eslint-disable-next-line no-new-func
+    return new Function(script).bind(scope)();
   }
 
   async execute(code: string[]) {
-    const funcs: string[] = [];
-    let func: string = this.lastFunc as string;
+    const funcs: CodeType[] = [];
+    let func: CodeType = this.lastFunc as CodeType;
     const scope = new Scope(this.logger);
     try {
       // eslint-disable-next-line no-restricted-syntax
       for (const c of code) {
         // eslint-disable-next-line no-await-in-loop
-        const parsed = await this.parse(c);
+        const parsed = await this.parse(c, scope);
         // eslint-disable-next-line no-new-func
         func = parsed;
         this.lastFunc = func;
@@ -63,19 +68,11 @@ class Sandbox implements SandboxType {
 
     if (this.lastFunc) {
       try {
-        let resp;
         // eslint-disable-next-line no-restricted-syntax
         for (func of funcs) {
-          console.log('exec=', this.logger.out);
           this.logger.clear();
-          // eslint-disable-next-line no-eval
-          // eslint-disable-next-line no-new-func
-          scope.execute(func);
+          scope.bindCode(func, Sandbox.runner);
         }
-        if (resp) {
-          this.logger.print(resp);
-        }
-        console.log('out=', scope.logger, resp);
       } catch (error) {
         this.logger.log('execution error');
         this.logger.log(error);

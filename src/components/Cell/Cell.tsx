@@ -11,6 +11,7 @@ import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
 import ContentEditable from '../ContentEditable';
 import { BasicTheme } from '../../themes';
+import { LogEntryType } from '../../types';
 
 interface Props {
   selected?: boolean;
@@ -19,7 +20,7 @@ interface Props {
   onChange: (value: string) => void;
   children: string;
   format?: string;
-  out?: string[];
+  out?: LogEntryType[];
 }
 
 interface StyledProps {
@@ -162,10 +163,10 @@ const Cell: FunctionComponent<Props> = ({
           <Prompt selected={selected} />
           <OutContent>
             {out.map(o => (
-              <>
-                <span>{o}</span>
+              <div key={o.id}>
+                <span>{o.text}</span>
                 <br />
-              </>
+              </div>
             ))}
           </OutContent>
         </Line>
