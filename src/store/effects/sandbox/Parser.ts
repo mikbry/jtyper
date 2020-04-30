@@ -39,7 +39,7 @@ class Parser implements ParserType {
       }
     });
     // console.log('variables=', variables);
-    parsed = parsed.replace(/print\(/g, 'this.print(');
+    parsed = parsed.replace(/print\(/g, 'print(');
     this.last = parsed;
     code.script = parsed;
     return code;

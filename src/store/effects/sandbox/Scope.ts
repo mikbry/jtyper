@@ -23,10 +23,10 @@ class Scope implements ScopeType {
     this.logger.print(string);
   }
 
-  bindCode(code: CodeType, runner: Function) {
+  async bindCode(code: CodeType, runner: any) {
     const { script } = code;
     let start = '';
-    let end = 'return {';
+    let end = '\n// */\nreturn {';
     Object.keys(this.variables).forEach(varName => {
       // console.log(varName, this.variables[varName], code.variables[varName]);
       if (!code.variables[varName]) {
@@ -41,7 +41,9 @@ class Scope implements ScopeType {
     end += '};';
     // console.log('start=', start);
     // console.log('end=', end);
-    const response = runner(start + script + end, this);
+    const sse = start + script + end;
+    // console.log(sse);
+    const response = await runner.execute(sse, this);
     // console.log('response=', response);
     Object.keys(response).forEach(varName => {
       // TODO sanitize response: NaN, Objects / Functions, ...

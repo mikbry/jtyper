@@ -9,5 +9,6 @@
 import MockupProvider from './MockupProvider';
 import renderWithProvider from './renderWithProvider';
 import localStorageMock from './localStorageMock';
+import './MockupWorker';
 
 export { localStorageMock, MockupProvider, renderWithProvider };
