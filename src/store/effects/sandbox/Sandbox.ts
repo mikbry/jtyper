@@ -9,6 +9,7 @@ import { ParserType, SandboxType, CodeType, ScopeType } from '../../../types';
 import Parser from './Parser';
 import Scope from './Scope';
 import Logger from './Logger';
+import ScriptWorker from './ScriptWorker';
 
 class Sandbox implements SandboxType {
   parser: ParserType | undefined;
@@ -21,9 +22,12 @@ class Sandbox implements SandboxType {
 
   logger: Logger;
 
+  scriptWorker: ScriptWorker;
+
   constructor() {
     this.parser = new Parser();
     this.logger = new Logger();
+    this.scriptWorker = new ScriptWorker();
     this.reset();
   }
 
@@ -38,11 +42,6 @@ class Sandbox implements SandboxType {
       return this.parser.parse(input, scope);
     }
     return { script: input, variables: {} };
-  }
-
-  static runner(script: string, scope: ScopeType) {
-    // eslint-disable-next-line no-new-func
-    return new Function(script).bind(scope)();
   }
 
   async execute(code: string[]) {
@@ -71,7 +70,8 @@ class Sandbox implements SandboxType {
         // eslint-disable-next-line no-restricted-syntax
         for (func of funcs) {
           this.logger.clear();
-          scope.bindCode(func, Sandbox.runner);
+          // eslint-disable-next-line no-await-in-loop
+          await scope.bindCode(func, this.scriptWorker);
         }
       } catch (error) {
         this.logger.log('execution error');

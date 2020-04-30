@@ -39,4 +39,5 @@ export interface CodeType {
 
 export interface ScopeType {
   variables: Record<string, VariableType>;
+  print: Function;
 }
