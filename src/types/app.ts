@@ -5,6 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { LogEntryType } from './sandbox';
 
 export type CellFormat = 'markdown' | 'code' | 'raw' | undefined;
 
@@ -12,7 +13,7 @@ export interface CellType {
   format?: 'markdown' | 'code' | 'raw';
   id: string;
   raw: string;
-  out?: string[];
+  out?: LogEntryType[];
 }
 
 export interface NotebookType {

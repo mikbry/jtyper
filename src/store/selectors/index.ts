@@ -7,6 +7,7 @@
  */
 
 import {
+  generateId,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,
@@ -14,9 +15,11 @@ import {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getFullCode,
 } from './app';
 
 export {
+  generateId,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,
@@ -24,4 +27,5 @@ export {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getFullCode,
 };

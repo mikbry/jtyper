@@ -23,7 +23,6 @@ const CodeHighlighter: FunctionComponent<Props> = ({ value }) => (
   <Highlighter
     className='CodeMirror cm-s-default jtyper-code'
     codeMirror={CodeMirror}
-    theme='ayu-dark'
     value={value}
     language='javascript'
   />

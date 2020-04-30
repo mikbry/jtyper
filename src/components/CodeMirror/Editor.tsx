@@ -24,6 +24,7 @@ const modes: Record<string, string> = {
   javascript: 'text/javascript',
   markdown: 'text/x-markdown',
 };
+
 const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
   const mode = modes[language];
   return (
@@ -31,7 +32,7 @@ const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
       value={value}
       detach
       options={{
-        lineNumbers: true,
+        lineNumbers: false,
         mode,
       }}
       onChange={(_editor, _data, newValue) => {

@@ -94,6 +94,7 @@
     "@styled-icons/feather": "^10.0.0",
     "@styled-icons/icomoon": "^10.0.0",
     "@styled-icons/styled-icon": "^10.0.0",
+    "acorn": "^7.1.1",
     "codemirror": "^5.53.2",
     "markdown-it": "^10.0.0",
     "react": "^16.12.0",

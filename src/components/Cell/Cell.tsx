@@ -11,6 +11,7 @@ import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
 import ContentEditable from '../ContentEditable';
 import { BasicTheme } from '../../themes';
+import { LogEntryType } from '../../types';
 
 interface Props {
   selected?: boolean;
@@ -19,7 +20,7 @@ interface Props {
   onChange: (value: string) => void;
   children: string;
   format?: string;
-  out?: string[];
+  out?: LogEntryType[];
 }
 
 interface StyledProps {
@@ -59,10 +60,15 @@ const Styled = styled.div`
     outline: none !important;
   }
 
-  & > span {
-    padding: 0.6em;
+  & > div > div {
+    width: calc(100% - 96px);
+  }
+  & div > pre {
+    width: calc(100% - 96px);
+    padding: 4px;
   }
 `;
+
 Styled.defaultProps = { theme: BasicTheme };
 
 const Prompt = styled.aside`
@@ -81,12 +87,12 @@ const Line = styled.div`
 
 const RawContent = styled.div`
   min-height: calc(32px - 1.2em);
-  padding: 0.6em 0;
+  padding: 6px 4px;
 `;
 
 const OutContent = styled.div`
   min-height: calc(32px - 1.2em);
-  padding: 0.6em 0;
+  padding: 6px 4px;
   font-size: 13px;
   font-familiy: 13px;
 `;
@@ -152,15 +158,15 @@ const Cell: FunctionComponent<Props> = ({
         <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
         {content}
       </Line>
-      {out && out.length && out.map && (
+      {out && (
         <Line>
           <Prompt selected={selected} />
           <OutContent>
             {out.map(o => (
-              <>
-                <span>{o}</span>
+              <div key={o.id}>
+                <span>{o.text}</span>
                 <br />
-              </>
+              </div>
             ))}
           </OutContent>
         </Line>
