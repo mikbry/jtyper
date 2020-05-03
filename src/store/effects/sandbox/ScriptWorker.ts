@@ -16,7 +16,10 @@ class ScriptWorker {
   private response = `
   const print = (text) => {
     postMessage({ print: text })
-  }
+  };
+  const stub = () => {
+    // TODO throw an error
+  };
   onmessage=(e)=> {
     let code = e.data[0];
     let result;

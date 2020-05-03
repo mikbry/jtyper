@@ -32,9 +32,15 @@ export interface VariableType {
   value?: any;
 }
 
+export interface FuncType {
+  start: number;
+  renamedTo?: string;
+}
+
 export interface CodeType {
   script: string;
   variables: Record<string, VariableType>;
+  funcs: Record<string, FuncType>;
 }
 
 export interface ScopeType {
