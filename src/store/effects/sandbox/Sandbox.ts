@@ -41,7 +41,7 @@ class Sandbox implements SandboxType {
     if (this.parser) {
       return this.parser.parse(input, scope);
     }
-    return { script: input, variables: {} };
+    return { script: input, variables: {}, funcs: {} };
   }
 
   async execute(code: string[]) {

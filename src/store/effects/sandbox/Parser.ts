@@ -8,6 +8,10 @@
 import * as acorn from 'acorn';
 import { ParserType, CodeType, ScopeType } from '../../../types/sandbox';
 
+const funcWhitelist: Record<string, string> = {
+  print: 'print',
+};
+
 interface ESTreeNode extends acorn.Node {
   body: ESTreeNode[];
   type: string;
@@ -15,6 +19,15 @@ interface ESTreeNode extends acorn.Node {
   name?: string;
   id?: ESTreeNode;
   declarations: ESTreeNode[];
+  expression: {
+    type: string;
+    callee: {
+      name: string;
+      start: number;
+    };
+    start: number;
+    end: number;
+  };
 }
 
 class Parser implements ParserType {
@@ -23,7 +36,7 @@ class Parser implements ParserType {
   async parse(input: string, scope: ScopeType) {
     const { variables } = scope;
     let parsed = input;
-    const code: CodeType = { variables: {}, script: input };
+    const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
     // console.log('tree', tree);
     tree.body.forEach(element => {
@@ -36,10 +49,23 @@ class Parser implements ParserType {
           code.variables[name] = { type, value: undefined };
           variables[name] = { type, value: undefined };
         });
+      } else if (element.type === 'ExpressionStatement' && element.expression.type === 'CallExpression') {
+        const { expression } = element;
+        const { name, start } = expression.callee;
+        let renamedTo = 'stub';
+        if (funcWhitelist[name]) {
+          renamedTo = funcWhitelist[name];
+        }
+        if (renamedTo !== name) {
+          const s = parsed.substring(0, start);
+          const e = parsed.substring(start + name.length);
+          parsed = s + renamedTo + e;
+        }
+        code.funcs[name] = { start, renamedTo };
       }
     });
     // console.log('variables=', variables);
-    parsed = parsed.replace(/print\(/g, 'print(');
+    // parsed = parsed.replace(/print\(/g, 'print(');
     this.last = parsed;
     code.script = parsed;
     return code;
