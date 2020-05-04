@@ -38,9 +38,10 @@ class Parser implements ParserType {
   async parse(input: string, scope: ScopeType) {
     const { variables } = scope;
     let parsed = input;
+    let offset = 0;
     const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
-    // console.log('tree', tree);
+    console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
         const kind = element.kind as string;
@@ -77,15 +78,27 @@ class Parser implements ParserType {
           renamedTo = funcWhitelist[name];
         }
         if (renamedTo !== name) {
-          const s = parsed.substring(0, start);
-          const e = parsed.substring(start + name.length);
+          const s = parsed.substring(0, start + offset);
+          const e = parsed.substring(start + offset + name.length);
           parsed = s + renamedTo + e;
+          offset += renamedTo.length - name.length;
         }
         code.funcs[name] = { start, renamedTo };
+      } else if (element.type === 'ExpressionStatement' && element.expression.type !== 'AssignmentExpression') {
+        const { expression } = element;
+        let { start, end } = expression;
+        start += offset;
+        end += offset;
+        const exp = parsed.substring(start, end);
+        const s = parsed.substring(0, start);
+        const e = parsed.substring(start + exp.length);
+        parsed = `${s}print(${exp})${e}`;
+        offset += 'print()'.length;
+        console.log('exp', exp, start, end);
       }
     });
     // console.log('variables=', variables);
-    // parsed = parsed.replace(/print\(/g, 'print(');
+    console.log('parsed', parsed);
     this.last = parsed;
     code.script = parsed;
     return code;
