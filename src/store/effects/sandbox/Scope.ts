@@ -31,7 +31,7 @@ class Scope implements ScopeType {
       // console.log(varName, this.variables[varName], code.variables[varName]);
       if (!code.variables[varName]) {
         // Not present in code block, add it
-        start += this.variables[varName].type === 'const' ? 'const ' : 'let ';
+        start += this.variables[varName].kind === 'const' ? 'const ' : 'let ';
         start += varName;
         // TODO transform value to its string representation
         start += this.variables[varName].value === undefined ? ';\n' : ` = ${this.variables[varName].value};`;

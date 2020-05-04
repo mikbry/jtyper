@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import * as acorn from 'acorn';
-import { ParserType, CodeType, ScopeType } from '../../../types/sandbox';
+import { ParserType, CodeType, ScopeType, DataType } from '../../../types/sandbox';
 
 const funcWhitelist: Record<string, string> = {
   print: 'print',
@@ -17,7 +17,9 @@ interface ESTreeNode extends acorn.Node {
   type: string;
   kind?: string;
   name?: string;
+  value?: string | number | boolean | object | Function;
   id?: ESTreeNode;
+  init?: ESTreeNode;
   declarations: ESTreeNode[];
   expression: {
     type: string;
@@ -38,16 +40,25 @@ class Parser implements ParserType {
     let parsed = input;
     const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
-    // console.log('tree', tree);
+    console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
-        const type = element.kind as string;
+        const kind = element.kind as string;
         const { declarations } = element;
         declarations.forEach(declaration => {
           const id = declaration.id as ESTreeNode;
+          const init = declaration.init as ESTreeNode;
+          console.log('id=', id, init);
           const name = id.name as string;
-          code.variables[name] = { type, value: undefined };
-          variables[name] = { type, value: undefined };
+          let type = typeof init.value as DataType;
+          if (init.type === 'ArrayExpression') {
+            type = 'array';
+          } else if (init.type === 'ObjectExpression') {
+            type = 'object';
+          }
+          code.variables[name] = { kind, value: init.value, type };
+          variables[name] = { kind, value: init.value, type };
+          console.log('var=', name, variables[name]);
         });
       } else if (element.type === 'ExpressionStatement' && element.expression.type === 'CallExpression') {
         const { expression } = element;
