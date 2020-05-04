@@ -18,6 +18,7 @@ declare module 'styled-components' {
       onSurface: string;
       menu: string;
       divider: string;
+      dividerOnLight: string;
       group: string;
       selected: string;
       onSelected: string;

@@ -17,6 +17,7 @@ const BasicTheme: DefaultTheme = {
     onSurface: '#999',
     menu: '#333',
     divider: 'rgba(255,255,255,0.2)',
+    dividerOnLight: 'rgba(0,0,0,0.03)',
     group: 'rgba(255,255,255,0.1)',
     selected: 'rgba(255,255,255,0.3)',
     onSelected: 'white',

@@ -97,6 +97,17 @@ const OutContent = styled.div`
   font-familiy: 13px;
 `;
 
+const OutText = styled.div`
+  padding: 4px 0;
+  border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
+`;
+
+const OutError = styled.div`
+  padding: 4px 0;
+  color: red;
+  border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
+`;
+
 const Cell: FunctionComponent<Props> = ({
   selected = false,
   editable = false,
@@ -162,12 +173,12 @@ const Cell: FunctionComponent<Props> = ({
         <Line>
           <Prompt selected={selected} />
           <OutContent>
-            {out.map(o => (
-              <div key={o.id}>
-                <span>{o.text}</span>
-                <br />
-              </div>
-            ))}
+            {out.map(o => {
+              if (o.type === 'error') {
+                return <OutError key={o.id}>{o.text}</OutError>;
+              }
+              return <OutText key={o.id}>{o.text}</OutText>;
+            })}
           </OutContent>
         </Line>
       )}

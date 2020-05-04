@@ -6,16 +6,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ScopeType } from '../../../types';
+import { ScopeType, DataType } from '../../../types';
 
-type DataType = { print?: Text; result?: any };
+type MessageType = { print?: { value?: DataType }; result?: DataType };
 
 class ScriptWorker {
   private worker?: Worker;
 
   private response = `
-  const print = (text) => {
-    postMessage({ print: text })
+  const print = (_value) => {
+    let value = _value;
+    if (typeof value === 'function') value = 'Function';
+    postMessage({ print: { value } })
   };
   const stub = () => {
     // TODO throw an error
@@ -51,7 +53,7 @@ class ScriptWorker {
     this.worker = undefined;
   }
 
-  public async execute(script: string, scope: ScopeType, timeout = 1000): Promise<string> {
+  public async execute(script: string, scope: ScopeType, timeout = 1000): Promise<DataType> {
     const worker = this.getWorker() as Worker;
     return new Promise((resolve, reject) => {
       const handle = setTimeout(() => {
@@ -62,12 +64,12 @@ class ScriptWorker {
       worker.onmessage = e => {
         clearTimeout(handle);
         // console.log('onmessage', e);
-        const data: DataType = e.data as DataType;
+        const data: MessageType = e.data as MessageType;
         if (data.result) {
           resolve(data.result);
         } else if (data.print) {
           // console.log('print', data.print);
-          scope.print(data.print);
+          scope.print(data.print.value);
         }
       };
       worker.onerror = e => {

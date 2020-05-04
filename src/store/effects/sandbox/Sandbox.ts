@@ -62,21 +62,26 @@ class Sandbox implements SandboxType {
       this.error = error;
       this.lastFunc = undefined;
       this.lastCode = undefined;
-      this.logger.log('preprocessing error', error);
+      this.logger.log(error);
     }
-
+    let err;
     if (this.lastFunc) {
-      try {
-        // eslint-disable-next-line no-restricted-syntax
-        for (func of funcs) {
-          this.logger.clear();
+      // eslint-disable-next-line no-restricted-syntax
+      for (func of funcs) {
+        this.logger.clear();
+        if (err) {
+          this.logger.log(err);
+        }
+        try {
           // eslint-disable-next-line no-await-in-loop
           await scope.bindCode(func, this.scriptWorker);
+        } catch (error) {
+          if (!err) {
+            this.logger.log(error);
+            err = error;
+          }
+          this.error = error;
         }
-      } catch (error) {
-        this.logger.log('execution error');
-        this.logger.log(error);
-        this.error = error;
       }
     }
     return this.logger.out;

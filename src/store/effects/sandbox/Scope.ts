@@ -29,25 +29,34 @@ class Scope implements ScopeType {
     let end = '\n// */\nreturn {';
     Object.keys(this.variables).forEach(varName => {
       // console.log(varName, this.variables[varName], code.variables[varName]);
-      if (!code.variables[varName]) {
+      if (!code.variables[varName] && this.variables[varName].type !== 'function') {
+        const variable = this.variables[varName];
         // Not present in code block, add it
-        start += this.variables[varName].type === 'const' ? 'const ' : 'let ';
+        start += variable.kind === 'const' ? 'const ' : 'let ';
         start += varName;
-        // TODO transform value to its string representation
-        start += this.variables[varName].value === undefined ? ';\n' : ` = ${this.variables[varName].value};`;
+        let { value } = variable;
+        if (value && (variable.type === 'object' || variable.type === 'array')) {
+          value = `JSON.parse('${JSON.stringify(value)}')`;
+        } else if (value && variable.type === 'string') {
+          value = `'${value}'`;
+        }
+        // console.log('name=', varName, value);
+        start += value === undefined ? ';\n' : ` = ${value};\n`;
       }
-      end += ` ${varName},`;
+      if (this.variables[varName].type !== 'function') {
+        end += ` ${varName},`;
+      }
     });
     end += '};';
     // console.log('start=', start);
     // console.log('end=', end);
     const sse = start + script + end;
-    // console.log(sse);
+    console.log(sse);
     const response = await runner.execute(sse, this);
     // console.log('response=', response);
     Object.keys(response).forEach(varName => {
-      // TODO sanitize response: NaN, Objects / Functions, ...
       this.variables[varName].value = response[varName];
+      // console.log('response=', response[varName]);
     });
   }
 }

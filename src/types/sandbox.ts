@@ -27,9 +27,22 @@ export interface LoggerType {
   out: LogEntryType[];
 }
 
+export type DataType =
+  | 'string'
+  | 'number'
+  | 'bigint'
+  | 'boolean'
+  | 'symbol'
+  | 'undefined'
+  | 'object'
+  | 'function'
+  | 'array'
+  | Error;
+
 export interface VariableType {
-  type: string;
-  value?: any;
+  kind: string;
+  value?: string | number | boolean | object | Function;
+  type: DataType;
 }
 
 export interface FuncType {

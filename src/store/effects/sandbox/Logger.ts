@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { RestType, LogEntryType } from '../../../types';
+import { RestType, LogEntryType, DataType } from '../../../types';
 import { generateId } from '../../selectors';
 
 class Logger {
@@ -56,21 +56,35 @@ class Logger {
     };
   }
 
-  appendConsole(args: RestType) {
-    args.forEach(a => {
-      let s = a;
-      if (a.toString) {
-        s = a.toString();
-      } else {
-        s = JSON.stringify(a);
-      }
-      this.out.push({ id: generateId(), type: 'text', text: s });
-    });
+  print(value: DataType) {
+    if (!this.out) this.out = [];
+    let text: unknown = value;
+    let type = 'text';
+    if (value === undefined) {
+      text = 'undefined';
+    } else if (value === null) {
+      text = 'null';
+    } else if ((text as Error).message) {
+      text = (text as Error).message;
+      type = 'error';
+    } else if (typeof value === 'object' || Array.isArray(value)) {
+      text = JSON.stringify(value);
+    } else if (value.toString) {
+      text = value.toString();
+    } else if (typeof value === 'string') {
+      text = value;
+    } else if (Number.isNaN(Number(value))) {
+      text = 'NaN';
+    } else {
+      text = `${value}`;
+    }
+    this.out.push({ id: generateId(), type, text: text as string });
   }
 
-  print(text: string) {
-    if (!this.out) this.out = [];
-    this.out.push({ id: generateId(), type: 'text', text });
+  appendConsole(args: RestType) {
+    args.forEach(a => {
+      this.print(a);
+    });
   }
 }
 
