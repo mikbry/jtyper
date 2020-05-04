@@ -50,15 +50,18 @@ class Parser implements ParserType {
           const init = declaration.init as ESTreeNode;
           // console.log('id=', id, init);
           const name = id.name as string;
+          let { value } = init;
           let type = typeof init.value as DataType;
           if (init.type === 'ArrayExpression') {
             type = 'array';
+            value = input.substring(init.start, init.end);
           } else if (init.type === 'ObjectExpression') {
             type = 'object';
+            value = input.substring(init.start, init.end);
           } else if (init.type === 'ArrowFunctionExpression') {
             type = 'function';
+            value = input.substring(init.start, init.end);
           }
-          let { value } = init;
           if (variables[name] && variables[name].value && value === undefined) {
             ({ value } = variables[name]);
           }

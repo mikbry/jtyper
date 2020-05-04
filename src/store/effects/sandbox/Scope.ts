@@ -23,39 +23,62 @@ class Scope implements ScopeType {
     this.logger.print(string);
   }
 
-  async bindCode(code: CodeType, runner: any) {
+  async bindCode(code: CodeType, runner: { execute: Function }) {
     const { script } = code;
     let start = '';
     let end = '\n// */\nreturn {';
-    Object.keys(this.variables).forEach(varName => {
-      // console.log(varName, this.variables[varName], code.variables[varName]);
-      if (!code.variables[varName] && this.variables[varName].type !== 'function') {
-        const variable = this.variables[varName];
-        // Not present in code block, add it
-        start += variable.kind === 'const' ? 'const ' : 'let ';
-        start += varName;
-        let { value } = variable;
-        if (value && (variable.type === 'object' || variable.type === 'array')) {
-          value = `JSON.parse('${JSON.stringify(value)}')`;
-        } else if (value && variable.type === 'string') {
-          value = `'${value}'`;
+    const names = Object.keys(this.variables);
+    if (names.length > 0) {
+      names.forEach(varName => {
+        // console.log(varName, this.variables[varName], code.variables[varName]);
+        if (!code.variables[varName]) {
+          const variable = this.variables[varName];
+          // Not present in code block, add it
+          start += variable.kind === 'const' ? 'const ' : 'let ';
+          start += varName;
+          let { value } = variable;
+          if (value && (variable.type === 'object' || variable.type === 'array')) {
+            if (typeof value !== 'string') {
+              value = `JSON.parse('${JSON.stringify(value)}')`;
+            }
+          } else if (value && variable.type === 'string') {
+            value = `'${value}'`;
+          }
+          // console.log('name=', varName, value);
+          start += value === undefined ? ';\n' : ` = ${value};\n`;
         }
-        // console.log('name=', varName, value);
-        start += value === undefined ? ';\n' : ` = ${value};\n`;
-      }
-      if (this.variables[varName].type !== 'function') {
-        end += ` ${varName},`;
-      }
-    });
+        if (
+          this.variables[varName].type !== 'function' &&
+          !(this.variables[varName].kind === 'const' && this.variables[varName].value)
+        ) {
+          end += ` ${varName},`;
+        }
+      });
+      end = `${end.substring(0, end.length - 1)} `;
+    }
     end += '};';
     // console.log('start=', start);
     // console.log('end=', end);
     const sse = start + script + end;
-    console.log(sse);
+    // console.log(sse);
     const response = await runner.execute(sse, this);
     // console.log('response=', response);
     Object.keys(response).forEach(varName => {
-      this.variables[varName].value = response[varName];
+      const value = response[varName];
+      this.variables[varName].value = value;
+      if (Array.isArray(value)) {
+        this.variables[varName].type = 'array';
+      } else if (typeof value === 'object') {
+        this.variables[varName].type = 'object';
+      } else if (typeof value === 'string') {
+        this.variables[varName].type = 'string';
+      } else if (typeof value === 'boolean') {
+        this.variables[varName].type = 'boolean';
+      } else if (typeof value === 'number') {
+        this.variables[varName].type = 'number';
+      } else if (typeof value === 'bigint') {
+        this.variables[varName].type = 'bigint';
+      }
       // console.log('response=', response[varName]);
     });
   }
