@@ -22,7 +22,7 @@ class MockupWorker {
     this.url = stringUrl;
   }
 
-  postMessage(msg: any) {
+  postMessage(msg: unknown) {
     this.onmessage(msg);
   }
 }
