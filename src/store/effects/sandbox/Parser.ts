@@ -40,7 +40,7 @@ class Parser implements ParserType {
     let parsed = input;
     const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
-    console.log('tree', tree);
+    // console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
         const kind = element.kind as string;
@@ -48,17 +48,23 @@ class Parser implements ParserType {
         declarations.forEach(declaration => {
           const id = declaration.id as ESTreeNode;
           const init = declaration.init as ESTreeNode;
-          console.log('id=', id, init);
+          // console.log('id=', id, init);
           const name = id.name as string;
           let type = typeof init.value as DataType;
           if (init.type === 'ArrayExpression') {
             type = 'array';
           } else if (init.type === 'ObjectExpression') {
             type = 'object';
+          } else if (init.type === 'ArrowFunctionExpression') {
+            type = 'function';
           }
-          code.variables[name] = { kind, value: init.value, type };
-          variables[name] = { kind, value: init.value, type };
-          console.log('var=', name, variables[name]);
+          let { value } = init;
+          if (variables[name] && variables[name].value && value === undefined) {
+            ({ value } = variables[name]);
+          }
+          code.variables[name] = { kind, value, type };
+          variables[name] = { kind, value, type };
+          // console.log('var=', name, variables[name]);
         });
       } else if (element.type === 'ExpressionStatement' && element.expression.type === 'CallExpression') {
         const { expression } = element;

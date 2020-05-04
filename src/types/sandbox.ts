@@ -36,7 +36,8 @@ export type DataType =
   | 'undefined'
   | 'object'
   | 'function'
-  | 'array';
+  | 'array'
+  | Error;
 
 export interface VariableType {
   kind: string;
