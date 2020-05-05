@@ -16,7 +16,6 @@ interface Props {
 const Styled = styled.div`
   width: 100%;
   min-height: calc(32px - 1.2em);
-  padding: 0.6em;
 `;
 
 const getText = (ref: React.RefObject<HTMLInputElement>) => {

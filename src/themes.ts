@@ -12,7 +12,7 @@ const BasicTheme: DefaultTheme = {
     primary: 'dimgray',
     secondary: 'orange',
     onPrimary: 'white',
-    background: 'whitesmoke',
+    background: 'white',
     surface: 'gainsboro',
     onSurface: '#999',
     menu: '#333',
