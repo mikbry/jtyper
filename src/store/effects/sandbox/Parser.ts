@@ -41,7 +41,7 @@ class Parser implements ParserType {
     let offset = 0;
     const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
-    console.log('tree', tree);
+    // console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
         const kind = element.kind as string;
@@ -51,21 +51,25 @@ class Parser implements ParserType {
           const init = declaration.init as ESTreeNode;
           // console.log('id=', id, init);
           const name = id.name as string;
-          let { value } = init;
-          let type = typeof init.value as DataType;
-          if (init.type === 'ArrayExpression') {
-            type = 'array';
-            value = input.substring(init.start, init.end);
-          } else if (init.type === 'ObjectExpression') {
-            type = 'object';
-            value = input.substring(init.start, init.end);
-          } else if (init.type === 'ArrowFunctionExpression') {
-            type = 'function';
-            value = input.substring(init.start, init.end);
+          let value;
+          let type: DataType = 'undefined';
+          if (init) {
+            ({ value } = init);
+            type = typeof init.value as DataType;
+            if (init.type === 'ArrayExpression') {
+              type = 'array';
+              value = input.substring(init.start, init.end);
+            } else if (init.type === 'ObjectExpression') {
+              type = 'object';
+              value = input.substring(init.start, init.end);
+            } else if (init.type === 'ArrowFunctionExpression') {
+              type = 'function';
+              value = input.substring(init.start, init.end);
+            }
           }
-          if (variables[name] && variables[name].value && value === undefined) {
+          /* if (variables[name] && variables[name].value && value === undefined) {
             ({ value } = variables[name]);
-          }
+          } */
           code.variables[name] = { kind, value, type };
           variables[name] = { kind, value, type };
           // console.log('var=', name, variables[name]);
@@ -94,11 +98,11 @@ class Parser implements ParserType {
         const e = parsed.substring(start + exp.length);
         parsed = `${s}print(${exp})${e}`;
         offset += 'print()'.length;
-        console.log('exp', exp, start, end);
+        // console.log('exp', exp, start, end);
       }
     });
     // console.log('variables=', variables);
-    console.log('parsed', parsed);
+    // console.log('parsed', parsed);
     this.last = parsed;
     code.script = parsed;
     return code;

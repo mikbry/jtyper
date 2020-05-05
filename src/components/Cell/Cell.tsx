@@ -101,6 +101,7 @@ const Line = styled.div`
     border: 1px solid ${(props: StyledProps) => chooseBorderColor(props)};
   }
 `;
+Line.defaultProps = { theme: BasicTheme };
 
 const RawContent = styled.div`
   min-height: calc(32px - 1.2em);
@@ -118,12 +119,14 @@ const OutText = styled.div`
   padding: 4px 0;
   border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
 `;
+OutText.defaultProps = { theme: BasicTheme };
 
 const OutError = styled.div`
   padding: 4px 0;
   color: red;
   border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
 `;
+OutError.defaultProps = { theme: BasicTheme };
 
 const Cell: FunctionComponent<Props> = ({
   selected = false,
@@ -187,8 +190,8 @@ const Cell: FunctionComponent<Props> = ({
         {content}
       </Line>
       {out?.length && (
-        <Line>
-          <Prompt />
+        <Line selected={false}>
+          <Prompt selected={false} />
           <OutContent>
             {out.map(o => {
               if (o.type === 'error') {

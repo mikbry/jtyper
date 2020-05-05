@@ -207,3 +207,26 @@ test('Toolbar with notebook and selected cell should cut', async () => {
   expect(newState.editor.selectedCell).toBe(undefined);
   expect(newState.files[0].cells.length).toBe(0);
 });
+
+test('Toolbar with notebook and no selected cell should run', async () => {
+  const sandbox = await initSandbox();
+  const state: Partial<StateType> = {
+    sandbox,
+    editor: { selected: 0, copyBuffer: {} },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '1', raw: 'print(0);', format: 'raw' },
+          { id: '2', raw: 'print(0);', format: 'code' },
+        ],
+      },
+    ],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state });
+  const items = getAllByRole('button');
+  fireEvent.click(items[7]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(undefined);
+});

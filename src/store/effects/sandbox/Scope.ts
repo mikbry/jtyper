@@ -38,18 +38,17 @@ class Scope implements ScopeType {
           start += varName;
           let { value } = variable;
           if (value && (variable.type === 'object' || variable.type === 'array')) {
-            if (typeof value !== 'string') {
-              value = `JSON.parse('${JSON.stringify(value)}')`;
-            }
+            value = `JSON.parse('${JSON.stringify(value)}')`;
           } else if (value && variable.type === 'string') {
             value = `'${value}'`;
           }
           // console.log('name=', varName, value);
           start += value === undefined ? ';\n' : ` = ${value};\n`;
         }
+        const va = this.variables[varName];
         if (
-          this.variables[varName].type !== 'function' &&
-          !(this.variables[varName].kind === 'const' && this.variables[varName].value)
+          va.kind === 'let' ||
+          (va.kind === 'const' && (va.value === undefined || va.type === 'array' || va.type === 'object'))
         ) {
           end += ` ${varName},`;
         }
@@ -76,9 +75,9 @@ class Scope implements ScopeType {
         this.variables[varName].type = 'boolean';
       } else if (typeof value === 'number') {
         this.variables[varName].type = 'number';
-      } else if (typeof value === 'bigint') {
+      } /* else if (typeof value === 'bigint') {
         this.variables[varName].type = 'bigint';
-      }
+      } */
       // console.log('response=', response[varName]);
     });
   }

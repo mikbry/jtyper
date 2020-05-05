@@ -11,6 +11,7 @@ import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockupProvider from '../../test/MockupProvider';
 import FakeMouseEvent from '../../test/FakeMouseEvent';
+import { LogEntryType } from '../../types';
 
 import Cell from './index';
 
@@ -65,6 +66,24 @@ test('Cell should have a value', () => {
     }),
   );
   expect(on).toHaveBeenCalledTimes(0);
+});
+
+test('Cell should be editable and hover', () => {
+  const on = jest.fn();
+  const { getByTestId, getAllByRole } = render(
+    <MockupProvider>
+      <Cell onClick={on} onChange={on} editable>
+        text
+      </Cell>
+    </MockupProvider>,
+  );
+  const cell = getAllByRole('button')[0];
+  const content = getByTestId('rawcontent');
+  let style = getComputedStyle(content);
+  expect(style.border).toBe('1px solid white');
+  fireEvent.mouseOver(cell);
+  style = getComputedStyle(content);
+  expect(style.border).toBe('1px solid white');
 });
 
 test('Cell should be editable and selected', () => {
@@ -175,4 +194,22 @@ test('editable & selected Cell with code should be changed', async () => {
   }
   expect(onChange).toHaveBeenCalledTimes(helloword.length);
   expect(value).toBe(` ${helloword}`);
+});
+
+test('Cell with code out should display it', () => {
+  const on = jest.fn();
+  const out: LogEntryType[] = [
+    { type: 'text', id: '1', text: 'text' },
+    { type: 'error', id: '2', text: 'error' },
+  ];
+  const { getByRole } = render(
+    <MockupProvider>
+      <Cell onClick={on} onChange={on} format='code' out={out}>
+        text
+      </Cell>
+    </MockupProvider>,
+  );
+  const content = getByRole('button').firstChild?.childNodes[1];
+  expect(content?.textContent?.trim()).toBe('text');
+  expect(on).toHaveBeenCalledTimes(0);
 });

@@ -7,23 +7,57 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const createObjectURL = (url: Blob) => url;
+type UrlType = { blob: Blob };
+type DataType = { data: string[] };
+
+const createObjectURL = (blob: Blob): UrlType => ({ blob });
+
+const script = `
+const print = (_value) => {
+  let value = _value;
+  if (typeof value === 'function') value = 'Function';
+  this.onmessage({ data: { print: { value } } })
+};
+const stub = () => {
+  // TODO throw an error
+}; \n
+`;
 
 class MockupWorker {
-  url: string;
+  url: { blob: Blob };
 
-  onmessage: Function = () => ({});
+  end?: boolean;
+
+  onmessage: Function = () => {
+    //
+  };
 
   onerror: Function = () => {
     //
   };
 
-  constructor(stringUrl: string) {
-    this.url = stringUrl;
+  constructor(url: UrlType) {
+    this.url = url;
   }
 
-  postMessage(msg: unknown) {
-    this.onmessage(msg);
+  terminate() {
+    //
+    this.end = true;
+  }
+
+  async handleMessage(e: DataType) {
+    const code = script + e.data[0];
+    try {
+      // eslint-disable-next-line no-new-func
+      const result = Function(code).bind(this)();
+      if (this.onmessage) this.onmessage({ data: { result } });
+    } catch (err) {
+      if (this.onerror) this.onerror(err);
+    }
+  }
+
+  postMessage(msg: string[]) {
+    this.handleMessage({ data: msg });
   }
 }
 

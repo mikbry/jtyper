@@ -5,61 +5,65 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { RestType, LogEntryType, DataType } from '../../../types';
+import { RestType, LogEntryType } from '../../../types';
 import { generateId } from '../../selectors';
+
+type ConsoleType = {
+  [key: string]: Function;
+  clear: Function;
+  error: Function;
+  info: Function;
+  log: Function;
+  warn: Function;
+};
+
+type LoggerOptions = { console?: unknown };
 
 class Logger {
   out: LogEntryType[] = [];
 
-  clear: Function;
+  originalConsole?: ConsoleType;
 
-  error: Function;
-
-  info: Function;
-
-  log: Function;
-
-  warn: Function;
-
-  originalConsole: {
-    clear: Function;
-    error: Function;
-    info: Function;
-    log: Function;
-    warn: Function;
-  };
-
-  constructor() {
+  constructor(opts: LoggerOptions = {}) {
     this.out = [];
-    const { clear, error, info, log, warn } = console;
-    this.originalConsole = { clear, error, info, log, warn };
-    this.clear = () => {
-      // this.originalConsole.clear.apply(this, args);
-      // this.appendConsole(args);
-      this.out = [];
-    };
-    this.error = (...args: RestType) => {
-      this.originalConsole.error.apply(this, args);
-      this.appendConsole(args);
-    };
-    this.info = (...args: RestType) => {
-      this.originalConsole.info.apply(this, args);
-      this.appendConsole(args);
-    };
-    this.log = (...args: RestType) => {
-      this.originalConsole.log.apply(this, args);
-      this.appendConsole(args);
-    };
-    this.warn = (...args: RestType) => {
-      this.originalConsole.warn.apply(this, args);
-      args.forEach(a => this.out.push({ id: generateId(), type: 'text', text: JSON.stringify(a) }));
-    };
+    if (opts.console) {
+      const { clear, error, info, log, warn } = opts.console as ConsoleType;
+      this.originalConsole = { clear, error, info, log, warn };
+    }
   }
 
-  print(value: DataType) {
-    if (!this.out) this.out = [];
+  clear() {
+    // this.originalConsole.clear.apply(this, args);
+    // this.appendConsole(args);
+    this.out = [];
+  }
+
+  error(...args: RestType) {
+    this.consoleOut('error', args);
+  }
+
+  info(...args: RestType) {
+    this.consoleOut('info', args);
+  }
+
+  log(...args: RestType) {
+    this.consoleOut('log', args);
+  }
+
+  warn(...args: RestType) {
+    this.consoleOut('warn', args);
+  }
+
+  consoleOut(type: string, args: RestType) {
+    if (this.originalConsole) {
+      this.originalConsole[type].apply(this, args);
+    }
+    this.appendConsole({ args, type });
+  }
+
+  print(value: number | string | undefined | null | [] | object | bigint | boolean, _type = 'text') {
     let text: unknown = value;
-    let type = 'text';
+    let type = _type;
     if (value === undefined) {
       text = 'undefined';
     } else if (value === null) {
@@ -69,21 +73,22 @@ class Logger {
       type = 'error';
     } else if (typeof value === 'object' || Array.isArray(value)) {
       text = JSON.stringify(value);
-    } else if (value.toString) {
+    } else {
+      // if (value.toString) {
       text = value.toString();
-    } else if (typeof value === 'string') {
+    } /* else if (typeof value === 'string') {
       text = value;
     } else if (Number.isNaN(Number(value))) {
       text = 'NaN';
     } else {
       text = `${value}`;
-    }
+    } */
     this.out.push({ id: generateId(), type, text: text as string });
   }
 
-  appendConsole(args: RestType) {
+  appendConsole({ args, type }: { args: RestType; type: string }) {
     args.forEach(a => {
-      this.print(a);
+      this.print(a, type);
     });
   }
 }

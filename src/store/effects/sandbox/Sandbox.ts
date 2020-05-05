@@ -12,21 +12,23 @@ import Logger from './Logger';
 import ScriptWorker from './ScriptWorker';
 
 class Sandbox implements SandboxType {
-  parser: ParserType | undefined;
+  parser: ParserType;
 
-  lastCode: string[] | undefined;
+  lastCode?: string[];
 
-  lastFunc: CodeType | undefined;
+  lastFunc?: CodeType;
 
-  error: Error | undefined;
+  error?: Error;
 
   logger: Logger;
 
   scriptWorker: ScriptWorker;
 
-  constructor() {
+  scope?: ScopeType;
+
+  constructor(noConsole = false) {
     this.parser = new Parser();
-    this.logger = new Logger();
+    this.logger = new Logger(noConsole ? {} : { console });
     this.scriptWorker = new ScriptWorker();
     this.reset();
   }
@@ -38,10 +40,7 @@ class Sandbox implements SandboxType {
   }
 
   async parse(input: string, scope: ScopeType): Promise<CodeType> {
-    if (this.parser) {
-      return this.parser.parse(input, scope);
-    }
-    return { script: input, variables: {}, funcs: {} };
+    return this.parser.parse(input, scope);
   }
 
   async execute(code: string[]) {
@@ -84,6 +83,7 @@ class Sandbox implements SandboxType {
         }
       }
     }
+    this.scope = scope;
     return this.logger.out;
   }
 }
