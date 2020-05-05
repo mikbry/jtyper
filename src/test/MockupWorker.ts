@@ -13,6 +13,11 @@ type DataType = { data: string[] };
 const createObjectURL = (blob: Blob): UrlType => ({ blob });
 
 const script = `
+const print = (_value) => {
+  let value = _value;
+  if (typeof value === 'function') value = 'Function';
+  this.onmessage({ data: { print: { value } } })
+};
 const stub = () => {
   // TODO throw an error
 }; \n
@@ -55,10 +60,4 @@ Object.defineProperty(window, 'Worker', {
 
 Object.defineProperty(window, 'URL', {
   value: { createObjectURL },
-});
-
-Object.defineProperty(window, 'print', {
-  value: () => {
-    /* */
-  },
 });

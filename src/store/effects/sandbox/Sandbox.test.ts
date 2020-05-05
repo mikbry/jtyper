@@ -21,12 +21,10 @@ const func = (v) => {
   return 'ok'
 };
 
-let v = value + 1;
+let v;
 
 print(v);
 
-v += 1;
-print(v);
 print(func());
 print(1/0);
 let d = undefined;
@@ -40,8 +38,8 @@ v
 `;
 
 const code2 = `
-v += 1;
-let z = true;
+v = 4;
+let z = 'true';
 forbidden(z);
 `;
 
@@ -110,7 +108,7 @@ test('Sandbox should execute and return all variables', async () => {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
   const out = await sandbox.execute([code1]);
-  expect(out.length).toBe(9);
+  expect(out.length).toBe(8);
   expect(out[0].text).toBe('Hello world!');
   expect(out[0].type).toBe('text');
   expect(out[0].id).toBeDefined();
@@ -123,17 +121,17 @@ test('Sandbox should execute and return all variables', async () => {
   expect(scope.variables.str.value).toBe('hello');
   expect(scope.variables.str.type).toBe('string');
   expect(scope.variables.array.kind).toBe('const');
-  expect(scope.variables.array.value).toBe('["1",2,3,4]');
+  expect(scope.variables.array.value).toStrictEqual(['1', 2, 3, 4]);
   expect(scope.variables.array.type).toBe('array');
   expect(scope.variables.obj.kind).toBe('const');
-  expect(scope.variables.obj.value).toBe("{ id: 1, name: 'name' }");
+  expect(scope.variables.obj.value).toStrictEqual({ id: 1, name: 'name' });
   expect(scope.variables.obj.type).toBe('object');
   expect(scope.variables.func.kind).toBe('const');
   expect(scope.variables.func.value).toBe("(v) => {\n  if (v) return 'nok';\n  return 'ok'\n}");
   expect(scope.variables.func.type).toBe('function');
   expect(scope.variables.v.kind).toBe('let');
-  expect(scope.variables.v.value).toBe(3);
-  expect(scope.variables.v.type).toBe('number');
+  expect(scope.variables.v.value).toBe(undefined);
+  expect(scope.variables.v.type).toBe('undefined');
   expect(scope.variables.d.kind).toBe('let');
   expect(scope.variables.d.value).toBe(NaN);
   expect(scope.variables.d.type).toBe('number');
@@ -155,10 +153,10 @@ test('Sandbox should execute several codes and return all variables', async () =
   expect(scope.variables.str.value).toBe('hello');
   expect(scope.variables.str.type).toBe('string');
   expect(scope.variables.array.kind).toBe('const');
-  expect(scope.variables.array.value).toBe('["1",2,3,4]');
+  expect(scope.variables.array.value).toStrictEqual(['1', 2, 3, 4]);
   expect(scope.variables.array.type).toBe('array');
   expect(scope.variables.obj.kind).toBe('const');
-  expect(scope.variables.obj.value).toBe("{ id: 1, name: 'name' }");
+  expect(scope.variables.obj.value).toStrictEqual({ id: 1, name: 'name' });
   expect(scope.variables.obj.type).toBe('object');
   expect(scope.variables.func.kind).toBe('const');
   expect(scope.variables.func.value).toBe("(v) => {\n  if (v) return 'nok';\n  return 'ok'\n}");
