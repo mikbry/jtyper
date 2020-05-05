@@ -26,6 +26,8 @@ const stub = () => {
 class MockupWorker {
   url: { blob: Blob };
 
+  end?: boolean;
+
   onmessage: Function = () => {
     //
   };
@@ -36,6 +38,11 @@ class MockupWorker {
 
   constructor(url: UrlType) {
     this.url = url;
+  }
+
+  terminate() {
+    //
+    this.end = true;
   }
 
   async handleMessage(e: DataType) {

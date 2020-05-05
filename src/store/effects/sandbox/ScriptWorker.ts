@@ -10,6 +10,14 @@ import { ScopeType, DataType } from '../../../types';
 
 type MessageType = { print?: { value?: DataType }; result?: DataType };
 
+const startTimeout = (callback: Function, timeout: number) => {
+  if (timeout === -1) {
+    callback();
+    return 0;
+  }
+  return setTimeout(timeout, callback);
+};
+
 class ScriptWorker {
   private worker?: Worker;
 
@@ -56,8 +64,7 @@ class ScriptWorker {
   public async execute(script: string, scope: ScopeType, timeout = 1000): Promise<DataType> {
     const worker = this.getWorker() as Worker;
     return new Promise((resolve, reject) => {
-      const handle = setTimeout(() => {
-        // console.log('worker timeout');
+      const handle = startTimeout(() => {
         this.kill();
         reject(new Error('Timeout Error'));
       }, timeout);
