@@ -29,9 +29,13 @@ class MockupWorker {
 
   async handleMessage(e: DataType) {
     const code = e.data[0];
-    // eslint-disable-next-line no-new-func
-    const result = Function(code).bind(this)();
-    if (this.onmessage) this.onmessage({ data: { result } });
+    try {
+      // eslint-disable-next-line no-new-func
+      const result = Function(code).bind(this)();
+      if (this.onmessage) this.onmessage({ data: { result } });
+    } catch (err) {
+      if (this.onerror) this.onerror(err);
+    }
   }
 
   postMessage(msg: string[]) {

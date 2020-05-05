@@ -24,9 +24,9 @@ class Sandbox implements SandboxType {
 
   scriptWorker: ScriptWorker;
 
-  constructor() {
+  constructor(noConsole = false) {
     this.parser = new Parser();
-    this.logger = new Logger({ console });
+    this.logger = new Logger(noConsole ? {} : { console });
     this.scriptWorker = new ScriptWorker();
     this.reset();
   }
