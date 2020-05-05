@@ -200,7 +200,7 @@ test('Cell with code out should display it', () => {
   const on = jest.fn();
   const out: LogEntryType[] = [
     { type: 'text', id: '1', text: 'text' },
-    { type: 'error', id: '1', text: 'error' },
+    { type: 'error', id: '2', text: 'error' },
   ];
   const { getByRole } = render(
     <MockupProvider>
