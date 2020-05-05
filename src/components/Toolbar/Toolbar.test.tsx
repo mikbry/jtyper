@@ -213,7 +213,16 @@ test('Toolbar with notebook and no selected cell should run', async () => {
   const state: Partial<StateType> = {
     sandbox,
     editor: { selected: 0, copyBuffer: {} },
-    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'print(0);', format: 'code' }] }],
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '1', raw: 'print(0);', format: 'raw' },
+          { id: '2', raw: 'print(0);', format: 'code' },
+        ],
+      },
+    ],
   };
   const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state });
   const items = getAllByRole('button');
