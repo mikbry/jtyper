@@ -17,8 +17,12 @@ const initialState: StateType = {
       title: 'Home',
       readOnly: true,
       cells: [
-        { raw: '# Header', id: 'a', format: 'markdown' },
-        { raw: 'lorem ipsum', id: 'b' },
+        {
+          raw: '# Wecome to JTyper\n## This notebook will show you how easy it is to create one !',
+          id: 'a',
+          format: 'markdown',
+        },
+        { raw: 'Try this code to see how JTyper works !', id: 'b' },
         { raw: `print('hellow world !')`, id: 'c', format: 'code' },
       ],
     },

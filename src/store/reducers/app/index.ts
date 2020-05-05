@@ -11,24 +11,34 @@ import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
 import { generateId, getCurrentNotebook, getNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
 
 const handlers = {
-  [INITIALIZE + DONE]: (state: StateType, action: Partial<StateType>) => {
-    let { document } = action;
+  [INITIALIZE + DONE]: (initialState: StateType, state: Partial<StateType>) => {
+    let { document } = state;
     if (!document) {
-      ({ document } = state);
+      ({ document } = initialState);
     }
-    // TODO merge files
-    let { files } = action;
+    let files = state.files as NotebookType[];
     if (!files) {
-      ({ files } = state);
+      ({ files } = initialState);
+    } else {
+      // merge files
+      initialState.files.forEach(file => {
+        // const fi = files.findIndex(f => f.id === file.id);
+        /* if (fi > -1 && file.readOnly) {
+          files.splice(fi, 1, file);
+        } else {
+          files.unshift(file);
+        } */
+        files.unshift(file);
+      });
     }
-    let { editor } = action;
+    let { editor } = state;
     if (!editor) {
-      ({ editor } = state);
+      ({ editor } = initialState);
     }
-    const { sandbox } = action;
+    const { sandbox } = state;
     const notebook = getCurrentNotebook(editor, files);
     const title = notebook?.title || '';
-    return { ...state, document, files, editor, init: true, saved: true, title, sandbox };
+    return { ...initialState, document, files, editor, init: true, saved: true, title, sandbox };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     let { title = 'Notebook' } = action;
