@@ -7,23 +7,35 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const createObjectURL = (url: Blob) => url;
+type UrlType = { blob: Blob };
+type DataType = { data: string[] };
+
+const createObjectURL = (blob: Blob): UrlType => ({ blob });
 
 class MockupWorker {
-  url: string;
+  url: { blob: Blob };
 
-  onmessage: Function = () => ({});
+  onmessage: Function = () => {
+    //
+  };
 
   onerror: Function = () => {
     //
   };
 
-  constructor(stringUrl: string) {
-    this.url = stringUrl;
+  constructor(url: UrlType) {
+    this.url = url;
   }
 
-  postMessage(msg: unknown) {
-    this.onmessage(msg);
+  async handleMessage(e: DataType) {
+    const code = e.data[0];
+    // eslint-disable-next-line no-new-func
+    const result = Function(code).bind(this)();
+    if (this.onmessage) this.onmessage({ data: { result } });
+  }
+
+  postMessage(msg: string[]) {
+    this.handleMessage({ data: msg });
   }
 }
 
@@ -33,4 +45,10 @@ Object.defineProperty(window, 'Worker', {
 
 Object.defineProperty(window, 'URL', {
   value: { createObjectURL },
+});
+
+Object.defineProperty(window, 'print', {
+  value: () => {
+    /* */
+  },
 });
