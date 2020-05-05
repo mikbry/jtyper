@@ -24,6 +24,8 @@ class Sandbox implements SandboxType {
 
   scriptWorker: ScriptWorker;
 
+  scope?: ScopeType;
+
   constructor(noConsole = false) {
     this.parser = new Parser();
     this.logger = new Logger(noConsole ? {} : { console });
@@ -81,6 +83,7 @@ class Sandbox implements SandboxType {
         }
       }
     }
+    this.scope = scope;
     return this.logger.out;
   }
 }

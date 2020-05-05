@@ -63,9 +63,9 @@ class Parser implements ParserType {
             type = 'function';
             value = input.substring(init.start, init.end);
           }
-          if (variables[name] && variables[name].value && value === undefined) {
+          /* if (variables[name] && variables[name].value && value === undefined) {
             ({ value } = variables[name]);
-          }
+          } */
           code.variables[name] = { kind, value, type };
           variables[name] = { kind, value, type };
           // console.log('var=', name, variables[name]);

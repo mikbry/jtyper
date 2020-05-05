@@ -12,6 +12,12 @@ type DataType = { data: string[] };
 
 const createObjectURL = (blob: Blob): UrlType => ({ blob });
 
+const script = `
+const stub = () => {
+  // TODO throw an error
+}; \n
+`;
+
 class MockupWorker {
   url: { blob: Blob };
 
@@ -28,7 +34,7 @@ class MockupWorker {
   }
 
   async handleMessage(e: DataType) {
-    const code = e.data[0];
+    const code = script + e.data[0];
     try {
       // eslint-disable-next-line no-new-func
       const result = Function(code).bind(this)();
