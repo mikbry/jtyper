@@ -26,7 +26,8 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
   dispatch: DispatchType,
   prevState: Function,
 ) => {
-  const { document, files, editor } = prevState();
+  const { document, files: _files, editor } = prevState();
+  const files = _files.filter((file: NotebookType) => !file.readOnly);
   let data: Partial<StateType>;
   // Not used
   /* if (action.document) {

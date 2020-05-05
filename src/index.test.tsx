@@ -29,5 +29,5 @@ test('store should be setup from localstorage', async () => {
   const state = store.getState();
   expect(state.document.title).toBe('Project');
   expect(state.editor.selected).toBe(0);
-  expect(state.files.length).toBe(1);
+  expect(state.files.length).toBe(2);
 });
