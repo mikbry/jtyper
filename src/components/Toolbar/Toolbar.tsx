@@ -35,9 +35,9 @@ const Styled = styled.div`
 Styled.defaultProps = { theme: BasicTheme };
 
 const Bar = styled.div`
-  margin: 4px;
+  margin: 4px 0 4px 4px;
   line-height: 36px;
-  border: 1px solid ${props => props.theme.palette.group};
+  border-right: 1px solid ${props => props.theme.palette.group};
 `;
 Bar.defaultProps = { theme: BasicTheme };
 

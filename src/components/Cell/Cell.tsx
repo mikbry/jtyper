@@ -43,38 +43,48 @@ const Styled = styled.div`
   margin: 0;
   padding: 0;
   width: auto;
-  border: 1px solid ${(props: StyledProps) => chooseBorderColor(props)};
 
   &:not(:last-child) {
     margin-bottom: 1.2em;
   }
 
-  &:hover {
+  & > div > .react-codemirror2 {
+    width: calc(100% - 96px);
+    padding: 0px;
+  }
+
+  & > div > div {
+    width: calc(100% - 96px - 8px);
+    padding: 4px;
+  }
+
+  & div > pre {
+    width: calc(100% - 96px - 8px);
+    padding: 4px;
+  }
+
+  &:hover > div:first-child > div {
+    border: 1px solid ${(props: StyledProps) => chooseBorderColor(props, true)};
+  }
+  &:hover > div:first-child > pre {
     border: 1px solid ${props => chooseBorderColor(props, true)};
   }
-  &:hover > div aside {
-    border-left: 4px solid ${props => chooseBorderColor(props, true)};
+  &:hover > div:first-child aside {
+    border-left: 8px solid ${props => chooseBorderColor(props, true)};
   }
 
   &:focus {
     outline: none !important;
-  }
-
-  & > div > div {
-    width: calc(100% - 96px);
-  }
-  & div > pre {
-    width: calc(100% - 96px);
-    padding: 4px;
   }
 `;
 
 Styled.defaultProps = { theme: BasicTheme };
 
 const Prompt = styled.aside`
-  width: 92px;
+  width: 36px;
+  max-height: 48px;
   padding: 4px;
-  border-left: 4px solid ${(props: StyledProps) => chooseBorderColor(props, true)};
+  border-left: 8px solid ${(props: StyledProps) => chooseBorderColor(props, true)};
   text-align: right;
   font-size: 13px;
   font-familiy: 13px;
@@ -83,6 +93,13 @@ Prompt.defaultProps = { theme: BasicTheme };
 
 const Line = styled.div`
   display: flex;
+  & > div {
+    border: 1px solid ${(props: StyledProps) => chooseBorderColor(props)};
+  }
+
+  & > pre {
+    border: 1px solid ${(props: StyledProps) => chooseBorderColor(props)};
+  }
 `;
 
 const RawContent = styled.div`
@@ -165,13 +182,13 @@ const Cell: FunctionComponent<Props> = ({
       ref={cellRef}
       suppressContentEditableWarning
     >
-      <Line>
+      <Line selected={selected}>
         <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
         {content}
       </Line>
-      {out && (
+      {out?.length && (
         <Line>
-          <Prompt selected={selected} />
+          <Prompt />
           <OutContent>
             {out.map(o => {
               if (o.type === 'error') {
