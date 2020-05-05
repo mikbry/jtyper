@@ -41,7 +41,7 @@ class Parser implements ParserType {
     let offset = 0;
     const code: CodeType = { variables: {}, funcs: {}, script: input };
     const tree = acorn.parse(input) as ESTreeNode;
-    console.log('tree', tree);
+    // console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
         const kind = element.kind as string;
@@ -94,11 +94,11 @@ class Parser implements ParserType {
         const e = parsed.substring(start + exp.length);
         parsed = `${s}print(${exp})${e}`;
         offset += 'print()'.length;
-        console.log('exp', exp, start, end);
+        // console.log('exp', exp, start, end);
       }
     });
     // console.log('variables=', variables);
-    console.log('parsed', parsed);
+    // console.log('parsed', parsed);
     this.last = parsed;
     code.script = parsed;
     return code;
