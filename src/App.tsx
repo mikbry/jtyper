@@ -8,22 +8,11 @@
  */
 
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
-import Page from './components/Page';
-import AppBar from './components/AppBar';
-import Toolbar from './components/Toolbar';
-import Header from './components/Header';
-import Drawer from './components/Drawer';
-import Explorer from './components/Explorer';
-import Container from './components/Container';
-import Notebook from './components/Notebook';
-
-const Wrapper = styled.div`
-  display: flex;
-  height: 100%;
-`;
+import Home from './pages/Home';
+import Project from './pages/Project';
 
 type Props = {
   store: Store;
@@ -31,20 +20,12 @@ type Props = {
 
 const App: FunctionComponent<Props> = ({ store }) => (
   <Provider store={store}>
-    <Page>
-      <AppBar>
-        <Toolbar />
-      </AppBar>
-      <Wrapper>
-        <Drawer>
-          <Header />
-          <Explorer />
-        </Drawer>
-        <Container>
-          <Notebook />
-        </Container>
-      </Wrapper>
-    </Page>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/p/:projectName' element={<Project />} />
+      </Routes>
+    </BrowserRouter>
   </Provider>
 );
 
