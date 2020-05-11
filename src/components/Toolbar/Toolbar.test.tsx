@@ -230,3 +230,26 @@ test('Toolbar with notebook and no selected cell should run', async () => {
   const newState = store.getState();
   expect(newState.editor.selectedCell).toBe(undefined);
 });
+
+test('Toolbar with notebook and no selected cell should run All', async () => {
+  const sandbox = await initSandbox();
+  const state: Partial<StateType> = {
+    sandbox,
+    editor: { selected: 0, copyBuffer: {} },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '1', raw: 'print(0);', format: 'raw' },
+          { id: '2', raw: 'print(0);', format: 'code' },
+        ],
+      },
+    ],
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Toolbar />, { state });
+  const items = getAllByRole('button');
+  fireEvent.click(items[10]);
+  const newState = store.getState();
+  expect(newState.editor.selectedCell).toBe(undefined);
+});

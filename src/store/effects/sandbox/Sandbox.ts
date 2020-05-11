@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ParserType, SandboxType, CodeType, ScopeType } from '../../../types';
+import { ParserType, SandboxType, CodeType, ScopeType, LogEntryType } from '../../../types';
 import Parser from './Parser';
 import Scope from './Scope';
 import Logger from './Logger';
@@ -43,7 +43,8 @@ class Sandbox implements SandboxType {
     return this.parser.parse(input, scope);
   }
 
-  async execute(code: string[]) {
+  async execute(code: string[], all = false) {
+    const out: LogEntryType[][] = [];
     const funcs: CodeType[] = [];
     let func: CodeType = this.lastFunc as CodeType;
     const scope = new Scope(this.logger);
@@ -81,10 +82,16 @@ class Sandbox implements SandboxType {
           }
           this.error = error;
         }
+        if (all) {
+          out.push([...this.logger.out]);
+        }
       }
     }
+    if (out.length === 0) {
+      out.push([...this.logger.out]);
+    }
     this.scope = scope;
-    return this.logger.out;
+    return out;
   }
 }
 

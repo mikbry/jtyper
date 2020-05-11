@@ -102,6 +102,9 @@ const Toolbar: FunctionComponent = () => {
   const handleResetAll = () => {
     dispatch(resetAllCell());
   };
+  const handleRunAll = () => {
+    dispatch(runCell({ cell: cell as CellType, next: selectedCell, all: true }));
+  };
   let editDisabled = true;
   let navDisabled = true;
   let runDisabled = true;
@@ -143,7 +146,7 @@ const Toolbar: FunctionComponent = () => {
         </IconButton>
         <IconButton icon={Stop2} disabled={runDisabled} onClick={handleReset} />
         <IconButton icon={History} disabled={runDisabled} onClick={handleResetAll} />
-        <IconButton icon={Forward3} disabled={runDisabled} onClick={handleSave} />
+        <IconButton icon={Forward3} disabled={runDisabled} onClick={handleRunAll} />
       </Bar>
       <StyledSelect
         options={options}
