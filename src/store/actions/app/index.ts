@@ -7,7 +7,13 @@
  */
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
 import { StateType, DispatchType, CellType, CellFormat, NotebookType, ComposerType } from '../../../types';
-import { getCurrentNotebook, findNotebookCodeCell, getNotebookCellIndex, getFullCode } from '../../selectors';
+import {
+  getCurrentNotebook,
+  findNotebookCodeCell,
+  getNotebookCellIndex,
+  getAllCodeCells,
+  getFullCode,
+} from '../../selectors';
 import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
 
@@ -70,21 +76,32 @@ const updateCell = (action: CellType) => (dispatch: DispatchType) => {
   dispatch(save({ editor: true }));
 };
 
-type RunCellType = { cell: CellType; next?: number };
-const runCell = ({ cell: c, next }: RunCellType) => async (dispatch: DispatchType, getState: Function) => {
+type RunCellType = { cell: CellType; next?: number; all?: boolean };
+const runCell = ({ cell: c, next, all }: RunCellType) => async (dispatch: DispatchType, getState: Function) => {
   const { editor, files, sandbox } = getState();
   const notebook = getCurrentNotebook(editor, files);
   let cell = c;
   if (!cell) {
     cell = findNotebookCodeCell(notebook) as CellType;
   }
-  if (cell && cell.format === 'code') {
+  if (all) {
+    const { cells, code } = getAllCodeCells(notebook);
+    if (cells.length === 0) {
+      return;
+    }
+    const out = await sandbox.execute(code, all);
+    const ncells = notebook.cells.map(cl => {
+      const i = cells.findIndex(cc => cc.id === cl.id);
+      return i === -1 ? cl : { ...cl, out: out[i] };
+    });
+    dispatch({ ...notebook, cells: ncells, type: APP.UPDATENOTEBOOK + DONE });
+  } else if (cell && cell.format === 'code') {
     const code = getFullCode(notebook, cell.id);
-    const out = await sandbox.execute(code);
+    const [out] = await sandbox.execute(code);
     dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
   }
   let selected = next;
-  if (cell && selected === undefined) {
+  if (cell && selected === undefined && !all) {
     selected = getNotebookCellIndex(notebook, cell.id) + 1;
   }
   dispatch({ type: APP.SELECTCELL + DONE, selected });

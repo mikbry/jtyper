@@ -15,6 +15,7 @@ import {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getAllCodeCells,
   getFullCode,
 } from './app';
 
@@ -27,5 +28,6 @@ export {
   getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
+  getAllCodeCells,
   getFullCode,
 };

@@ -58,3 +58,17 @@ export const getFullCode = (notebook: NotebookType, id: string): string[] => {
   });
   return code;
 };
+
+type CodeCells = { code: string[]; cells: CellType[] };
+
+export const getAllCodeCells = (notebook: NotebookType): CodeCells => {
+  const cells: CellType[] = [];
+  const code: string[] = [];
+  notebook.cells.forEach(cell => {
+    if (cell.format === 'code') {
+      cells.push(cell);
+      code.push(cell.raw);
+    }
+  });
+  return { cells, code };
+};

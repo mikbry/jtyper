@@ -59,7 +59,7 @@ test('Sandbox should execute hello world!', async () => {
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute(['"hello world!"']);
+  const [out] = await sandbox.execute(['"hello world!"']);
   expect(out.length).toBe(1);
   expect(out[0].text).toBe('hello world!');
   expect(out[0].type).toBe('text');
@@ -71,7 +71,7 @@ test('Sandbox should not execute syntax error code', async () => {
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute(['hello world!']);
+  const [out] = await sandbox.execute(['hello world!']);
   expect(out.length).toBe(1);
   expect(out[0].text).toBe('Unexpected token (1:6)');
   expect(out[0].type).toBe('error');
@@ -83,7 +83,7 @@ test('Sandbox should out execution error code', async () => {
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute(['h[1].param = true;']);
+  const [out] = await sandbox.execute(['h[1].param = true;']);
   expect(out.length).toBe(1);
   expect(out[0].text).toBe('h is not defined');
   expect(out[0].type).toBe('error');
@@ -95,7 +95,7 @@ test('Sandbox should stop execution on previous error', async () => {
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute(['h[1].param = true;', 'p[0].param=2']);
+  const [out] = await sandbox.execute(['h[1].param = true;', 'p[0].param=2']);
   expect(out.length).toBe(1);
   expect(out[0].text).toBe('h is not defined');
   expect(out[0].type).toBe('error');
@@ -107,7 +107,7 @@ test('Sandbox should execute and return all variables', async () => {
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute([code1]);
+  const [out] = await sandbox.execute([code1]);
   expect(out.length).toBe(8);
   expect(out[0].text).toBe('Hello world!');
   expect(out[0].type).toBe('text');
@@ -142,7 +142,7 @@ test('Sandbox should execute several codes and return all variables', async () =
   Object.defineProperty(window, 'print', {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
-  const out = await sandbox.execute([code1, code2, code3]);
+  const [out] = await sandbox.execute([code1, code2, code3]);
   expect(out.length).toBe(0);
   const scope = sandbox.scope as ScopeType;
   expect(Object.keys(scope.variables).length).toBe(9);
