@@ -91,6 +91,19 @@ const runCell = ({ cell: c, next }: RunCellType) => async (dispatch: DispatchTyp
   dispatch(save({ files: true, editor: true }));
 };
 
+const resetCell = ({ cell }: { cell: CellType }) => (dispatch: DispatchType) => {
+  dispatch({ ...cell, out: undefined, type: APP.UPDATECELL + DONE });
+  dispatch(save({ files: true }));
+};
+
+const resetAllCell = () => (dispatch: DispatchType, getState: Function) => {
+  const { editor, files } = getState();
+  const notebook = getCurrentNotebook(editor, files);
+  const cells = notebook.cells.map(c => ({ ...c, out: undefined }));
+  dispatch({ ...notebook, cells, type: APP.UPDATENOTEBOOK + DONE });
+  dispatch(save({ files: true }));
+};
+
 const selectCell = (action: { selected: number }) => (dispatch: DispatchType) => {
   const { selected } = action;
   dispatch({ type: APP.SELECTCELL + DONE, selected });
@@ -122,6 +135,8 @@ export {
   selectCell,
   updateCell,
   runCell,
+  resetCell,
+  resetAllCell,
   selectFile,
   cut,
   copy,

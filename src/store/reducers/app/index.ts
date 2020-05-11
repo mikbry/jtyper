@@ -60,6 +60,12 @@ const handlers = {
     files.push(notebook);
     return { ...state, files, editor, saved: false, title };
   },
+  [APP.UPDATENOTEBOOK + DONE]: (state: StateType, action: NotebookType) => {
+    const { files, editor } = state;
+    const selected = editor.selected as number;
+    files.splice(selected, 1, action);
+    return { ...state, files };
+  },
   [APP.DELETENOTEBOOK + DONE]: (state: StateType, action: { index: number }) => {
     const { index } = action;
     const { files, editor } = state;
