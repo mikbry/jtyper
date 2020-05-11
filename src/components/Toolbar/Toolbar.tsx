@@ -20,7 +20,7 @@ import { Stop2 } from '@styled-icons/icomoon//Stop2';
 import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
 import { useSelector, useDispatch } from 'react-redux';
-import { save, createCell, updateCell, runCell, selectCell, cut, copy, paste } from '../../store/actions';
+import { save, createCell, updateCell, runCell, selectCell, resetCell, cut, copy, paste } from '../../store/actions';
 import { StateType, CellType, CellFormat } from '../../types';
 import { getNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
@@ -85,6 +85,9 @@ const Toolbar: FunctionComponent = () => {
     const next = selectedCell === undefined ? undefined : selectedCell + 1;
     dispatch(runCell({ cell: cell as CellType, next }));
   };
+  const handleReset = () => {
+    dispatch(resetCell({ cell: cell as CellType }));
+  };
   let editDisabled = true;
   let navDisabled = true;
   let runDisabled = true;
@@ -124,7 +127,7 @@ const Toolbar: FunctionComponent = () => {
         <IconButton icon={Next2} disabled={runDisabled} onClick={handleRun}>
           Run
         </IconButton>
-        <IconButton icon={Stop2} disabled={runDisabled} onClick={handleSave} />
+        <IconButton icon={Stop2} disabled={runDisabled} onClick={handleReset} />
         <IconButton icon={History} disabled={runDisabled} onClick={handleSave} />
         <IconButton icon={Forward3} disabled={runDisabled} onClick={handleSave} />
       </Bar>

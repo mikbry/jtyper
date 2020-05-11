@@ -91,6 +91,11 @@ const runCell = ({ cell: c, next }: RunCellType) => async (dispatch: DispatchTyp
   dispatch(save({ files: true, editor: true }));
 };
 
+const resetCell = ({ cell }: { cell: CellType }) => (dispatch: DispatchType) => {
+  dispatch({ ...cell, out: undefined, type: APP.UPDATECELL + DONE });
+  dispatch(save({ editor: true }));
+};
+
 const selectCell = (action: { selected: number }) => (dispatch: DispatchType) => {
   const { selected } = action;
   dispatch({ type: APP.SELECTCELL + DONE, selected });
@@ -122,6 +127,7 @@ export {
   selectCell,
   updateCell,
   runCell,
+  resetCell,
   selectFile,
   cut,
   copy,
