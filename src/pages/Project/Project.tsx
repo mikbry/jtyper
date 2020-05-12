@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 /**
  * Copyright (c) Mik BRY
  * mik@miklabs.com
@@ -40,10 +39,7 @@ const Project: FunctionComponent = () => {
   }
   const i = files.findIndex(
     (file, index) =>
-      (notebookId === undefined && index === 0) ||
-      file.id === notebookId ||
-      (file.filename && file.filename.toLowerCase() === notebookId) ||
-      (file.title && file.title.toLowerCase() === notebookId),
+      (notebookId === undefined && index === 0) || (file.title && file.title.toLowerCase() === notebookId),
   );
   if (i === -1) {
     return (
@@ -52,7 +48,7 @@ const Project: FunctionComponent = () => {
       </Page>
     );
   }
-  if (editor.selected && i !== editor.selected) {
+  if (editor.selected !== undefined && i !== editor.selected) {
     // Another screen
     dispatch(selectFile({ selected: i }));
   }

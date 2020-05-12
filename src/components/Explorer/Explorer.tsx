@@ -32,23 +32,23 @@ const Explorer: FunctionComponent = () => {
     event.preventDefault();
     const title = createNewTitle(files);
     dispatch(createNotebook({ title }));
-    navigate(generateUrl(publisher.name, title));
+    navigate(generateUrl(publisher.name as string, title));
   };
   const handleDuplicate = () => {
     const title = createNewTitle(files, notebook.title);
     dispatch(createNotebook({ ...notebook, title }));
-    navigate(generateUrl(publisher.name, title));
+    navigate(generateUrl(publisher.name as string, title));
   };
   const handleDelete = () => {
-    dispatch(deleteNotebook({ index: editor.selected as number }));
-    const selected = getNextFile(files, editor.selected);
+    const selected = getNextFile(files.length - 1, editor.selected);
     const n = getNotebook(selected, files);
-    navigate(generateUrl(publisher.name, n?.title));
+    dispatch(deleteNotebook({ index: editor.selected as number }));
+    navigate(generateUrl(publisher.name as string, n?.title));
   };
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();
-    const n = getNotebook(selected, files);
-    navigate(generateUrl(publisher.name, n?.title));
+    const n = getNotebook(selected, files) as NotebookType;
+    navigate(generateUrl(publisher.name as string, n.title));
   };
   const { selected } = editor;
   return (

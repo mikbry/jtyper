@@ -84,19 +84,19 @@ export const createNewTitle = (files: Array<NotebookType>, fromTitle?: string): 
   return title;
 };
 
-export const generateUrl = (publisherName?: string, notebookId?: string): string => {
+export const generateUrl = (publisherName: string, notebookId?: string): string => {
   if (!notebookId) {
-    return `/p/${publisherName?.toLowerCase()}`;
+    return `/p/${publisherName.toLowerCase()}`;
   }
-  return `/p/${publisherName?.toLowerCase()}/${notebookId?.toLowerCase()}`;
+  return `/p/${publisherName.toLowerCase()}/${notebookId.toLowerCase()}`;
 };
 
-export const getNextFile = (files: Array<NotebookType>, index: number | undefined): number | undefined => {
+export const getNextFile = (filesLength: number, index: number | undefined): number | undefined => {
   let next = index;
-  if (files.length === 0) {
+  if (filesLength === 0) {
     next = undefined;
-  } else if (next !== undefined && next >= files.length) {
-    next = files.length - 1;
+  } else if (next !== undefined && next >= filesLength) {
+    next = filesLength - 1;
   }
   return next;
 };

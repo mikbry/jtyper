@@ -18,9 +18,19 @@ import { initStore } from '../store';
 import { StateType } from '../types';
 import { initEffects } from '../store/effects';
 
-type Opts = { state?: Partial<StateType>; real?: boolean; dispatch?: Function; store?: Store; theme?: DefaultTheme };
+type Opts = {
+  state?: Partial<StateType>;
+  real?: boolean;
+  dispatch?: Function;
+  store?: Store;
+  theme?: DefaultTheme;
+  history?: string[];
+};
 
-const renderWithProvider = async (El: JSX.Element, { state, real = false, dispatch, store: s, theme }: Opts) => {
+const renderWithProvider = async (
+  El: JSX.Element,
+  { state, real = false, dispatch, store: s, theme, history }: Opts,
+) => {
   let store = s;
   if (real) {
     const iState = { ...initialState, ...state };
@@ -37,7 +47,9 @@ const renderWithProvider = async (El: JSX.Element, { state, real = false, dispat
   }
   const result = render(
     <Provider store={store}>
-      <MemoryRouter>{El}</MemoryRouter>
+      <MemoryRouter initialEntries={history} initialIndex={0}>
+        {El}
+      </MemoryRouter>
     </Provider>,
   );
   return { ...result, store };

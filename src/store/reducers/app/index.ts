@@ -41,7 +41,7 @@ const handlers = {
     return { ...initialState, document, files, editor, init: true, saved: true, title, sandbox };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
-    const { title = 'Notebook' } = action;
+    const { title } = action;
     const { files, editor } = state;
     /* let i = 1;
     const it = (f: NotebookType) => f.title === title;
