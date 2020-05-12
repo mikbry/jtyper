@@ -8,7 +8,7 @@
  */
 import { AnyAction } from 'redux';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
-import { NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
+import { PublisherType, NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
 import {
   SandboxType,
   ParserType,
@@ -21,6 +21,7 @@ import {
 } from './sandbox';
 
 export interface StateType {
+  publisher: PublisherType;
   document: DocumentType;
   files: Array<NotebookType>;
   editor: EditorType;
@@ -55,6 +56,7 @@ export type ComposerPromise = Promise<DocumentType | NotebookType[] | EditorType
 export type ComposerType = (type: string, parameters: ComposerParameters) => ComposerPromise;
 
 export {
+  PublisherType,
   NotebookType,
   EditorType,
   DocumentType,

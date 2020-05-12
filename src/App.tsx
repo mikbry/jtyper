@@ -8,11 +8,12 @@
  */
 
 import React, { FunctionComponent } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 import Home from './pages/Home';
 import Project from './pages/Project';
+import Publication from './pages/Publication';
 
 type Props = {
   store: Store;
@@ -20,12 +21,15 @@ type Props = {
 
 const App: FunctionComponent<Props> = ({ store }) => (
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/p/:projectName' element={<Project />} />
+        <Route path='/p' element={<Project />} />
+        <Route path='/p/:publisherName' element={<Project />} />
+        <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+        <Route path='/:publisherName/:notebookId' element={<Publication />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   </Provider>
 );
 

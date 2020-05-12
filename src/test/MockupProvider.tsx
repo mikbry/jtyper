@@ -7,6 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { Dispatch, AnyAction } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -51,6 +52,10 @@ const MockupProvider: FunctionComponent<MockupProviderProps> = ({
       }
     }) as Dispatch<AnyAction>;
   }
-  return <Provider store={store}>{children}</Provider>;
+  return (
+    <Provider store={store}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </Provider>
+  );
 };
 export default MockupProvider;

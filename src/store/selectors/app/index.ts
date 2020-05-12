@@ -72,3 +72,31 @@ export const getAllCodeCells = (notebook: NotebookType): CodeCells => {
   });
   return { cells, code };
 };
+
+export const createNewTitle = (files: Array<NotebookType>, fromTitle?: string): string => {
+  let title = fromTitle || 'Notebook';
+  let i = 1;
+  const it = (f: NotebookType) => f.title === title;
+  while (files.findIndex(it) !== -1) {
+    title = `Notebook${i}`;
+    i += 1;
+  }
+  return title;
+};
+
+export const generateUrl = (publisherName?: string, notebookId?: string): string => {
+  if (!notebookId) {
+    return `/p/${publisherName?.toLowerCase()}`;
+  }
+  return `/p/${publisherName?.toLowerCase()}/${notebookId?.toLowerCase()}`;
+};
+
+export const getNextFile = (files: Array<NotebookType>, index: number | undefined): number | undefined => {
+  let next = index;
+  if (files.length === 0) {
+    next = undefined;
+  } else if (next !== undefined && next >= files.length) {
+    next = files.length - 1;
+  }
+  return next;
+};

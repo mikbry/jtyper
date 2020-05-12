@@ -8,6 +8,7 @@
  */
 
 import React, { FunctionComponent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Page from '../../components/Page';
@@ -18,6 +19,8 @@ import Drawer from '../../components/Drawer';
 import Explorer from '../../components/Explorer';
 import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
+import { selectFile } from '../../store/actions';
+import { StateType } from '../../types';
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,8 +28,34 @@ const Wrapper = styled.div`
 `;
 
 const Project: FunctionComponent = () => {
-  const { projectName } = useParams();
-  console.log('projectname:', projectName);
+  const { publisherName, notebookId } = useParams();
+  const dispatch = useDispatch();
+  const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
+  if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
+    return (
+      <Page>
+        <div>404 Publisher doesn&apos;t exist</div>
+      </Page>
+    );
+  }
+  const i = files.findIndex(
+    (file, index) =>
+      (notebookId === undefined && index === 0) ||
+      file.id === notebookId ||
+      (file.filename && file.filename.toLowerCase() === notebookId) ||
+      (file.title && file.title.toLowerCase() === notebookId),
+  );
+  if (i === -1) {
+    return (
+      <Page>
+        <div>404 Notebook not found</div>
+      </Page>
+    );
+  }
+  if (editor.selected && i !== editor.selected) {
+    // Another screen
+    dispatch(selectFile({ selected: i }));
+  }
   return (
     <Page>
       <AppBar>

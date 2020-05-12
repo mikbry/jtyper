@@ -8,6 +8,9 @@
 import { StateType } from '../../types';
 
 const initialState: StateType = {
+  publisher: {
+    name: 'jtyper',
+  },
   document: {
     title: 'project',
   },

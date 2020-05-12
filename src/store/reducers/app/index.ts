@@ -41,15 +41,20 @@ const handlers = {
     return { ...initialState, document, files, editor, init: true, saved: true, title, sandbox };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
-    let { title = 'Notebook' } = action;
+    const { title = 'Notebook' } = action;
     const { files, editor } = state;
-    let i = 1;
+    /* let i = 1;
     const it = (f: NotebookType) => f.title === title;
     while (files.findIndex(it) !== -1) {
       title = `Notebook${i}`;
       i += 1;
+    } */
+    let cells;
+    if (action.cells) {
+      cells = action.cells.map(cell => ({ ...cell, id: generateId() }));
+    } else {
+      cells = [{ id: generateId(), raw: `# ${title}`, format: 'markdown' as CellFormat }];
     }
-    const cells = [{ id: generateId(), raw: `# ${title}` }];
     const notebook: NotebookType = {
       id: generateId(),
       title,

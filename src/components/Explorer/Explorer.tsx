@@ -7,34 +7,48 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
 import { useSelector, useDispatch } from 'react-redux';
-import { createNotebook, deleteNotebook, selectFile } from '../../store/actions';
-import { StateType, NotebookType } from '../../types';
+import { createNotebook, deleteNotebook } from '../../store/actions';
+import { StateType, NotebookType, PublisherType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
 import Item from '../Item';
-import { getNotebook } from '../../store/selectors';
+import { getNotebook, createNewTitle, generateUrl, getNextFile } from '../../store/selectors';
 
 const Explorer: FunctionComponent = () => {
-  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
+  const [publisher, files, editor] = useSelector((state: StateType) => [
+    state.publisher as PublisherType,
+    state.files,
+    state.editor,
+  ]);
   const dispatch = useDispatch();
-  const notebook = getNotebook(editor.selected, files);
+  const navigate = useNavigate();
+  const notebook = getNotebook(editor.selected, files) as NotebookType;
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    dispatch(createNotebook());
+    const title = createNewTitle(files);
+    dispatch(createNotebook({ title }));
+    navigate(generateUrl(publisher.name, title));
   };
   const handleDuplicate = () => {
-    dispatch(createNotebook(notebook));
+    const title = createNewTitle(files, notebook.title);
+    dispatch(createNotebook({ ...notebook, title }));
+    navigate(generateUrl(publisher.name, title));
   };
   const handleDelete = () => {
     dispatch(deleteNotebook({ index: editor.selected as number }));
+    const selected = getNextFile(files, editor.selected);
+    const n = getNotebook(selected, files);
+    navigate(generateUrl(publisher.name, n?.title));
   };
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();
-    dispatch(selectFile({ selected }));
+    const n = getNotebook(selected, files);
+    navigate(generateUrl(publisher.name, n?.title));
   };
   const { selected } = editor;
   return (

@@ -17,6 +17,9 @@ import {
   getNotebookCellIndex,
   getAllCodeCells,
   getFullCode,
+  createNewTitle,
+  generateUrl,
+  getNextFile,
 } from './app';
 
 export {
@@ -30,4 +33,7 @@ export {
   getNotebookCellIndex,
   getAllCodeCells,
   getFullCode,
+  createNewTitle,
+  generateUrl,
+  getNextFile,
 };

@@ -7,6 +7,7 @@
  */
 import React from 'react';
 import { render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
@@ -34,7 +35,11 @@ const renderWithProvider = async (El: JSX.Element, { state, real = false, dispat
       ...state,
     });
   }
-  const result = render(<Provider store={store}>{El}</Provider>);
+  const result = render(
+    <Provider store={store}>
+      <MemoryRouter>{El}</MemoryRouter>
+    </Provider>,
+  );
   return { ...result, store };
 };
 
