@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -15,6 +16,7 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: '[name].[hash].js',
     sourceMapFilename: '[file].map[query]',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -38,6 +40,9 @@ module.exports = {
     ],
   },
   devtool: 'source-map',
+  devServer: {
+    historyApiFallback: true,
+  },
   plugins: [
     new CopyWebpackPlugin([
       {

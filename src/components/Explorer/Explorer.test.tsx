@@ -77,7 +77,7 @@ test('Explorer should duplicate a notebook', async () => {
     // console.log('dispatch', action);
   });
   const state: Partial<StateType> = {
-    files: [{ id: '1', title: 'Notebook1', cells: [], readOnly: true }],
+    files: [{ id: '1', title: 'Notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }], readOnly: true }],
     editor: { selected: 0 },
   };
   const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, real: true });

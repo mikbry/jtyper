@@ -32,6 +32,12 @@ export interface DocumentType {
   author?: string;
 }
 
+export interface PublisherType {
+  icon?: string;
+  name?: string;
+  headline?: string;
+}
+
 export interface EditorType {
   selected?: number;
   selectedCell?: number;

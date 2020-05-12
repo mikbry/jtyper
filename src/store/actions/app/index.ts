@@ -49,7 +49,7 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
   composer(APP.LOCALSAVE + FETCH, data).then(() => dispatch({ type: APP.LOCALSAVE + DONE }));
 };
 
-const createNotebook = (action: Partial<NotebookType> | undefined = {}) => (dispatch: DispatchType) => {
+const createNotebook = (action: Partial<NotebookType>) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
   dispatch(save({ editor: true }));
 };

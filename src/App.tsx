@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 /**
  * Copyright (c) Mik BRY
  * mik@miklabs.com
@@ -8,22 +7,12 @@
  */
 
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
-import Page from './components/Page';
-import AppBar from './components/AppBar';
-import Toolbar from './components/Toolbar';
-import Header from './components/Header';
-import Drawer from './components/Drawer';
-import Explorer from './components/Explorer';
-import Container from './components/Container';
-import Notebook from './components/Notebook';
-
-const Wrapper = styled.div`
-  display: flex;
-  height: 100%;
-`;
+import Home from './pages/Home';
+import Project from './pages/Project';
+import Publication from './pages/Publication';
 
 type Props = {
   store: Store;
@@ -31,20 +20,15 @@ type Props = {
 
 const App: FunctionComponent<Props> = ({ store }) => (
   <Provider store={store}>
-    <Page>
-      <AppBar>
-        <Toolbar />
-      </AppBar>
-      <Wrapper>
-        <Drawer>
-          <Header />
-          <Explorer />
-        </Drawer>
-        <Container>
-          <Notebook />
-        </Container>
-      </Wrapper>
-    </Page>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/p' element={<Project />} />
+        <Route path='/p/:publisherName' element={<Project />} />
+        <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+        <Route path='/:publisherName/:notebookId' element={<Publication />} />
+      </Routes>
+    </Router>
   </Provider>
 );
 

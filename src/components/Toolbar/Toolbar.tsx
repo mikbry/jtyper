@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-
 import { FloppyDisk } from '@styled-icons/icomoon/FloppyDisk';
 import { Plus } from '@styled-icons/icomoon//Plus';
 import { Scissors } from '@styled-icons/icomoon/Scissors';
@@ -19,7 +19,6 @@ import { Next2 } from '@styled-icons/icomoon/Next2';
 import { Stop2 } from '@styled-icons/icomoon//Stop2';
 import { History } from '@styled-icons/icomoon/History';
 import { Forward3 } from '@styled-icons/icomoon/Forward3';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   save,
   createCell,
