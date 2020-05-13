@@ -38,10 +38,10 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
   // Not used
   /* if (action.document) {
     data = { document };
-  } else if (action.files) {
-    data = { files };
   } else */
-  if (action && action.editor) {
+  if (action.files) {
+    data = { files };
+  } else if (action && action.editor) {
     data = { editor };
   } else {
     data = { document, files, editor };
@@ -51,13 +51,13 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
 
 const createNotebook = (action: Partial<NotebookType>) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
-  dispatch(save({ editor: true }));
+  dispatch(save({ editor: true, files: true }));
 };
 
 const deleteNotebook = (action: { index: number }) => (dispatch: DispatchType) => {
   const { index } = action;
   dispatch({ type: APP.DELETENOTEBOOK + DONE, index });
-  dispatch(save({ editor: true }));
+  dispatch(save({ editor: true, files: true }));
 };
 
 const selectFile = (action: { selected: number }) => (dispatch: DispatchType) => {
