@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
-import { MockupProvider, renderWithProvider } from '../../test';
+import { renderWithProvider } from '../../test';
 import Explorer from './index';
 import { StateType } from '../../types';
 import FakeMouseEvent from '../../test/FakeMouseEvent';
@@ -58,15 +58,11 @@ test('Explorer should create a notebook', async () => {
     files: [],
     editor: { selected: undefined },
   };
-  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, real: true });
+  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, dispatch, real: true });
   const buttons = getAllByRole('button');
   expect(buttons.length).toBe(3);
   fireEvent.click(buttons[0]);
-  rerender(
-    <MockupProvider dispatch={dispatch}>
-      <Explorer />
-    </MockupProvider>,
-  );
+  rerender(<Explorer />);
   /* const items = getAllByTestId('item');
   expect(items.length).toBe(1);
   expect(items[0].textContent).toBe('Notebook1'); */
@@ -80,14 +76,10 @@ test('Explorer should duplicate a notebook', async () => {
     files: [{ id: '1', title: 'Notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }], readOnly: true }],
     editor: { selected: 0 },
   };
-  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, real: true });
+  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, dispatch, real: true });
   const buttons = getAllByRole('button');
   fireEvent.click(buttons[1]);
-  rerender(
-    <MockupProvider dispatch={dispatch}>
-      <Explorer />
-    </MockupProvider>,
-  );
+  rerender(<Explorer />);
   /* const items = getAllByTestId('item');
   expect(items.length).toBe(1);
   expect(items[0].textContent).toBe('Notebook1'); */
@@ -101,14 +93,10 @@ test('Explorer should not delete a notebook', async () => {
     files: [{ id: '1', title: 'Notebook1', cells: [], readOnly: true }],
     editor: { selected: 0 },
   };
-  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, real: true });
+  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, dispatch, real: true });
   const buttons = getAllByRole('button');
   fireEvent.click(buttons[2]);
-  rerender(
-    <MockupProvider dispatch={dispatch}>
-      <Explorer />
-    </MockupProvider>,
-  );
+  rerender(<Explorer />);
   /* const items = getAllByTestId('item');
   expect(items.length).toBe(1);
   expect(items[0].textContent).toBe('Notebook1'); */
@@ -122,14 +110,10 @@ test('Explorer should delete a notebook', async () => {
     files: [{ id: '1', title: 'Notebook1', cells: [] }],
     editor: { selected: 0 },
   };
-  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, real: true });
+  const { getAllByRole, rerender } = await renderWithProvider(<Explorer />, { state, dispatch, real: true });
   const buttons = getAllByRole('button');
   fireEvent.click(buttons[2]);
-  rerender(
-    <MockupProvider dispatch={dispatch}>
-      <Explorer />
-    </MockupProvider>,
-  );
+  rerender(<Explorer />);
   /* const items = getAllByTestId('item');
   expect(items.length).toBe(1);
   expect(items[0].textContent).toBe('Notebook1'); */

@@ -20,6 +20,14 @@ import {
   DataType,
 } from './sandbox';
 
+export interface PackageType {
+  name: string;
+  version: string;
+  description: string;
+  homepage: string;
+  author: string;
+  licence: string;
+}
 export interface StateType {
   publisher: PublisherType;
   document: DocumentType;
@@ -28,6 +36,7 @@ export interface StateType {
   saved?: boolean;
   title?: string;
   sandbox?: SandboxType;
+  package?: PackageType;
 }
 
 export type ActionType = AnyAction | ThunkAction<void, StateType, unknown, AnyAction>;

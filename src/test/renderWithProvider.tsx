@@ -15,8 +15,9 @@ import configureStore from 'redux-mock-store';
 import { DefaultTheme } from 'styled-components';
 import { initialState } from '../store/reducers';
 import { initStore } from '../store';
-import { StateType } from '../types';
+import { StateType, PackageType } from '../types';
 import { initEffects } from '../store/effects';
+import pkg from '../../package.json';
 
 type Opts = {
   state?: Partial<StateType>;
@@ -29,19 +30,21 @@ type Opts = {
 
 const renderWithProvider = async (
   El: JSX.Element,
-  { state, real = false, dispatch, store: s, theme, history }: Opts,
+  { state = {}, real = false, dispatch, store: s, theme, history }: Opts,
 ) => {
-  let store = s;
+  let store = s as Store;
   if (real) {
     const iState = { ...initialState, ...state };
     store = await initStore(iState, true);
   } else if (!store || state) {
     initEffects({});
+    const pk = pkg as unknown;
     const mockStore = configureStore([thunk]);
     store = mockStore({
       editor: {},
       dispatch,
       theme,
+      package: pk as PackageType,
       ...state,
     });
   }
@@ -52,7 +55,15 @@ const renderWithProvider = async (
       </MemoryRouter>
     </Provider>,
   );
-  return { ...result, store };
+  const rerender = (Element: JSX.Element) =>
+    result.rerender(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={history} initialIndex={0}>
+          {Element}
+        </MemoryRouter>
+      </Provider>,
+    );
+  return { ...result, rerender, store };
 };
 
 export default renderWithProvider;
