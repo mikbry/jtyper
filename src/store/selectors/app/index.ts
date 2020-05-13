@@ -100,3 +100,8 @@ export const getNextFile = (filesLength: number, index: number | undefined): num
   }
   return next;
 };
+
+export const getNotebookTitle = (editor: EditorType, files: Array<NotebookType>): string => {
+  const notebook = getCurrentNotebook(editor, files);
+  return notebook?.title || '';
+};

@@ -8,7 +8,13 @@
 
 import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
-import { generateId, getCurrentNotebook, getNotebook, validateSelectedCell, getNotebookCell } from '../../selectors';
+import {
+  generateId,
+  getCurrentNotebook,
+  getNotebookTitle,
+  validateSelectedCell,
+  getNotebookCell,
+} from '../../selectors';
 
 const handlers = {
   [INITIALIZE + DONE]: (initialState: StateType, state: Partial<StateType>) => {
@@ -36,9 +42,15 @@ const handlers = {
       ({ editor } = initialState);
     }
     const { sandbox } = state;
-    const notebook = getCurrentNotebook(editor, files);
-    const title = notebook?.title || '';
+    const title = getNotebookTitle(editor, files);
     return { ...initialState, document, files, editor, init: true, saved: true, title, sandbox };
+  },
+  [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
+    const { selected } = action;
+    const { editor: e, files } = state;
+    const editor = { ...e, selected, selectedCell: undefined };
+    const title = getNotebookTitle(editor, files);
+    return { ...state, editor, title, saved: false };
   },
   [APP.CREATENOTEBOOK + DONE]: (state: StateType, action: Partial<NotebookType>) => {
     const { title } = action;
@@ -81,8 +93,7 @@ const handlers = {
     } else if (editor.selected !== undefined && editor.selected >= files.length) {
       editor.selected = files.length - 1;
     }
-    const notebook = getNotebook(editor.selected, files);
-    const title = notebook?.title || '';
+    const title = getNotebookTitle(editor, files);
     return { ...state, files, editor, saved: false, title };
   },
   [APP.CREATECELL + DONE]: (state: StateType, action: { raw?: string; format?: CellFormat }) => {
@@ -104,11 +115,6 @@ const handlers = {
       cell.out = action.out;
     }
     return { ...state, files, saved: false };
-  },
-  [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
-    const { selected } = action;
-    const { editor } = state;
-    return { ...state, editor: { ...editor, selected, selectedCell: undefined }, saved: false };
   },
   [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;

@@ -20,6 +20,7 @@ import {
   createNewTitle,
   generateUrl,
   getNextFile,
+  getNotebookTitle,
 } from './app';
 
 export {
@@ -36,4 +37,5 @@ export {
   createNewTitle,
   generateUrl,
   getNextFile,
+  getNotebookTitle,
 };
