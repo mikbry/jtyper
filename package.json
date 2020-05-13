@@ -1,9 +1,10 @@
 {
   "name": "jtyper",
   "version": "0.1.0",
-  "description": "Typescript notebook running on browser",
+  "description": "Javascript notebook running in browser",
   "main": "dist/index.js",
   "repository": "https://github.com/mikbry/jtyper.git",
+  "homepage": "https://github.com/mikbry/jtyper",
   "author": "Mik <mik@mikbry.com>",
   "license": "MIT",
   "private": true,

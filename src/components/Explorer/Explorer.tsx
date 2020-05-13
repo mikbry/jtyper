@@ -13,17 +13,18 @@ import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
 import { useSelector, useDispatch } from 'react-redux';
 import { createNotebook, deleteNotebook } from '../../store/actions';
-import { StateType, NotebookType, PublisherType } from '../../types';
+import { StateType, NotebookType, PublisherType, PackageType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
 import Item from '../Item';
 import { getNotebook, createNewTitle, generateUrl, getNextFile } from '../../store/selectors';
 
 const Explorer: FunctionComponent = () => {
-  const [publisher, files, editor] = useSelector((state: StateType) => [
+  const [publisher, files, editor, pkg] = useSelector((state: StateType) => [
     state.publisher as PublisherType,
     state.files,
     state.editor,
+    state.package as PackageType,
   ]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -73,7 +74,11 @@ const Explorer: FunctionComponent = () => {
           </Item>
         ))}
       </li>
-      <DrawerFooter>JTyper v0.1</DrawerFooter>
+      <DrawerFooter>
+        <a href={pkg.homepage} target='_blank' rel='noopener noreferrer'>
+          {pkg.name} v{pkg.version}
+        </a>
+      </DrawerFooter>
     </>
   );
 };

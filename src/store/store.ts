@@ -10,8 +10,9 @@ import thunk from 'redux-thunk';
 import { init } from './actions';
 import createEffects, { composer } from './effects';
 import { reducers } from './reducers';
-import { StateType } from '../types';
+import { StateType, PackageType } from '../types';
 import { composeEnhancers } from './devtools';
+import pkg from '../../package.json';
 
 let store: Store;
 
@@ -27,7 +28,8 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const fxComposer = disableEffects ? undefined : composer;
   const doInit = init(fxComposer);
   let state = await doInit();
-  state = reducers[state.type](initialState, state);
+  const pk = pkg as unknown;
+  state = reducers[state.type]({ ...initialState, package: pk as PackageType }, state);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   store = createStore(handler, state, enhancer);
