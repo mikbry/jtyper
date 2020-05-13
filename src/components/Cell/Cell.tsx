@@ -81,13 +81,12 @@ const Styled = styled.div`
 Styled.defaultProps = { theme: BasicTheme };
 
 const Prompt = styled.aside`
-  width: 36px;
+  width: 33.5px;
   max-height: 48px;
   padding: 4px;
   border-left: 8px solid ${(props: StyledProps) => chooseBorderColor(props, true)};
   text-align: right;
   font-size: 13px;
-  font-familiy: 13px;
 `;
 Prompt.defaultProps = { theme: BasicTheme };
 
