@@ -22,6 +22,7 @@ import {
   paste,
   save,
 } from './app';
+import useCommands from './commands';
 
 export {
   init,
@@ -39,4 +40,5 @@ export {
   copy,
   paste,
   save,
+  useCommands,
 };

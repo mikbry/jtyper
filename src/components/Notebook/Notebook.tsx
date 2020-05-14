@@ -5,11 +5,11 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
-import { selectCell, updateCell, deleteCell } from '../../store/actions';
+import { selectCell, updateCell, useCommands } from '../../store/actions';
 import { getNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
@@ -71,7 +71,7 @@ const Notebook: FunctionComponent = () => {
   if (!content) {
     content = <NoContent>No content</NoContent>;
   }
-  const handleCommands = (event: KeyboardEvent) => {
+  /* const handleCommands = (event: KeyboardEvent) => {
     if (!readOnly && selectedCell > -1) {
       if (event.ctrlKey && event.key === 'd') {
         dispatch(deleteCell({ selected: selectedCell }));
@@ -84,7 +84,9 @@ const Notebook: FunctionComponent = () => {
     return () => {
       window.removeEventListener('keydown', handleCommands);
     };
-  }, [handleCommands]);
+  }, [handleCommands]); */
+
+  useCommands();
 
   return <Wrapper>{content}</Wrapper>;
 };
