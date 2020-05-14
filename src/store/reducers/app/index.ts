@@ -126,6 +126,16 @@ const handlers = {
     const { title } = notebook;
     return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
   },
+  [APP.DELETECELL + DONE]: (state: StateType, action: { selected: number }) => {
+    const { selected } = action;
+    const { files, editor } = state;
+    let { selectedCell } = editor;
+    const notebook = getCurrentNotebook(editor, files);
+    notebook.cells.splice(selected, 1);
+    const { length } = notebook.cells;
+    selectedCell = validateSelectedCell(selected, length);
+    return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
+  },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
     const { selected, cell } = action;
     const { files, editor } = state;

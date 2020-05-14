@@ -129,7 +129,7 @@ const selectCell = (action: { selected: number }) => (dispatch: DispatchType) =>
 
 const deleteCell = (action: { selected: number }) => (dispatch: DispatchType) => {
   const { selected } = action;
-  dispatch({ type: APP.DELETE + DONE, selected });
+  dispatch({ type: APP.DELETECELL + DONE, selected });
   dispatch(save({ editor: true }));
 };
 

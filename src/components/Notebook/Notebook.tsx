@@ -13,6 +13,7 @@ import { selectCell, updateCell, deleteCell } from '../../store/actions';
 import { getNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
+import useEvent from '../../utils/useEvent';
 
 const Wrapper = styled.div`
   margin: 0.6em;
@@ -39,18 +40,18 @@ const Notebook: FunctionComponent = () => {
     dispatch(updateCell(cell));
   };
   const handleCommands = (event: React.KeyboardEvent<HTMLElement>, selected: number) => {
-    console.log('commands=', event.key);
-    if (event.key === 'D') {
-      console.log('command=Delete Cell');
+    if (event.ctrlKey && event.key === 'd') {
       dispatch(deleteCell({ selected }));
     }
   };
   let content;
 
+  let readOnly = true;
+  let selectedCell = -1;
   const notebook = getNotebook(editor.selected, files);
   if (notebook) {
-    const { selectedCell = -1 } = editor;
-    const { readOnly } = notebook;
+    ({ selectedCell = -1 } = editor);
+    ({ readOnly = false } = notebook);
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
@@ -62,9 +63,6 @@ const Notebook: FunctionComponent = () => {
             selected={index === selectedCell}
             onChange={value => {
               handleCellChange(index, value, notebook);
-            }}
-            onKeyPress={(e: React.KeyboardEvent<HTMLElement>) => {
-              if (!readOnly) handleCommands(e, index);
             }}
             onClick={() => {
               if (!readOnly) handleSelectCell(index);
@@ -79,6 +77,11 @@ const Notebook: FunctionComponent = () => {
   if (!content) {
     content = <NoContent>No content</NoContent>;
   }
+  useEvent('keydown', (e: React.KeyboardEvent<HTMLElement>) => {
+    if (!readOnly && selectedCell > -1) {
+      handleCommands(e, selectedCell);
+    }
+  });
 
   return <Wrapper>{content}</Wrapper>;
 };
