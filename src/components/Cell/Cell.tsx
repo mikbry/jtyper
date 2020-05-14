@@ -144,9 +144,6 @@ const Cell: FunctionComponent<Props> = ({
   const handleBlur = () => {
     //  if (cellRef.current) onChange(cellRef.current.innerText);
   };
-  const handleKey = (/* e: KeyboardEvent */) => {
-    //
-  };
   let content = <>{value}</>;
   if (format === 'markdown') {
     content =
@@ -177,7 +174,6 @@ const Cell: FunctionComponent<Props> = ({
       selected={selected}
       editable={editable}
       onClick={onClick}
-      onKeyDown={handleKey}
       onBlur={handleBlur}
       tabIndex={0}
       selecting={selected}

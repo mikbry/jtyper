@@ -11,7 +11,7 @@ import { fireEvent } from '@testing-library/react';
 import { renderWithProvider } from '../../test';
 import Explorer from './index';
 import { StateType } from '../../types';
-import FakeMouseEvent from '../../test/FakeMouseEvent';
+import MockupEvent from '../../test/MockupEvent';
 
 test('Explorer should render correctly', async () => {
   const { asFragment } = await renderWithProvider(<Explorer />, {});
@@ -41,7 +41,7 @@ test('Explorer should select a notebook', async () => {
   expect(items[0].textContent).toBe('Notebook1');
   fireEvent(
     items[0],
-    new FakeMouseEvent('keypress', {
+    new MockupEvent('keypress', {
       bubbles: true,
       key: 'a',
       keyCode: 97,

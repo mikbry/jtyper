@@ -10,8 +10,8 @@ import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Notebook from './index';
-import { renderWithProvider } from '../../test';
-import { StateType } from '../../types';
+import { renderWithProvider, MockupEvent } from '../../test';
+import { StateType, NotebookType } from '../../types';
 
 beforeAll(() => {
   Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, value: 308 });
@@ -43,7 +43,7 @@ test('Notebook selected with data should display content', async () => {
     editor: { selected: 0, selectedCell: 0 },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
-  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
   const cells = getAllByRole('button');
   expect(cells.length).toBe(1);
   expect(cells[0].textContent).toBe('text');
@@ -59,9 +59,49 @@ test('Notebook readonly selected with data should display content', async () => 
     editor: { selected: 0 },
     files: [{ id: '1', title: 'notebook', readOnly: true, cells: [{ id: '1', raw: 'text' }] }],
   };
-  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
   const cells = getAllByRole('button');
   expect(cells.length).toBe(1);
   expect(cells[0].textContent).toBe('text');
   fireEvent.click(cells[0]);
+});
+
+test('Notebook readonly should not  delete content', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', readOnly: true, cells: [{ id: '1', raw: 'text' }] }],
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'd',
+      ctrlKey: true,
+    }),
+  );
+  const files = state.files as NotebookType[];
+  expect(files[0].cells?.length).toBe(1);
+});
+
+test('Notebook editable should have content deleted', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text' }] }],
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'd',
+      ctrlKey: true,
+    }),
+  );
+  const files = state.files as NotebookType[];
+  expect(files[0].cells?.length).toBe(0);
 });

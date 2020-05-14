@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
@@ -22,7 +21,7 @@ interface MouseEventInitExt extends MouseEventInit {
 }
 
 // See : https://github.com/testing-library/react-testing-library/issues/268
-class FakeMouseEvent extends MouseEvent {
+class MockupEvent extends MouseEvent {
   constructor(type: string, values: MouseEventInitExt) {
     const { pageX, pageY, offsetX, offsetY, x, y, key, touches, keyCode, charCode, ...mouseValues } = values;
     super(type, mouseValues);
@@ -42,4 +41,4 @@ class FakeMouseEvent extends MouseEvent {
   }
 }
 
-export default FakeMouseEvent;
+export default MockupEvent;

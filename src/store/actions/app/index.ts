@@ -127,6 +127,12 @@ const selectCell = (action: { selected: number }) => (dispatch: DispatchType) =>
   dispatch(save({ editor: true }));
 };
 
+const deleteCell = (action: { selected: number }) => (dispatch: DispatchType) => {
+  const { selected } = action;
+  dispatch({ type: APP.DELETECELL + DONE, selected });
+  dispatch(save({ editor: true }));
+};
+
 const cut = (action: { cell: CellType; selected: number }) => (dispatch: DispatchType) => {
   const { selected, cell } = action;
   dispatch({ type: APP.COPY + DONE, selected, cell });
@@ -155,6 +161,7 @@ export {
   resetCell,
   resetAllCell,
   selectFile,
+  deleteCell,
   cut,
   copy,
   paste,

@@ -9,7 +9,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ContentEditable from './index';
-import FakeMouseEvent from '../../test/FakeMouseEvent';
+import MockupEvent from '../../test/MockupEvent';
 
 test('ContentEditable should render correctly', () => {
   const fn = jest.fn();
@@ -25,21 +25,21 @@ test('ContentEditable should have a value', () => {
   expect(on).toHaveBeenCalledTimes(0);
   fireEvent(
     content,
-    new FakeMouseEvent('keydown', {
+    new MockupEvent('keydown', {
       bubbles: true,
       keyCode: 27,
     }),
   );
   fireEvent(
     content,
-    new FakeMouseEvent('keydown', {
+    new MockupEvent('keydown', {
       bubbles: true,
       keyCode: 96,
     }),
   );
   fireEvent(
     content,
-    new FakeMouseEvent('blur', {
+    new MockupEvent('blur', {
       bubbles: true,
     }),
   );
