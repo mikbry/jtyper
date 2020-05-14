@@ -9,7 +9,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
-import { selectCell, updateCell } from '../../store/actions';
+import { selectCell, updateCell, deleteCell } from '../../store/actions';
 import { getNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
@@ -38,6 +38,13 @@ const Notebook: FunctionComponent = () => {
     const cell = { ...notebook.cells[index], raw: value };
     dispatch(updateCell(cell));
   };
+  const handleCommands = (event: React.KeyboardEvent<HTMLElement>, selected: number) => {
+    console.log('commands=', event.key);
+    if (event.key === 'D') {
+      console.log('command=Delete Cell');
+      dispatch(deleteCell({ selected }));
+    }
+  };
   let content;
 
   const notebook = getNotebook(editor.selected, files);
@@ -55,6 +62,9 @@ const Notebook: FunctionComponent = () => {
             selected={index === selectedCell}
             onChange={value => {
               handleCellChange(index, value, notebook);
+            }}
+            onKeyPress={(e: React.KeyboardEvent<HTMLElement>) => {
+              if (!readOnly) handleCommands(e, index);
             }}
             onClick={() => {
               if (!readOnly) handleSelectCell(index);

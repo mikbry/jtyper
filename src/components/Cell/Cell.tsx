@@ -16,6 +16,7 @@ import { LogEntryType } from '../../types';
 interface Props {
   selected?: boolean;
   editable?: boolean;
+  onKeyPress: (event: React.KeyboardEvent<HTMLElement>) => void;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange: (value: string) => void;
   children: string;
@@ -133,6 +134,7 @@ const Cell: FunctionComponent<Props> = ({
   format = undefined,
   out = undefined,
   onClick,
+  onKeyPress,
   onChange,
   children,
 }) => {
@@ -143,9 +145,6 @@ const Cell: FunctionComponent<Props> = ({
   }, []);
   const handleBlur = () => {
     //  if (cellRef.current) onChange(cellRef.current.innerText);
-  };
-  const handleKey = (/* e: KeyboardEvent */) => {
-    //
   };
   let content = <>{value}</>;
   if (format === 'markdown') {
@@ -177,7 +176,7 @@ const Cell: FunctionComponent<Props> = ({
       selected={selected}
       editable={editable}
       onClick={onClick}
-      onKeyDown={handleKey}
+      onKeyPress={onKeyPress}
       onBlur={handleBlur}
       tabIndex={0}
       selecting={selected}

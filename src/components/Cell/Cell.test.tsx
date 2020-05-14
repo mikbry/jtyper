@@ -32,7 +32,7 @@ test('Cell should render correctly', () => {
   const on = jest.fn();
   const { asFragment } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on}>
+      <Cell onKeyPress={on} onClick={on} onChange={on}>
         text
       </Cell>
     </MockupProvider>,
@@ -44,7 +44,7 @@ test('Cell should have a value', () => {
   const on = jest.fn();
   const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on}>
+      <Cell onKeyPress={on} onClick={on} onChange={on}>
         text
       </Cell>
     </MockupProvider>,
@@ -72,7 +72,7 @@ test('Cell should be editable and hover', () => {
   const on = jest.fn();
   const { getByTestId, getAllByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} editable>
+      <Cell onKeyPress={on} onClick={on} onChange={on} editable>
         text
       </Cell>
     </MockupProvider>,
@@ -90,7 +90,7 @@ test('Cell should be editable and selected', () => {
   const on = jest.fn();
   const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} editable selected>
+      <Cell onKeyPress={on} onClick={on} onChange={on} editable selected>
         text
       </Cell>
     </MockupProvider>,
@@ -105,7 +105,7 @@ test('Cell with markdown should display Highlighter', () => {
   const on = jest.fn();
   const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='markdown'>
+      <Cell onKeyPress={on} onClick={on} onChange={on} format='markdown'>
         text
       </Cell>
     </MockupProvider>,
@@ -119,7 +119,7 @@ test('editable & selected Cell with markdown should display Editor', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='markdown' editable selected>
+      <Cell onKeyPress={on} onClick={on} onChange={on} format='markdown' editable selected>
         text
       </Cell>
     </MockupProvider>,
@@ -134,7 +134,7 @@ test('Cell with code should display CodeHighlighter', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code'>
+      <Cell onKeyPress={on} onClick={on} onChange={on} format='code'>
         text
       </Cell>
     </MockupProvider>,
@@ -149,7 +149,7 @@ test('editable & selected Cell with code should display Editor', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code' editable selected>
+      <Cell onKeyPress={on} onClick={on} onChange={on} format='code' editable selected>
         text
       </Cell>
     </MockupProvider>,
@@ -162,13 +162,14 @@ test('editable & selected Cell with code should display Editor', () => {
 
 test('editable & selected Cell with code should be changed', async () => {
   const onClick = jest.fn();
+  const onKey = jest.fn();
   let value;
   const onChange = jest.fn().mockImplementation(newValue => {
     value = newValue;
   });
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={onClick} onChange={onChange} format='code' editable selected>
+      <Cell onKeyPress={onKey} onClick={onClick} onChange={onChange} format='code' editable selected>
         {' '}
       </Cell>
     </MockupProvider>,
@@ -204,7 +205,7 @@ test('Cell with code out should display it', () => {
   ];
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code' out={out}>
+      <Cell onKeyPress={on} onClick={on} onChange={on} format='code' out={out}>
         text
       </Cell>
     </MockupProvider>,
