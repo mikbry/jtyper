@@ -9,7 +9,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Select from './index';
-import FakeMouseEvent from '../../test/FakeMouseEvent';
+import MockupEvent from '../../test/MockupEvent';
 
 test('Select should render correctly', () => {
   const onChange = jest.fn();
@@ -34,13 +34,13 @@ test('Select should be disabled', () => {
   fireEvent.click(select);
   fireEvent(
     select,
-    new FakeMouseEvent('blur', {
+    new MockupEvent('blur', {
       bubbles: true,
     }),
   );
   fireEvent(
     select,
-    new FakeMouseEvent('keypress', {
+    new MockupEvent('keypress', {
       bubbles: true,
       key: 'a',
       keyCode: 97,
@@ -55,7 +55,7 @@ test('Select should be open', () => {
   const select = getByRole('button');
   fireEvent(
     select,
-    new FakeMouseEvent('blur', {
+    new MockupEvent('blur', {
       bubbles: true,
     }),
   );

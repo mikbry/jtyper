@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
@@ -13,7 +13,6 @@ import { selectCell, updateCell, deleteCell } from '../../store/actions';
 import { getNotebook } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
-import useEvent from '../../utils/useEvent';
 
 const Wrapper = styled.div`
   margin: 0.6em;
@@ -39,13 +38,8 @@ const Notebook: FunctionComponent = () => {
     const cell = { ...notebook.cells[index], raw: value };
     dispatch(updateCell(cell));
   };
-  const handleCommands = (event: React.KeyboardEvent<HTMLElement>, selected: number) => {
-    if (event.ctrlKey && event.key === 'd') {
-      dispatch(deleteCell({ selected }));
-    }
-  };
-  let content;
 
+  let content;
   let readOnly = true;
   let selectedCell = -1;
   const notebook = getNotebook(editor.selected, files);
@@ -77,11 +71,20 @@ const Notebook: FunctionComponent = () => {
   if (!content) {
     content = <NoContent>No content</NoContent>;
   }
-  useEvent('keydown', (e: React.KeyboardEvent<HTMLElement>) => {
+  const handleCommands = (event: KeyboardEvent) => {
     if (!readOnly && selectedCell > -1) {
-      handleCommands(e, selectedCell);
+      if (event.ctrlKey && event.key === 'd') {
+        dispatch(deleteCell({ selected: selectedCell }));
+      }
     }
-  });
+  };
+  useEffect(() => {
+    window.addEventListener('keydown', handleCommands);
+
+    return () => {
+      window.removeEventListener('keydown', handleCommands);
+    };
+  }, [handleCommands]);
 
   return <Wrapper>{content}</Wrapper>;
 };

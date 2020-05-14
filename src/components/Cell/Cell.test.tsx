@@ -10,7 +10,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockupProvider from '../../test/MockupProvider';
-import FakeMouseEvent from '../../test/FakeMouseEvent';
+import MockupEvent from '../../test/MockupEvent';
 import { LogEntryType } from '../../types';
 
 import Cell from './index';
@@ -53,14 +53,14 @@ test('Cell should have a value', () => {
   expect(content.textContent).toBe('text');
   fireEvent(
     content,
-    new FakeMouseEvent('blur', {
+    new MockupEvent('blur', {
       bubbles: true,
     }),
   );
   expect(on).toHaveBeenCalledTimes(0);
   fireEvent(
     content,
-    new FakeMouseEvent('keydown', {
+    new MockupEvent('keydown', {
       bubbles: true,
       key: 'ArrowRight',
     }),
@@ -181,7 +181,7 @@ test('editable & selected Cell with code should be changed', async () => {
   if (textarea) {
     fireEvent(
       textarea,
-      new FakeMouseEvent('keydown', {
+      new MockupEvent('keydown', {
         bubbles: true,
         key: 'a',
         keyCode: 97,
