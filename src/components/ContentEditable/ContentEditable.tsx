@@ -11,6 +11,7 @@ import styled from 'styled-components';
 interface Props {
   onChange: (value: string) => void;
   value: string;
+  focus: boolean;
 }
 
 const Styled = styled.div`
@@ -23,16 +24,28 @@ const getText = (ref: React.RefObject<HTMLInputElement>) => {
   return '';
 };
 
-const ContentEditable: FunctionComponent<Props> = ({ value, onChange }) => {
+const ContentEditable: FunctionComponent<Props> = ({ value, onChange, focus }) => {
   const elRef = useRef<HTMLInputElement>(null);
   getText(elRef);
   useEffect(() => {
-    // setCell
+    if (elRef.current && focus) {
+      elRef.current.focus();
+    }
   }, []);
   const handleClick = () => {
     // TODO
   };
+  let handler: number;
   const handleBlur = () => {
+    if (handler) {
+      clearTimeout(handler);
+    }
+    handler = setTimeout(() => {
+      if (elRef.current && focus) {
+        elRef.current.focus();
+      }
+    }, 100);
+
     onChange(getText(elRef));
   };
   const handleKey = (e: KeyboardEvent) => {

@@ -18,6 +18,7 @@ type Props = {
   value: string;
   language: string;
   onChange: Function;
+  focus: boolean;
 };
 
 const modes: Record<string, string> = {
@@ -30,10 +31,12 @@ const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
   return (
     <CodeMirror2
       value={value}
-      detach
       options={{
         lineNumbers: false,
         mode,
+      }}
+      editorDidMount={editor => {
+        editor.focus();
       }}
       onChange={(_editor, _data, newValue) => {
         onChange(newValue);

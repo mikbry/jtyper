@@ -71,20 +71,6 @@ const Notebook: FunctionComponent = () => {
   if (!content) {
     content = <NoContent>No content</NoContent>;
   }
-  /* const handleCommands = (event: KeyboardEvent) => {
-    if (!readOnly && selectedCell > -1) {
-      if (event.ctrlKey && event.key === 'd') {
-        dispatch(deleteCell({ selected: selectedCell }));
-      }
-    }
-  };
-  useEffect(() => {
-    window.addEventListener('keydown', handleCommands);
-
-    return () => {
-      window.removeEventListener('keydown', handleCommands);
-    };
-  }, [handleCommands]); */
 
   useCommands();
 

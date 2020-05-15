@@ -67,3 +67,9 @@ const renderWithProvider = async (
 };
 
 export default renderWithProvider;
+
+Object.defineProperty(window, 'focus', {
+  value: () => {
+    //
+  },
+});

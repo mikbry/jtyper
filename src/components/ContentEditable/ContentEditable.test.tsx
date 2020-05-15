@@ -13,13 +13,13 @@ import MockupEvent from '../../test/MockupEvent';
 
 test('ContentEditable should render correctly', () => {
   const fn = jest.fn();
-  const { asFragment } = render(<ContentEditable value='content' onChange={fn} />);
+  const { asFragment } = render(<ContentEditable value='content' onChange={fn} focus />);
   expect(asFragment()).toMatchSnapshot();
 });
 
 test('ContentEditable should have a value', () => {
   const on = jest.fn();
-  const { getByTestId } = render(<ContentEditable value='text' onChange={on} />);
+  const { getByTestId } = render(<ContentEditable value='text' onChange={on} focus />);
   const content = getByTestId('contenteditable');
   expect(content.textContent).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
