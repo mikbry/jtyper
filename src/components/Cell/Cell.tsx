@@ -148,21 +148,21 @@ const Cell: FunctionComponent<Props> = ({
   if (format === 'markdown') {
     content =
       selected && editable ? (
-        <Editor value={value} onChange={onChange} language='markdown' />
+        <Editor value={value} onChange={onChange} language='markdown' focus />
       ) : (
         <Highlighter value={value} />
       );
   } else if (format === 'code') {
     content =
       selected && editable ? (
-        <Editor value={value} onChange={onChange} language='javascript' />
+        <Editor value={value} onChange={onChange} language='javascript' focus />
       ) : (
         <CodeHighlighter value={value} />
       );
   } else {
     content =
       selected && editable ? (
-        <ContentEditable value={value} onChange={onChange} />
+        <ContentEditable value={value} onChange={onChange} focus />
       ) : (
         <RawContent data-testid='rawcontent'>{value}</RawContent>
       );

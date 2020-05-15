@@ -99,7 +99,9 @@ test('Notebook editable should have content deleted', async () => {
     new MockupEvent('keydown', {
       bubbles: true,
       key: 'd',
+      metaKey: true,
       ctrlKey: true,
+      altKey: false,
     }),
   );
   const files = state.files as NotebookType[];

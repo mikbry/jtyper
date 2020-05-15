@@ -18,11 +18,14 @@ export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType
 export const getNotebook = (selected: number | undefined, files: Array<NotebookType>): NotebookType | undefined =>
   selected !== undefined ? files[selected] : undefined;
 
+export const getNotebookCellByIndex = (index: number, notebook: NotebookType): CellType | undefined =>
+  notebook.cells[index];
+
 export const getCurrentCell = (editor: EditorType, notebook: NotebookType | undefined): CellType | undefined => {
   let cell;
   const { selectedCell } = editor;
   if (notebook !== undefined && selectedCell !== undefined) {
-    cell = notebook.cells[selectedCell];
+    cell = getNotebookCellByIndex(selectedCell, notebook);
   }
   return cell;
 };

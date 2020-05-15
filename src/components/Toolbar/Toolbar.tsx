@@ -63,7 +63,8 @@ const Toolbar: FunctionComponent = () => {
   const { selectedCell } = editor;
   const notebook = getNotebook(editor.selected, files);
   const cell = getCurrentCell(editor, notebook);
-  const handleSave = () => {
+  const handleSave = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
     dispatch(save());
   };
   const handleCreate = () => {
