@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
-import { deleteCell } from './app';
+import { runCell, deleteCell } from './app';
 
 const commands = [
   {
@@ -19,10 +19,30 @@ const commands = [
       {
         key: 'd',
         ctrKey: true,
+        altKey: false,
         cmd: (editor: EditorType) => {
           const selected = editor.selectedCell as number;
           return deleteCell({ selected });
         },
+      },
+    ],
+  },
+  {
+    // We could have a selected cell and edit it
+    conditions: () => true,
+    shortcuts: [
+      {
+        key: 'Enter',
+        ctrKey: true,
+        cmd: (editor: EditorType) => {
+          const selected = editor.selectedCell as number;
+          return runCell({ selected });
+        },
+      },
+      {
+        key: 'Enter',
+        altKey: true,
+        cmd: () => runCell({ all: true }),
       },
     ],
   },
@@ -35,7 +55,7 @@ const useCommands = () => {
     for (const c of commands) {
       if (c.conditions(editor)) {
         for (const s of c.shortcuts) {
-          if (s.key === event.key && s.ctrKey === event.ctrlKey) {
+          if (s.key === event.key && (s.ctrKey === event.ctrlKey || s.altKey === event.altKey)) {
             dispatch(s.cmd(editor));
             return;
           }

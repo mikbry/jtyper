@@ -13,6 +13,7 @@ import {
   getNotebookCellIndex,
   getAllCodeCells,
   getFullCode,
+  getNotebookCellByIndex,
 } from '../../selectors';
 import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
@@ -76,13 +77,20 @@ const updateCell = (action: CellType) => (dispatch: DispatchType) => {
   dispatch(save({ editor: true }));
 };
 
-type RunCellType = { cell: CellType; next?: number; all?: boolean };
-const runCell = ({ cell: c, next, all }: RunCellType) => async (dispatch: DispatchType, getState: Function) => {
+type RunCellType = { cell?: CellType; selected?: number; next?: number; all?: boolean };
+const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
+  dispatch: DispatchType,
+  getState: Function,
+) => {
   const { editor, files, sandbox } = getState();
   const notebook = getCurrentNotebook(editor, files);
   let cell = c;
   if (!cell) {
-    cell = findNotebookCodeCell(notebook) as CellType;
+    if (s) {
+      cell = getNotebookCellByIndex(s, notebook);
+    } else {
+      cell = findNotebookCodeCell(notebook) as CellType;
+    }
   }
   if (all) {
     const { cells, code } = getAllCodeCells(notebook);
