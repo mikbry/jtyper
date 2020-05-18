@@ -50,10 +50,16 @@ export interface FuncType {
   renamedTo?: string;
 }
 
+export interface ImportType {
+  start: number;
+  specifiers: Array<{ name: string; type: string; alias?: string }>;
+}
+
 export interface CodeType {
   script: string;
   variables: Record<string, VariableType>;
   funcs: Record<string, FuncType>;
+  imports: Record<string, ImportType>;
 }
 
 export interface ScopeType {
