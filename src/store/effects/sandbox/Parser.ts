@@ -21,6 +21,10 @@ interface ESTreeNode extends acorn.Node {
   id?: ESTreeNode;
   init?: ESTreeNode;
   declarations: ESTreeNode[];
+  local: ESTreeNode;
+  imported: ESTreeNode;
+  source: ESTreeNode;
+  specifiers: ESTreeNode[];
   expression: {
     type: string;
     callee: {
@@ -39,8 +43,12 @@ class Parser implements ParserType {
     const { variables } = scope;
     let parsed = input;
     let offset = 0;
-    const code: CodeType = { variables: {}, funcs: {}, script: input };
-    const tree = acorn.parse(input) as ESTreeNode;
+    const code: CodeType = { variables: {}, funcs: {}, imports: {}, script: input };
+    const tree = acorn.parse(input, {
+      sourceType: 'module',
+      allowImportExportEverywhere: true,
+      allowAwaitOutsideFunction: true,
+    }) as ESTreeNode;
     // console.log('tree', tree);
     tree.body.forEach(element => {
       if (element.type === 'VariableDeclaration') {
@@ -99,6 +107,30 @@ class Parser implements ParserType {
         parsed = `${s}print(${exp})${e}`;
         offset += 'print()'.length;
         // console.log('exp', exp, start, end);
+      } else if (element.type === 'ImportDeclaration') {
+        const source = element.source as ESTreeNode;
+        const name = source.value as string;
+        const specifiers: Array<{ name: string; type: string; alias?: string }> = [];
+        element.specifiers.forEach(sp => {
+          let type = '';
+          if (sp.type === 'ImportNamespaceSpecifier') {
+            type = 'namespace';
+          } else if (sp.type === 'ImportDefaultSpecifier') {
+            type = 'default';
+          } else if (sp.type === 'ImportSpecifier') {
+            type = 'export';
+          }
+          let n = sp.local.name as string;
+          if (sp.imported && sp.imported.name !== n) {
+            const alias = n;
+            n = sp.imported.name as string;
+            specifiers.push({ name: n, type, alias });
+          } else {
+            specifiers.push({ name: n, type });
+          }
+        });
+        code.imports[name] = { start: element.start, specifiers };
+        // console.log('import=', code.imports[name]);
       }
     });
     // console.log('variables=', variables);
