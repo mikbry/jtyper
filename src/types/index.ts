@@ -20,6 +20,13 @@ import {
   DataType,
 } from './sandbox';
 
+export interface ModuleType {
+  name: string;
+  url: string;
+  module?: unknown;
+  error?: string;
+}
+
 export interface PackageType {
   name: string;
   version: string;
@@ -28,6 +35,7 @@ export interface PackageType {
   author: string;
   licence: string;
 }
+
 export interface StateType {
   publisher: PublisherType;
   document: DocumentType;
@@ -37,6 +45,7 @@ export interface StateType {
   title?: string;
   sandbox?: SandboxType;
   package?: PackageType;
+  modules: Record<string, ModuleType>;
 }
 
 export type ActionType = AnyAction | ThunkAction<void, StateType, unknown, AnyAction>;
