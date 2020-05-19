@@ -33,6 +33,7 @@ const initialState: StateType = {
   editor: {
     selected: 0,
   },
+  modules: {},
 };
 
 export default initialState;

@@ -85,17 +85,21 @@ class Parser implements ParserType {
       } else if (element.type === 'ExpressionStatement' && element.expression.type === 'CallExpression') {
         const { expression } = element;
         const { name, start } = expression.callee;
-        let renamedTo = 'stub';
-        if (funcWhitelist[name]) {
-          renamedTo = funcWhitelist[name];
+        if (!name) {
+          console.log('todo call without name', expression);
+        } else {
+          let renamedTo = 'stub';
+          if (funcWhitelist[name]) {
+            renamedTo = funcWhitelist[name];
+          }
+          if (renamedTo !== name) {
+            const s = parsed.substring(0, start + offset);
+            const e = parsed.substring(start + offset + name.length);
+            parsed = s + renamedTo + e;
+            offset += renamedTo.length - name.length;
+          }
+          code.funcs[name] = { start, renamedTo };
         }
-        if (renamedTo !== name) {
-          const s = parsed.substring(0, start + offset);
-          const e = parsed.substring(start + offset + name.length);
-          parsed = s + renamedTo + e;
-          offset += renamedTo.length - name.length;
-        }
-        code.funcs[name] = { start, renamedTo };
       } else if (element.type === 'ExpressionStatement' && element.expression.type !== 'AssignmentExpression') {
         const { expression } = element;
         let { start, end } = expression;
