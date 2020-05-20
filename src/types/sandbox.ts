@@ -52,6 +52,7 @@ export interface FuncType {
 
 export interface ImportType {
   start: number;
+  url?: string;
   specifiers: Array<{ name: string; type: string; alias?: string }>;
 }
 

@@ -100,7 +100,12 @@ class Parser implements ParserType {
           }
           code.funcs[name] = { start, renamedTo };
         }
-      } else if (element.type === 'ExpressionStatement' && element.expression.type !== 'AssignmentExpression') {
+      } else if (
+        element.type === 'ExpressionStatement' &&
+        element.expression.type !== 'AssignmentExpression' &&
+        element.expression.type !== 'AwaitExpression'
+      ) {
+        console.log('expression=', element);
         const { expression } = element;
         let { start, end } = expression;
         start += offset;
@@ -133,7 +138,12 @@ class Parser implements ParserType {
             specifiers.push({ name: n, type });
           }
         });
-        code.imports[name] = { start: element.start, specifiers };
+        const { start } = element;
+        code.imports[name] = { start, specifiers };
+        const s = parsed.slice(0, start);
+        const e = parsed.slice(start);
+        parsed = `${s}// ${e}`;
+        offset += 3;
         // console.log('import=', code.imports[name]);
       }
     });

@@ -30,6 +30,7 @@ class ScriptWorker {
   const stub = () => {
     // TODO throw an error
   };
+  const global = {}; 
   onmessage=(e)=> {
     let code = e.data[0];
     let result;

@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { ParserType, SandboxType, CodeType, ScopeType, LogEntryType } from '../../../types';
+import { ParserType, SandboxType, CodeType, ScopeType, LogEntryType, ModuleType } from '../../../types';
 import Parser from './Parser';
 import Scope from './Scope';
 import Logger from './Logger';
@@ -26,10 +26,13 @@ class Sandbox implements SandboxType {
 
   scope?: ScopeType;
 
+  modules: Record<string, ModuleType>;
+
   constructor(noConsole = false) {
     this.parser = new Parser();
     this.logger = new Logger(noConsole ? {} : { console });
     this.scriptWorker = new ScriptWorker();
+    this.modules = {};
     this.reset();
   }
 
@@ -37,6 +40,10 @@ class Sandbox implements SandboxType {
     this.lastCode = undefined;
     this.lastFunc = undefined;
     this.error = undefined;
+  }
+
+  setModules(modules: Record<string, ModuleType>) {
+    this.modules = modules;
   }
 
   async parse(input: string, scope: ScopeType): Promise<CodeType> {
@@ -53,6 +60,13 @@ class Sandbox implements SandboxType {
       for (const c of code) {
         // eslint-disable-next-line no-await-in-loop
         const parsed = await this.parse(c, scope);
+        Object.keys(parsed.imports).forEach(i => {
+          if (this.modules[i]) {
+            parsed.imports[i].url = this.modules[i].url;
+          } else {
+            throw new Error(`Import not available: ${i}`);
+          }
+        });
         // eslint-disable-next-line no-new-func
         func = parsed;
         this.lastFunc = func;
