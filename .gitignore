@@ -7,4 +7,4 @@ coverage
 **/yarn-error.log
 **/dist
 **/__snapshots__
-public/modules/*
+public/modules
