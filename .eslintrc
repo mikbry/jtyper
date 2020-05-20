@@ -31,7 +31,7 @@
     "jquery": false,
     "node": true
   },
-  "ignorePatterns": ["**/dist", "node_modules/"],
+  "ignorePatterns": ["**/dist", "node_modules/", "public"],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "import/prefer-default-export": "off",

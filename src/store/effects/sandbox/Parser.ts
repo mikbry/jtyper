@@ -100,7 +100,10 @@ class Parser implements ParserType {
           }
           code.funcs[name] = { start, renamedTo };
         }
-      } else if (element.type === 'ExpressionStatement' && element.expression.type !== 'AssignmentExpression') {
+      } else if (element.type === 'ExpressionStatement' &&
+        element.expression.type !== 'AssignmentExpression' &&
+        element.expression.type !== 'AwaitExpression') {
+        console.log('expression=', element);
         const { expression } = element;
         let { start, end } = expression;
         start += offset;
