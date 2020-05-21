@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
-import { runCell, deleteCell, save, cut, copy, paste } from './app';
+import { runCell, deleteCell, selectCell, save, cut, copy, paste } from './app';
 
 const commands = [
   {
@@ -29,6 +29,26 @@ const commands = [
         ctrlKey: true,
         altKey: false,
         cmd: () => paste(),
+      },
+      {
+        key: 'ArrowUp',
+        name: 'arrow up',
+        ctrlKey: false,
+        altKey: false,
+        cmd: (editor: EditorType) => {
+          const selected = editor.selectedCell === undefined ? 0 : editor.selectedCell - 1;
+          return selectCell({ selected });
+        },
+      },
+      {
+        key: 'ArrowDown',
+        name: 'arrow down',
+        ctrlKey: false,
+        altKey: false,
+        cmd: (editor: EditorType) => {
+          const selected = editor.selectedCell === undefined ? 0 : editor.selectedCell + 1;
+          return selectCell({ selected });
+        },
       },
     ],
   },
