@@ -64,6 +64,7 @@ export interface CodeType {
 }
 
 export interface ScopeType {
+  id: string;
   variables: Record<string, VariableType>;
   print: Function;
 }

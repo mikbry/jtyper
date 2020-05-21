@@ -8,7 +8,7 @@
 
 import { ScopeType, DataType } from '../../../types';
 
-type MessageType = { print?: { value?: DataType }; result?: DataType };
+type MessageType = { print?: { value?: DataType }; result?: DataType; type?: string };
 
 const startTimeout = (callback: Function, timeout: number) => {
   if (timeout === -1) {
@@ -32,11 +32,15 @@ class ScriptWorker {
   };
   const global = {}; 
   onmessage=(e)=> {
-    let code = e.data[0];
-    let result;
-    var e = null;
-    result = (async () => { Function(code).bind(self)(); })();
-    postMessage({result});  
+    const data = e.data;
+    if (data.type === 'execute') {
+      let code = data.scripts[0];
+      let result;
+      var e = null;
+      (async () => { return Function(code).bind(self)(); })().then(result => {
+        postMessage({ type: data.type, scopeId: data.scopeId, result });   
+      }); 
+    }
   }`;
 
   constructor() {
@@ -73,7 +77,7 @@ class ScriptWorker {
         clearTimeout(handle);
         // console.log('onmessage', e);
         const data: MessageType = e.data as MessageType;
-        if (data.result) {
+        if (data.type === 'execute') {
           resolve(data.result);
         } else if (data.print) {
           // console.log('print', data.print);
@@ -85,7 +89,7 @@ class ScriptWorker {
         clearTimeout(handle);
         reject(e);
       };
-      worker.postMessage([script]);
+      worker.postMessage({ type: 'execute', scopeId: scope.id, scripts: [script] });
     });
   }
 }
