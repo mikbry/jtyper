@@ -8,7 +8,9 @@
 import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
 import { StateType, DispatchType, CellType, CellFormat, NotebookType, ComposerType } from '../../../types';
 import {
+  getNotebook,
   getCurrentNotebook,
+  getCurrentCell,
   findNotebookCodeCell,
   getNotebookCellIndex,
   getAllCodeCells,
@@ -145,14 +147,25 @@ const deleteCell = (action: { selected: number }) => (dispatch: DispatchType) =>
   dispatch(save({ editor: true }));
 };
 
-const cut = (action: { cell: CellType; selected: number }) => (dispatch: DispatchType) => {
-  const { selected, cell } = action;
+const cut = (action: { cell?: CellType; selected: number }) => (dispatch: DispatchType, getState: Function) => {
+  let { cell } = action;
+  const { selected } = action;
+  if (!cell) {
+    const { editor, files } = getState();
+    const notebook = getNotebook(selected, files);
+    cell = getCurrentCell(editor, notebook);
+  }
   dispatch({ type: APP.COPY + DONE, selected, cell });
   dispatch(save({ editor: true }));
 };
 
-const copy = (action: { cell: CellType }) => (dispatch: DispatchType) => {
-  const { cell } = action;
+const copy = (action: { cell?: CellType }) => (dispatch: DispatchType, getState: Function) => {
+  let { cell } = action;
+  if (!cell) {
+    const { editor, files } = getState();
+    const notebook = getNotebook(editor.selected, files);
+    cell = getCurrentCell(editor, notebook);
+  }
   dispatch({ type: APP.COPY + DONE, cell });
   dispatch(save({ editor: true }));
 };
