@@ -35,7 +35,7 @@ class ScriptWorker {
     let code = e.data[0];
     let result;
     var e = null;
-    result = Function(code).bind(self)();
+    result = (async () => { Function(code).bind(self)(); })();
     postMessage({result});  
   }`;
 
