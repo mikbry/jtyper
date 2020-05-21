@@ -116,13 +116,16 @@ const handlers = {
     }
     return { ...state, files, saved: false };
   },
-  [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number }) => {
+  [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number | undefined }) => {
     const { selected } = action;
     const { files, editor } = state;
 
     const notebook = getCurrentNotebook(editor, files);
     const { length } = notebook.cells;
-    const selectedCell = validateSelectedCell(selected, length);
+    let selectedCell;
+    if (selected !== undefined) {
+      selectedCell = validateSelectedCell(selected, length);
+    }
     const { title } = notebook;
     return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
   },
