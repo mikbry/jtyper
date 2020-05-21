@@ -5,10 +5,12 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import { generateId } from '../../selectors';
 import { LoggerType, ScopeType, CodeType, VariableType } from '../../../types';
 
 class Scope implements ScopeType {
+  id: string;
+
   variables: Record<string, VariableType> = {};
 
   code?: string;
@@ -17,6 +19,7 @@ class Scope implements ScopeType {
 
   constructor(logger: LoggerType) {
     this.logger = logger;
+    this.id = generateId();
   }
 
   print(string: string) {
