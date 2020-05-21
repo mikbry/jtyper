@@ -130,7 +130,7 @@ const useCommands = () => {
             (isMac ? s.ctrlKey === event.metaKey : s.ctrlKey === event.ctrlKey) &&
             s.altKey === event.altKey
           ) {
-            event.stopPropagation();
+            event.preventDefault();
             dispatch(s.cmd(editor));
             return;
           }
