@@ -75,6 +75,13 @@ const commands = [
         },
       },
       {
+        key: 'Escape',
+        name: 'Escape cell',
+        ctrlKey: false,
+        altKey: false,
+        cmd: () => selectCell({ selected: undefined }),
+      },
+      {
         key: 'x',
         name: 'Cut cell',
         ctrlKey: true,
@@ -90,6 +97,22 @@ const commands = [
         ctrlKey: true,
         altKey: false,
         cmd: () => copy({}),
+      },
+    ],
+  },
+  {
+    // We could have a selected cell and edit it
+    conditions: (editor: EditorType) => !editor.readOnly && editor.selectedCell === undefined,
+    shortcuts: [
+      {
+        key: 'Enter',
+        name: 'Enter cell',
+        ctrlKey: false,
+        altKey: false,
+        cmd: () => {
+          const selected = 0;
+          return selectCell({ selected });
+        },
       },
     ],
   },
