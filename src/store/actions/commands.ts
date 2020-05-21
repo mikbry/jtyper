@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
-import { runCell, deleteCell, selectCell, save, cut, copy, paste } from './app';
+import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste } from './app';
 
 const commands = [
   {
@@ -22,6 +22,13 @@ const commands = [
         ctrlKey: true,
         altKey: false,
         cmd: () => save(),
+      },
+      {
+        key: 'a',
+        name: 'Create cell',
+        ctrlKey: true,
+        altKey: false,
+        cmd: () => createCell(),
       },
       {
         key: 'v',
@@ -123,7 +130,7 @@ const useCommands = () => {
             (isMac ? s.ctrlKey === event.metaKey : s.ctrlKey === event.ctrlKey) &&
             s.altKey === event.altKey
           ) {
-            event.preventDefault();
+            event.stopPropagation();
             dispatch(s.cmd(editor));
             return;
           }
