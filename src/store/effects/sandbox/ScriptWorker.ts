@@ -42,8 +42,8 @@ class ScriptWorker {
   };
 
   const handleExecute = (data, result) => {
-    // console.log('handleExecute=', data, result);
-    const r = {};
+    console.log('handleExecute='+JSON.stringify(result));
+    const r = JSON.parse(JSON.stringify(result));
     postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
   };
 
@@ -128,6 +128,7 @@ class ScriptWorker {
         // console.log('onmessage', e);
         const data: MessageType = e.data as MessageType;
         if (data.type === 'execute') {
+          console.log('result=', data.result);
           resolve(data.result);
         } else if (data.print) {
           // console.log('print', data.print);
