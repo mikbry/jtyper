@@ -166,7 +166,10 @@ const handlers = {
     notebook.cells.splice(selectedCell, 0, cell);
     return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
   },
-  [APP.LOCALSAVE + DONE]: (state: StateType) => ({ ...state, saved: true }),
+  [APP.LOCALSAVE + DONE]: (state: StateType) => {
+    console.log('localsave', state);
+    return { ...state, saved: true };
+  },
 };
 
 export default handlers;

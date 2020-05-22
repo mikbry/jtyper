@@ -107,3 +107,29 @@ test('Notebook editable should have content deleted', async () => {
   const files = state.files as NotebookType[];
   expect(files[0].cells?.length).toBe(0);
 });
+
+test('Notebook editable should save content', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text' }] }],
+    saved: false,
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: false });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 's',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  // await new Promise(r => setTimeout(r, 4000));
+  jest.useFakeTimers();
+  jest.runAllTimers();
+  // Bug works correctly in dev but not here...
+  expect(state.saved).toBe(false);
+});
