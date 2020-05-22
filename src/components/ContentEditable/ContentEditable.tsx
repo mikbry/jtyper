@@ -24,27 +24,28 @@ const getText = (ref: React.RefObject<HTMLInputElement>) => {
   return '';
 };
 
-const ContentEditable: FunctionComponent<Props> = ({ value, onChange, focus }) => {
+const ContentEditable: FunctionComponent<Props> = ({ value, onChange }) => {
   const elRef = useRef<HTMLInputElement>(null);
   getText(elRef);
   useEffect(() => {
-    if (elRef.current && focus) {
+    /* if (elRef.current && focus) {
       elRef.current.focus();
-    }
+    } */
+    // elRef.current.focus();
   }, []);
-  const handleClick = () => {
+  /* const handleClick = () => {
     // TODO
-  };
-  let handler: number;
+  }; */
+  // let handler: number;
   const handleBlur = () => {
-    if (handler) {
+    /* if (handler) {
       clearTimeout(handler);
     }
     handler = setTimeout(() => {
       if (elRef.current && focus) {
         elRef.current.focus();
       }
-    }, 100);
+    }, 100); */
 
     onChange(getText(elRef));
   };
@@ -60,7 +61,7 @@ const ContentEditable: FunctionComponent<Props> = ({ value, onChange, focus }) =
   return (
     <Styled
       role='button'
-      onClick={handleClick}
+      /* onClick={handleClick} */
       onKeyDown={handleKey}
       onBlur={handleBlur}
       tabIndex={0}
