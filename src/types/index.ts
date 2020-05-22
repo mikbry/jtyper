@@ -23,7 +23,7 @@ import {
 export interface ModuleType {
   name: string;
   url: string;
-  module?: unknown;
+  data?: Blob;
   error?: string;
 }
 

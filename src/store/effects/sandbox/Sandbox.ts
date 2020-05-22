@@ -63,6 +63,7 @@ class Sandbox implements SandboxType {
         Object.keys(parsed.imports).forEach(i => {
           if (this.modules[i]) {
             parsed.imports[i].url = this.modules[i].url;
+            this.scriptWorker.addModule(this.modules[i]);
           } else {
             throw new Error(`Import not available: ${i}`);
           }
@@ -80,6 +81,7 @@ class Sandbox implements SandboxType {
     }
     let err;
     if (this.lastFunc) {
+      await this.scriptWorker.loadModules();
       // eslint-disable-next-line no-restricted-syntax
       for (func of funcs) {
         this.logger.clear();

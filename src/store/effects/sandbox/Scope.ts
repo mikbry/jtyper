@@ -30,15 +30,15 @@ class Scope implements ScopeType {
     const { script } = code;
     let start = '';
     let end = '\n// */\nreturn {';
-    let names = Object.keys(code.imports);
+    /* let names = Object.keys(code.imports);
     if (names.length) {
       names.forEach(importName => {
         start += `self.importScripts('http://localhost:9010/modules/${code.imports[importName].url}')\n`;
       });
       start += '\n';
-    }
+    } */
 
-    names = Object.keys(this.variables);
+    const names = Object.keys(this.variables);
     if (names.length > 0) {
       names.forEach(varName => {
         // console.log(varName, this.variables[varName], code.variables[varName]);

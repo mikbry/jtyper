@@ -27,7 +27,7 @@ const init = (fxComposer?: ComposerType) => async () => {
     const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
     const sandbox = await initSandbox();
     const modules = {
-      '@tensorflow/tfjs': { name: 'tfjs', url: 'tf.js' },
+      '@tensorflow/tfjs': { name: '@tensorflow/tfjs', url: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.js' },
     };
     sandbox.setModules(modules);
     return { type: INITIALIZE + DONE, document, files, editor, sandbox, modules };
