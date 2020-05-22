@@ -31,17 +31,19 @@ class ScriptWorker {
     // TODO throw an error
   };
   const global = {}; 
+  const handleExecute = (data, result) => {
+    postMessage({ type: data.type, scopeId: data.scopeId, result });  
+  };
+  let data;
   onmessage=(e)=> {
-    const data = e.data;
+    data = e.data;
     if (data.type === 'execute') {
       let code = data.scripts[0];
       let result;
       var e = null;
-      (async () => { return Function(code).bind(self)(); })().then(result => {
-        postMessage({ type: data.type, scopeId: data.scopeId, result });   
-      }); 
+      Function(\`(async () => {\n\` + code + \`\n})().then(result => { handleExecute(data,result); });\`).bind(self)();
     }
-  }`;
+  };`;
 
   constructor() {
     this.createWorker();
