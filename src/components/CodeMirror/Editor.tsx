@@ -24,6 +24,7 @@ type Props = {
 const modes: Record<string, string> = {
   javascript: 'text/javascript',
   markdown: 'text/x-markdown',
+  raw: 'null',
 };
 
 const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onChange }) => {

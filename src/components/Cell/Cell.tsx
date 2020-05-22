@@ -9,7 +9,7 @@ import React, { /* KeyboardEvent, */ FunctionComponent, /* useState, */ useEffec
 import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
-import ContentEditable from '../ContentEditable';
+// import ContentEditable from '../ContentEditable';
 import { BasicTheme } from '../../themes';
 import { LogEntryType } from '../../types';
 
@@ -162,7 +162,7 @@ const Cell: FunctionComponent<Props> = ({
   } else {
     content =
       selected && editable ? (
-        <ContentEditable value={value} onChange={onChange} focus />
+        <Editor value={value} onChange={onChange} language='raw' focus />
       ) : (
         <RawContent data-testid='rawcontent'>{value}</RawContent>
       );
