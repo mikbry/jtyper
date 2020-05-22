@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
@@ -26,7 +26,8 @@ const modes: Record<string, string> = {
   markdown: 'text/x-markdown',
 };
 
-const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
+const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onChange }) => {
+  const [value] = useState(defaultValue);
   const mode = modes[language];
   return (
     <CodeMirror2
@@ -36,7 +37,9 @@ const Editor: FunctionComponent<Props> = ({ value, language, onChange }) => {
         mode,
       }}
       editorDidMount={editor => {
-        editor.focus();
+        if (!editor.hasFocus) {
+          editor.focus();
+        }
       }}
       onChange={(_editor, _data, newValue) => {
         onChange(newValue);
