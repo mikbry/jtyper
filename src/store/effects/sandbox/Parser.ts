@@ -126,7 +126,8 @@ class Parser implements ParserType {
             type = 'namespace';
           } else if (sp.type === 'ImportDefaultSpecifier') {
             type = 'default';
-          } else if (sp.type === 'ImportSpecifier') {
+          } else {
+            // } if (sp.type === 'ImportSpecifier') {
             type = 'export';
           }
           let n = sp.local.name as string;

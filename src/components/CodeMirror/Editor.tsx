@@ -38,6 +38,8 @@ const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onCha
         mode,
       }}
       editorDidMount={editor => {
+        // Very hard to create a use case for this so we ignore for now
+        /* istanbul ignore next */
         if (!editor.hasFocus) {
           editor.focus();
         }

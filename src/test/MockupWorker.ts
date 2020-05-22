@@ -7,10 +7,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-type UrlType = { blob: Blob };
-type DataType = { data: string[] };
+// eslint-disable-next-line max-classes-per-file
+type UrlType = { blob: BlobEx };
+type DataType = { scripts: string[]; type?: string; scopeId?: string };
 
-const createObjectURL = (blob: Blob): UrlType => ({ blob });
+const createObjectURL = (blob: BlobEx): UrlType => ({ blob });
+
+class BlobEx {
+  s: string[];
+
+  constructor(s: []) {
+    this.s = s;
+  }
+}
 
 const script = `
 const print = (_value) => {
@@ -24,7 +33,7 @@ const stub = () => {
 `;
 
 class MockupWorker {
-  url: { blob: Blob };
+  url: { blob: BlobEx };
 
   end?: boolean;
 
@@ -38,6 +47,7 @@ class MockupWorker {
 
   constructor(url: UrlType) {
     this.url = url;
+    // console.log('url=', url);
   }
 
   terminate() {
@@ -45,19 +55,36 @@ class MockupWorker {
     this.end = true;
   }
 
-  async handleMessage(e: DataType) {
-    const code = script + e.data[0];
+  stub() {
+    this.end = undefined;
+  }
+
+  print(_value?: unknown) {
+    if (_value === undefined) return;
+    let value = _value;
+    if (typeof value === 'function') value = 'Function';
+    this.onmessage({ data: { print: { value } } });
+  }
+
+  async handleMessage(data: DataType) {
+    const { blob } = this.url;
+    blob.s[blob.s.length - 1] = script;
+    const code = script + data.scripts[0];
+    const scripts = blob.s.join('');
+    if (this.onmessage) this.onmessage({ data: {} }); // Coverage dummy test
     try {
       // eslint-disable-next-line no-new-func
+      Function(scripts).bind(this)();
+      // eslint-disable-next-line no-new-func
       const result = Function(code).bind(this)();
-      if (this.onmessage) this.onmessage({ data: { result } });
+      if (this.onmessage) this.onmessage({ data: { type: data.type, scopeId: data.scopeId, result } });
     } catch (err) {
       if (this.onerror) this.onerror(err);
     }
   }
 
-  postMessage(msg: string[]) {
-    this.handleMessage({ data: msg });
+  postMessage(data: DataType) {
+    this.handleMessage(data);
   }
 }
 
@@ -67,4 +94,8 @@ Object.defineProperty(window, 'Worker', {
 
 Object.defineProperty(window, 'URL', {
   value: { createObjectURL },
+});
+
+Object.defineProperty(window, 'Blob', {
+  value: BlobEx,
 });

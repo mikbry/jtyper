@@ -37,15 +37,11 @@ class ScriptWorker {
   const stub = () => {
     // TODO throw an error
   };
+  let prevconsolelog = console.log;
   console.log = (_text) => {
     print(_text);
   };
 
-  const handleExecute = (data, result) => {
-    console.log('handleExecute='+JSON.stringify(result));
-    const r = JSON.parse(JSON.stringify(result));
-    postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
-  };
 
   onmessage=(e)=> {
     // console.log('onmessage=', e);
@@ -54,9 +50,13 @@ class ScriptWorker {
       let code = data.scripts[0];
       let result;
       var e = null;
-      Function(\`(async () => {\n\` + code + \`\n})().then(result => { handleExecute(data,result); });\`).bind(self)();
+      Function(\`(async (data) => {\n\` + code + \`\n})(data).then(result => {
+        const r = JSON.parse(JSON.stringify(result));
+        // console.log('post message', data, result);
+        postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
+      });\`).bind(self)();
     }
-  };`;
+  };\n`;
 
   constructor() {
     this.modules = {};
@@ -125,10 +125,10 @@ class ScriptWorker {
       }, timeout);
       worker.onmessage = e => {
         clearTimeout(handle);
-        // console.log('onmessage', e);
+        console.log('onmessage', e);
         const data: MessageType = e.data as MessageType;
         if (data.type === 'execute') {
-          console.log('result=', data.result);
+          // console.log('result=', data.result);
           resolve(data.result);
         } else if (data.print) {
           // console.log('print', data.print);

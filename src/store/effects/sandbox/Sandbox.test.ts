@@ -9,6 +9,13 @@ import Sandbox from './Sandbox';
 import '../../../test/MockupWorker';
 import { ScopeType } from '../../../types';
 
+Object.defineProperty(window, 'fetch', {
+  value: async () => ({
+    blob: async () =>
+      'const f = { test: () => { print("Hello"); } }; if (!window.foo) Object.defineProperty(window, "foo", { value: f });\n',
+  }),
+});
+
 const code1 = `
 print('Hello world!');
 
@@ -173,4 +180,28 @@ test('Sandbox should execute several codes and return all variables', async () =
   expect(scope.variables.b.kind).toBe('const');
   expect(scope.variables.b.value).toBe('ok');
   expect(scope.variables.b.type).toBe('string');
+});
+
+test('Sandbox should import module', async () => {
+  const sandbox = new Sandbox(true);
+  sandbox.setModules({ test: { name: 'test', url: 'test' } });
+  const [out] = await sandbox.execute(['import "test";', 'import * as test from "test";', 'foo.test();']);
+  expect(out.length).toBe(1);
+  expect(out[0].text).toBe('Hello');
+  expect(out[0].type).toBe('text');
+  expect(out[0].id).toBeDefined();
+});
+
+test('Sandbox should not import unknown module', async () => {
+  const sandbox = new Sandbox(true);
+  // sandbox.setModules({ test: { name: 'test', url: 'test' } });
+  const [out] = await sandbox.execute([
+    'import test, { a, b as c } from "test";',
+    'import test, { a, b } from "test";',
+    'foo.test();',
+  ]);
+  expect(out.length).toBe(1);
+  expect(out[0].text).toBe('Import not available: test');
+  expect(out[0].type).toBe('error');
+  expect(out[0].id).toBeDefined();
 });

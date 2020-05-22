@@ -88,15 +88,16 @@ test('Cell should be editable and hover', () => {
 
 test('Cell should be editable and selected', () => {
   const on = jest.fn();
-  const { getByTestId } = render(
+  const { getByRole } = render(
     <MockupProvider>
       <Cell onClick={on} onChange={on} editable selected>
         text
       </Cell>
     </MockupProvider>,
   );
-  const content = getByTestId('contenteditable');
-  expect(content.textContent).toBe('text');
+  const content = getByRole('button').firstChild?.childNodes[1] as Node;
+  expect(content).toHaveClass('react-codemirror2');
+  expect(content?.textContent?.trim()).toBe('text');
   fireEvent.click(content);
   expect(on).toHaveBeenCalledTimes(1);
 });
