@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { ScopeType, DataType } from '../../../types';
+import { ScopeType, DataType, ModuleType } from '../../../types';
 
 type MessageType = { print?: { value?: DataType }; result?: DataType; type?: string };
 
@@ -19,9 +19,16 @@ const startTimeout = (callback: Function, timeout: number) => {
 };
 
 class ScriptWorker {
+  private modules: Record<string, ModuleType>;
+
   private worker?: Worker;
 
-  private response = `
+  private globalScript = `
+  const global = {}; 
+  `;
+
+  private handlerScript = `
+  let data;
   const print = (_value) => {
     let value = _value;
     if (typeof value === 'function') value = 'Function';
@@ -30,12 +37,18 @@ class ScriptWorker {
   const stub = () => {
     // TODO throw an error
   };
-  const global = {}; 
-  const handleExecute = (data, result) => {
-    postMessage({ type: data.type, scopeId: data.scopeId, result });  
+  console.log = (_text) => {
+    print(_text);
   };
-  let data;
+
+  const handleExecute = (data, result) => {
+    // console.log('handleExecute=', data, result);
+    const r = {};
+    postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
+  };
+
   onmessage=(e)=> {
+    // console.log('onmessage=', e);
     data = e.data;
     if (data.type === 'execute') {
       let code = data.scripts[0];
@@ -46,19 +59,53 @@ class ScriptWorker {
   };`;
 
   constructor() {
-    this.createWorker();
+    this.modules = {};
   }
 
-  createWorker() {
-    const blob = new Blob([this.response], { type: 'application/javascript' });
+  addModule(module: ModuleType) {
+    if (!this.modules[module.name]) {
+      this.modules[module.name] = module;
+      this.kill();
+    }
+  }
+
+  async loadModules() {
+    const keys = Object.keys(this.modules);
+    const loader = keys
+      .filter(m => !this.modules[m].data)
+      .map(k => {
+        const module = this.modules[k];
+        const asyncFetch = async () => {
+          // console.log('load module=', module.url);
+          const response = await fetch(module.url);
+          module.data = await response.blob();
+          // console.log('loaded module=', !!module.data);
+          return 'ok';
+        };
+        return asyncFetch;
+      });
+    // console.log('loader', loader[0]);
+    await Promise.all(loader);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const l of loader) {
+      await l();
+    }
+  }
+
+  async createWorker() {
+    if (this.worker) {
+      return;
+    }
+    const modules: Blob[] = Object.keys(this.modules)
+      .map(m => this.modules[m].data)
+      .filter(d => !!d) as Blob[];
+    // console.log('createWorker modules=', modules);
+    const blob = new Blob([this.globalScript, ...modules, this.handlerScript], { type: 'application/javascript' });
     this.worker = new Worker(URL.createObjectURL(blob));
   }
 
-  getWorker() {
-    if (!this.worker) {
-      this.createWorker();
-    }
-    return this.worker;
+  getWorker(): Worker {
+    return this.worker as Worker;
   }
 
   kill() {
@@ -69,7 +116,8 @@ class ScriptWorker {
   }
 
   public async execute(script: string, scope: ScopeType, timeout = 1000): Promise<DataType> {
-    const worker = this.getWorker() as Worker;
+    await this.createWorker();
+    const worker = this.getWorker();
     return new Promise((resolve, reject) => {
       const handle = startTimeout(() => {
         this.kill();
