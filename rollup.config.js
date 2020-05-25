@@ -9,6 +9,7 @@ import commonjs from 'rollup-plugin-commonjs-alternate';
 import copy from 'rollup-plugin-copy';
 import json from '@rollup/plugin-json';
 import { string } from 'rollup-plugin-string';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 const appName = 'rollupReactApp';
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -68,12 +69,13 @@ const plugins = () => [
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
   }),
   json(),
+  nodePolyfills(),
+  resolve(),
   typescript({ abortOnError: false }),
   hotcss({
     hot: development,
     filename: development ? 'styles.css' : 'css/styles.css',
   }),
-  resolve({ extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'] }),
   string({
     include: ['**/*.fs', '**/*.vs'],
   }),
