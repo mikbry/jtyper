@@ -92,7 +92,6 @@ const plugins = () => [
         'useState',
         'useRef',
         'useCallback',
-        'useState',
         'useContext',
         'useLayoutEffect',
       ],
