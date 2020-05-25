@@ -8,8 +8,8 @@
     "allowJs": true,
     "checkJs": false,
     "strict": true,
-    "module": "ES6",
-    "target": "ES6",
+    "module": "es6",
+    "target": "es5",
     "jsx": "react",
     "moduleResolution": "node",
     "lib": [

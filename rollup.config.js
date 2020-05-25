@@ -70,7 +70,7 @@ const plugins = () => [
   }),
   json(),
   nodePolyfills(),
-  resolve(),
+  resolve({ preferBuiltins: true }),
   typescript({ abortOnError: false }),
   hotcss({
     hot: development,
