@@ -75,6 +75,7 @@ class MockupWorker {
     try {
       // eslint-disable-next-line no-new-func
       Function(scripts).bind(this)();
+      // console.log(code);
       // eslint-disable-next-line no-new-func
       const result = Function(code).bind(this)();
       if (this.onmessage) this.onmessage({ data: { type: data.type, scopeId: data.scopeId, result } });

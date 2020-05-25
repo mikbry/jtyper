@@ -29,7 +29,7 @@ class Scope implements ScopeType {
   async bindCode(code: CodeType, runner: { execute: Function }) {
     const { script } = code;
     let start = '';
-    let end = '\n// */\nreturn {';
+    let end = '';
     /* let names = Object.keys(code.imports);
     if (names.length) {
       names.forEach(importName => {
@@ -64,9 +64,11 @@ class Scope implements ScopeType {
           end += ` ${varName},`;
         }
       });
-      end = `${end.substring(0, end.length - 1)} `;
+      if (end.length) {
+        end = end.substring(0, end.length - 1);
+      }
     }
-    end += '};';
+    end = `\n// */\nreturn {${end} };`;
     // console.log('start=', start);
     // console.log('end=', end);
     const sse = start + script + end;

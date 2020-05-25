@@ -133,6 +133,7 @@ const commands = [
       {
         key: 'Enter',
         name: 'Run all',
+        ctrlKey: false,
         altKey: true,
         cmd: () => runCell({ all: true }),
       },

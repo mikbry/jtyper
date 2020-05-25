@@ -125,13 +125,12 @@ class ScriptWorker {
       }, timeout);
       worker.onmessage = e => {
         clearTimeout(handle);
-        console.log('onmessage', e);
+        // console.log('onmessage', e);
         const data: MessageType = e.data as MessageType;
         if (data.type === 'execute') {
           // console.log('result=', data.result);
           resolve(data.result);
         } else if (data.print) {
-          // console.log('print', data.print);
           scope.print(data.print.value);
         }
       };
