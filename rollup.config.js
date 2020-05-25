@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import resolve from '@rollup/plugin-node-resolve';
-// import typescript from '@rollup/plugin-typescript';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
