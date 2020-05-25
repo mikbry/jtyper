@@ -21,18 +21,18 @@ import { composer } from '../../effects';
 import initSandbox from '../../effects/sandbox';
 
 const init = (fxComposer?: ComposerType) => async () => {
+  const sandbox = await initSandbox();
   if (fxComposer) {
     const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
     const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });
     const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
-    const sandbox = await initSandbox();
     const modules = {
       '@tensorflow/tfjs': { name: '@tensorflow/tfjs', url: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.js' },
     };
     sandbox.setModules(modules);
     return { type: INITIALIZE + DONE, document, files, editor, sandbox, modules };
   }
-  return { type: INITIALIZE + DONE };
+  return { type: INITIALIZE + DONE, sandbox };
 };
 
 const save = (action: { document?: boolean; files?: boolean; editor?: boolean } | undefined = {}) => (
@@ -92,7 +92,7 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
   const notebook = getCurrentNotebook(editor, files);
   let cell = c;
   if (!cell) {
-    if (s) {
+    if (s !== undefined) {
       cell = getNotebookCellByIndex(s, notebook);
     } else {
       cell = findNotebookCodeCell(notebook) as CellType;
