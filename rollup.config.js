@@ -1,23 +1,24 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import resolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
+// import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
-import url from '@rollup/plugin-url';
 import hotcss from 'rollup-plugin-hot-css';
 import commonjs from 'rollup-plugin-commonjs-alternate';
-import refresh from 'rollup-plugin-react-refresh';
 import copy from 'rollup-plugin-copy';
+import json from '@rollup/plugin-json';
 import { string } from 'rollup-plugin-string';
 
 const appName = 'rollupReactApp';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
 const development = NODE_ENV === 'development';
-const outputFile = production ? '/static/js/index' : '/index.[hash]';
+const outputFile = production ? 'js/index' : '/index.[hash]';
 const publicUrl = process.env.PUBLIC_URL || 'http://localhost:9000';
 const esmFile = `${outputFile}.js`;
 const iifeFile = `${outputFile}.legacy.js`;
-const styles = development ? '/styles.[hash].css' : 'static/assets/styles.css';
+const styles = development ? '/styles.[hash].css' : 'css/styles.css';
 
 const genScripts = () => {
   let scripts = `<script async type="module" src="${esmFile}"></script>`;
@@ -66,27 +67,26 @@ const plugins = () => [
   replace({
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
   }),
-  url(),
+  json(),
+  typescript({ abortOnError: false }),
   hotcss({
     hot: development,
-    filename: development ? 'styles.css' : 'static/assets/styles.css',
+    filename: development ? 'styles.css' : 'css/styles.css',
   }),
-  typescript(),
   resolve({ extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'] }),
   string({
     include: ['**/*.fs', '**/*.vs'],
   }),
   commonjs({ extensions: ['.js', '.jsx'] }),
   production && terser(),
-  development && refresh(),
 ];
 
 const esm = {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   output: {
     dir: 'build',
     format: 'esm',
-    entryFileNames: development ? '[name].[hash].js' : 'static/js/[name].js',
+    entryFileNames: development ? '[name].[hash].js' : 'js/[name].js',
     assetFileNames: development ? '[name].[hash][extname]' : '[name][extname]',
     sourcemap: true,
   },
@@ -99,7 +99,7 @@ const iife = {
   output: {
     dir: 'build',
     format: 'iife',
-    entryFileNames: 'static/js/[name].legacy.js',
+    entryFileNames: 'js/[name].legacy.js',
     assetFileNames: development ? '[name][hash][extname]' : '[name][extname]',
     name: appName,
     sourcemap: true,

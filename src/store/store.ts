@@ -12,7 +12,6 @@ import createEffects, { composer } from './effects';
 import { reducers } from './reducers';
 import { StateType, PackageType } from '../types';
 import { composeEnhancers } from './devtools';
-import pkg from '../../package.json';
 
 let store: Store;
 
@@ -28,7 +27,7 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const fxComposer = disableEffects ? undefined : composer;
   const doInit = init(fxComposer);
   let state = await doInit();
-  const pk = pkg as unknown;
+  const pk = { name: 'JTyper', version: '0.1.0' };
   state = reducers[state.type]({ ...initialState, package: pk as PackageType }, state);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
