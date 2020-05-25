@@ -19,12 +19,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        run: yarn workspace @widdio/app build
+        run: yarn build
 
       - name: Deploy app
         uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: packages/app/build # The folder the action should deploy.
+          FOLDER: build # The folder the action should deploy.
           TARGET_FOLDER: /app
