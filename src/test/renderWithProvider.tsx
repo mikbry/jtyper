@@ -17,7 +17,6 @@ import { initialState } from '../store/reducers';
 import { initStore } from '../store';
 import { StateType, PackageType } from '../types';
 import { initEffects } from '../store/effects';
-import pkg from '../../package.json';
 
 type Opts = {
   state?: Partial<StateType>;
@@ -38,7 +37,7 @@ const renderWithProvider = async (
     store = await initStore(iState, true);
   } else if (!store || state) {
     initEffects({});
-    const pk = pkg as unknown;
+    const pk = { name: 'JTyper', version: '0.1.0' };
     const mockStore = configureStore([thunk]);
     store = mockStore({
       editor: {},

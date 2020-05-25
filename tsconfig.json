@@ -1,25 +1,32 @@
 {
   "compilerOptions": {
-      "outDir": "./dist",
-      "baseUrl": "src",
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowJs": true,
-      "checkJs": false,
-      "strict": true,
-      "module": "ES6",
-      "target": "ES6",
-      "jsx": "react",
-      "moduleResolution": "node",
-      "lib": ["ESNext", "dom"],
-      "forceConsistentCasingInFileNames": true,
-      "resolveJsonModule": true,
-      "sourceMap": true,
-      "declaration": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "experimentalDecorators": true,
-      "incremental": true,
-      "noFallthroughCasesInSwitch": true
-  }
+    "declaration": false,
+    "noImplicitAny": true,
+    "outDir": "./build",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "module": "ES6",
+    "target": "ES6",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": ["node_modules", "src/**/*.test.ts", "src/store/devtools.ts"]
 }
