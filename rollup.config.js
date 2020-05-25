@@ -80,7 +80,7 @@ const plugins = () => [
   }),
   commonjs({
     include: 'node_modules/**',
-    namedExports: {
+    /* namedExports: {
       'node_modules/react/index.js': [
         'cloneElement',
         'createContext',
@@ -93,7 +93,7 @@ const plugins = () => [
         'isValidElementType',
         'ForwardRef'
       ]
-    }
+    } */
   }),
   production && terser(),
 ];
