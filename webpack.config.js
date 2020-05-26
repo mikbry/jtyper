@@ -74,7 +74,7 @@ module.exports = {
       },
       {
         pattern: '%STYLES%',
-        replacement: './syles.css',
+        replacement: '',
       },
     ]),
   ],
