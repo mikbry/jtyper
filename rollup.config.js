@@ -57,6 +57,7 @@ const plugins = () => [
           'public/logo512.png',
           'public/manifest.json',
           'public/robots.text',
+          'public/404.html',
         ],
         dest: 'build',
       },
