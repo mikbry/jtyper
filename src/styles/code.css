@@ -6,6 +6,14 @@
 
 .CodeMirror {
   min-height: 32px;
-  height: 100%;
+  height: auto;
+  width: calc(100% - 2px);
   background-color: whitesmoke;
+}
+
+.CodeMirror-scroll>div:nth-last-child(2) {
+  display: none;
+}
+.CodeMirror-scroll {
+  height: calc(100% - 2px);
 }
