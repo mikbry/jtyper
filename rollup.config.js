@@ -10,6 +10,11 @@ import json from '@rollup/plugin-json';
 import { string } from 'rollup-plugin-string';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 
+import * as react from 'react';
+import * as reactDom from 'react-dom';
+import * as reactIs from 'react-is';
+import * as propTypes from 'prop-types';
+
 const appName = 'JTyper';
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -84,7 +89,7 @@ const plugins = () => [
   }),
   commonjs({
     include: 'node_modules/**',
-    namedExports: {
+    /* namedExports: {
       'node_modules/react/index.js': [
         'cloneElement',
         'forwardRef',
@@ -104,12 +109,14 @@ const plugins = () => [
         'useDebugValue',
       ],
       'node_modules/react-dom/index.js': ['render', 'hydrate'],
-      'node_modules/react-is/index.js': [
-        'isElement',
-        'isValidElementType',
-        'ForwardRef'
-      ]
-    }
+      'node_modules/react-is/index.js': ['isElement', 'isValidElementType', 'ForwardRef'],
+    }, */
+    namedExports: {
+      'node_modules/react/index.js': Object.keys(react),
+      'node_modules/react-dom/index.js': Object.keys(reactDom),
+      'node_modules/react-is/index.js': Object.keys(reactIs),
+      'prop-types': Object.keys(propTypes),
+    },
   }),
   production && terser(),
 ];
