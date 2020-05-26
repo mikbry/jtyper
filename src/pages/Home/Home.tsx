@@ -20,6 +20,8 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
+const contentBase = process.env.CONTENT_BASE || '';
+
 const Home: FunctionComponent = () => (
   <Page>
     <AppBar />
@@ -29,7 +31,7 @@ const Home: FunctionComponent = () => (
       </Drawer>
       <Container>
         <div>Welcome to JTyper</div>
-        <Link to='/p/jtyper'>Project demo</Link>
+        <Link to={`${contentBase}/p/jtyper`}>Project demo</Link>
       </Container>
     </Wrapper>
   </Page>

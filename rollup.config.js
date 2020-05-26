@@ -11,12 +11,13 @@ import { string } from 'rollup-plugin-string';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 const appName = 'JTyper';
-const CONTENT_BASE = process.env.CONTENT_BASE || '/';
+const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
 const development = NODE_ENV === 'development';
 const outputFile = production ? 'js/index' : '/index.[hash]';
-const publicUrl = process.env.PUBLIC_URL || '';
+const PUBLIC_URL = process.env.PUBLIC_URL || '';
+const publicUrl = PUBLIC_URL + CONTENT_BASE;
 const esmFile = `${outputFile}.js`;
 const iifeFile = `${outputFile}.legacy.js`;
 const styles = development ? '/styles.[hash].css' : 'css/styles.css';
@@ -67,7 +68,7 @@ const plugins = () => [
   }),
   replace({
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-    'process.env.PUBLIC_URL': JSON.stringify(publicUrl),
+    'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
     'process.env.CONTENT_BASE': JSON.stringify(CONTENT_BASE),
   }),
   json(),
