@@ -15,15 +15,15 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
 const development = NODE_ENV === 'development';
 const outputFile = production ? 'js/index' : '/index.[hash]';
-const publicUrl = process.env.PUBLIC_URL || 'http://localhost:9000';
+const publicUrl = process.env.PUBLIC_URL || '';
 const esmFile = `${outputFile}.js`;
 const iifeFile = `${outputFile}.legacy.js`;
 const styles = development ? '/styles.[hash].css' : 'css/styles.css';
 
 const genScripts = () => {
-  let scripts = `<script async type="module" src="/${esmFile}"></script>`;
+  let scripts = `<script async type="module" src="${publicUrl}/${esmFile}"></script>`;
   if (production) {
-    scripts += `<script nomodule src="/${iifeFile}"></script>`;
+    scripts += `<script nomodule src="${publicUrl}/${iifeFile}"></script>`;
   }
   return scripts;
 };
