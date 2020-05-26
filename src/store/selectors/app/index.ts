@@ -87,11 +87,12 @@ export const createNewTitle = (files: Array<NotebookType>, fromTitle?: string): 
   return title;
 };
 
+const contentBase = process.env.CONTENT_BASE || '';
 export const generateUrl = (publisherName: string, notebookId?: string): string => {
   if (!notebookId) {
-    return `/p/${publisherName.toLowerCase()}`;
+    return `${contentBase}/p/${publisherName.toLowerCase()}`;
   }
-  return `/p/${publisherName.toLowerCase()}/${notebookId.toLowerCase()}`;
+  return `${contentBase}/p/${publisherName.toLowerCase()}/${notebookId.toLowerCase()}`;
 };
 
 export const getNextFile = (filesLength: number, index: number | undefined): number | undefined => {
