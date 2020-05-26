@@ -18,9 +18,6 @@ type Props = {
   store: Store;
 };
 
-console.log('process.env.PUBLIC_URL', process.env.PUBLIC_URL);
-console.log('process.env.CONTENT_BASE', process.env.CONTENT_BASE);
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 const contentBase = process.env.CONTENT_BASE || '';
 
 const App: FunctionComponent<Props> = ({ store }) => (
