@@ -21,9 +21,9 @@ const iifeFile = `${outputFile}.legacy.js`;
 const styles = development ? '/styles.[hash].css' : 'css/styles.css';
 
 const genScripts = () => {
-  let scripts = `<script async type="module" src="${esmFile}"></script>`;
+  let scripts = `<script async type="module" src="/${esmFile}"></script>`;
   if (production) {
-    scripts += `<script nomodule src="${iifeFile}"></script>`;
+    scripts += `<script nomodule src="/${iifeFile}"></script>`;
   }
   return scripts;
 };
@@ -95,6 +95,9 @@ const plugins = () => [
         'useContext',
         'useLayoutEffect',
         'useReducer',
+        'Children',
+        'isValidElement',
+        'useDebugValue',
       ],
       'node_modules/react-dom/index.js': ['render', 'hydrate'],
       'node_modules/react-is/index.js': [

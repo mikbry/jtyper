@@ -29,7 +29,7 @@ const Home: FunctionComponent = () => (
       </Drawer>
       <Container>
         <div>Welcome to JTyper</div>
-        <Link to='/p/main'>Project demo</Link>
+        <Link to='/p/jtyper'>Project demo</Link>
       </Container>
     </Wrapper>
   </Page>
