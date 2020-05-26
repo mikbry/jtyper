@@ -23,12 +23,12 @@ const contentBase = process.env.CONTENT_BASE || '';
 const App: FunctionComponent<Props> = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <Routes>
-        <Route path={`${contentBase}/`} element={<Home />} />
-        <Route path={`${contentBase}/p`} element={<Project />} />
-        <Route path={`${contentBase}/p/:publisherName`} element={<Project />} />
-        <Route path={`${contentBase}/p/:publisherName/:notebookId`} element={<Project />} />
-        <Route path={`${contentBase}/:publisherName/:notebookId`} element={<Publication />} />
+      <Routes basename={contentBase}>
+        <Route path='/' element={<Home />} />
+        <Route path='/p' element={<Project />} />
+        <Route path='/p/:publisherName' element={<Project />} />
+        <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+        <Route path='/:publisherName/:notebookId' element={<Publication />} />
       </Routes>
     </Router>
   </Provider>
