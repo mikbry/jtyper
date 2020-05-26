@@ -10,7 +10,8 @@ import json from '@rollup/plugin-json';
 import { string } from 'rollup-plugin-string';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 
-const appName = 'rollupReactApp';
+const appName = 'JTyper';
+const CONTENT_BASE = process.env.CONTENT_BASE || '/';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
 const development = NODE_ENV === 'development';
@@ -66,6 +67,8 @@ const plugins = () => [
   }),
   replace({
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
+    'process.env.PUBLIC_URL': JSON.stringify(publicUrl),
+    'process.env.CONTENT_BASE': JSON.stringify(CONTENT_BASE),
   }),
   json(),
   nodePolyfills(),
@@ -105,7 +108,7 @@ const plugins = () => [
         'isValidElementType',
         'ForwardRef'
       ]
-    } 
+    }
   }),
   production && terser(),
 ];

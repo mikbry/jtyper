@@ -24,6 +24,7 @@ jobs:
         run: yarn build
         env:
           PUBLIC_URL: https://mikbry.github.io/jtyper
+          CONTENT_BASE: /jtyper/
           NODE_ENV: production
 
       - name: Deploy app
