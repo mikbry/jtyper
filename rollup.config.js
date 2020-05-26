@@ -17,15 +17,16 @@ import * as propTypes from 'prop-types';
 
 const appName = 'JTyper';
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
+const PUBLIC_URL = process.env.PUBLIC_URL || '';
+const publicUrl = PUBLIC_URL + CONTENT_BASE;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
 const development = NODE_ENV === 'development';
 const outputFile = production ? 'js/index' : '/index.[hash]';
-const PUBLIC_URL = process.env.PUBLIC_URL || '';
-const publicUrl = PUBLIC_URL + CONTENT_BASE;
 const esmFile = `${outputFile}.js`;
 const iifeFile = `${outputFile}.legacy.js`;
-const styles = development ? '/styles.[hash].css' : 'css/styles.css';
+let styles = development ? '/styles.[hash].css' : `${CONTENT_BASE}/css/styles.css`;
+styles = `<link rel="stylesheet" type="text/css" href="${styles}">`;
 
 const genScripts = () => {
   let scripts = `<script async type="module" src="${publicUrl}/${esmFile}"></script>`;

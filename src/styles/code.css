@@ -6,6 +6,6 @@
 
 .CodeMirror {
   min-height: 32px;
-  height: initial;
+  height: 100%;
   background-color: whitesmoke;
 }

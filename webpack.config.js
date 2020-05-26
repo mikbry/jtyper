@@ -5,7 +5,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const CONTENT_BASE = process.env.CONTENT_BASE || '';
+const PUBLIC_URL = process.env.PUBLIC_URL || '';
+const publicUrl = PUBLIC_URL + CONTENT_BASE;
 
 module.exports = {
   entry: './src/index.ts',
@@ -60,11 +62,19 @@ module.exports = {
     new HtmlReplaceWebpackPlugin([
       {
         pattern: '%PUBLIC_URL%',
-        replacement: isDevelopment ? 'http://localhost:9010' : 'https://mikbry.github.io/jtyper',
+        replacement: publicUrl,
       },
       {
         pattern: '%TITLE%',
         replacement: 'Jtyper',
+      },
+      {
+        pattern: '%SCRIPTS%',
+        replacement: '',
+      },
+      {
+        pattern: '%STYLES%',
+        replacement: '',
       },
     ]),
   ],
