@@ -33,9 +33,11 @@ const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onCha
   return (
     <CodeMirror2
       value={value}
+      autoScroll={false}
       options={{
         lineNumbers: false,
         mode,
+        scrollbarStyle: 'null',
       }}
       editorDidMount={editor => {
         // Very hard to create a use case for this so we ignore for now
