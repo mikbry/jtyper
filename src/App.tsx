@@ -18,6 +18,8 @@ type Props = {
   store: Store;
 };
 
+console.log('process.env', process.env);
+
 const App: FunctionComponent<Props> = ({ store }) => (
   <Provider store={store}>
     <Router>
