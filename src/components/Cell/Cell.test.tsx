@@ -90,7 +90,7 @@ test('Cell should be editable and selected', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} editable selected>
+      <Cell onClick={on} onChange={on} editable selected edited>
         text
       </Cell>
     </MockupProvider>,
@@ -120,7 +120,7 @@ test('editable & selected Cell with markdown should display Editor', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='markdown' editable selected>
+      <Cell onClick={on} onChange={on} format='markdown' editable selected edited>
         text
       </Cell>
     </MockupProvider>,
@@ -150,7 +150,7 @@ test('editable & selected Cell with code should display Editor', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code' editable selected>
+      <Cell onClick={on} onChange={on} format='code' editable selected edited>
         text
       </Cell>
     </MockupProvider>,
@@ -169,7 +169,7 @@ test('editable & selected Cell with code should be changed', async () => {
   });
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={onClick} onChange={onChange} format='code' editable selected>
+      <Cell onClick={onClick} onChange={onChange} format='code' editable selected edited>
         {' '}
       </Cell>
     </MockupProvider>,
@@ -194,7 +194,7 @@ test('editable & selected Cell with code should be changed', async () => {
     await userEvent.type(textarea, helloword);
   }
   expect(onChange).toHaveBeenCalledTimes(helloword.length);
-  expect(value).toBe(` ${helloword}`);
+  expect(value).toBe(`${helloword} `);
 });
 
 test('Cell with code out should display it', () => {

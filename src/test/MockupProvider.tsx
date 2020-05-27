@@ -18,6 +18,12 @@ import { StateType } from '../types';
 import { BasicTheme } from '../themes';
 import { initEffects } from '../store/effects';
 
+Object.defineProperty(window, 'focus', {
+  value: () => {
+    //
+  },
+});
+
 type MockupProviderProps = {
   initialstate?: Partial<StateType>;
   theme?: DefaultTheme;
