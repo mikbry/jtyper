@@ -402,6 +402,7 @@ span.CodeMirror-selectedtext { background: none; }
   height: auto;
   width: calc(100% - 2px);
   background-color: whitesmoke;
+  cursor: text;
 }
 
 .CodeMirror-scroll>div:nth-last-child(2) {
