@@ -163,7 +163,7 @@ test('editable & selected Cell with code should display Editor', () => {
 
 test('editable & selected Cell with code should be changed', async () => {
   const onClick = jest.fn();
-  let value;
+  let value = '';
   const onChange = jest.fn().mockImplementation(newValue => {
     value = newValue;
   });
@@ -194,7 +194,7 @@ test('editable & selected Cell with code should be changed', async () => {
     await userEvent.type(textarea, helloword);
   }
   expect(onChange).toHaveBeenCalledTimes(helloword.length);
-  expect(value).toBe(`${helloword} `);
+  expect(value.trim()).toBe(helloword);
 });
 
 test('Cell with code out should display it', () => {
