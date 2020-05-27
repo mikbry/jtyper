@@ -41,6 +41,7 @@ export interface PublisherType {
 export interface EditorType {
   selected?: number;
   selectedCell?: number;
+  mode?: 'edit';
   readOnly?: boolean;
   copyBuffer?: Partial<CellType>;
 }

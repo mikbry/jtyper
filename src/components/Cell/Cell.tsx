@@ -15,6 +15,7 @@ import { LogEntryType } from '../../types';
 
 interface Props {
   selected?: boolean;
+  edited?: boolean;
   editable?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange: (value: string) => void;
@@ -25,13 +26,16 @@ interface Props {
 
 interface StyledProps {
   selected?: boolean;
+  edited?: boolean;
   editable?: boolean;
   selecting?: boolean;
   theme: DefaultTheme;
 }
 
 const chooseBorderColor = (props: StyledProps, hover = false) => {
-  if (props.selected) return props.theme.palette.secondary;
+  console.log('props.edited=', props.edited);
+  if (props.selected && props.edited) return props.theme.palette.secondary;
+  if (props.selected) return props.theme.palette.surface;
   if (props.editable && hover) return props.theme.palette.surface;
   return props.theme.palette.notebook;
 };
@@ -129,6 +133,7 @@ OutError.defaultProps = { theme: BasicTheme };
 
 const Cell: FunctionComponent<Props> = ({
   selected = false,
+  edited = false,
   editable = false,
   format = undefined,
   out = undefined,
@@ -147,21 +152,21 @@ const Cell: FunctionComponent<Props> = ({
   let content = <>{value}</>;
   if (format === 'markdown') {
     content =
-      selected && editable ? (
+      selected && edited && editable ? (
         <Editor value={value} onChange={onChange} language='markdown' focus />
       ) : (
         <Highlighter value={value} />
       );
   } else if (format === 'code') {
     content =
-      selected && editable ? (
+      selected && edited && editable ? (
         <Editor value={value} onChange={onChange} language='javascript' focus />
       ) : (
         <CodeHighlighter value={value} />
       );
   } else {
     content =
-      selected && editable ? (
+      selected && edited && editable ? (
         <Editor value={value} onChange={onChange} language='raw' focus />
       ) : (
         <RawContent data-testid='rawcontent'>{value}</RawContent>
@@ -172,6 +177,7 @@ const Cell: FunctionComponent<Props> = ({
     <Styled
       role='button'
       selected={selected}
+      edited={edited}
       editable={editable}
       onClick={onClick}
       onBlur={handleBlur}
@@ -180,8 +186,10 @@ const Cell: FunctionComponent<Props> = ({
       ref={cellRef}
       suppressContentEditableWarning
     >
-      <Line selected={selected}>
-        <Prompt selected={selected}>{format === 'code' && `In [${'   '}] :`}</Prompt>
+      <Line selected={selected} edited={edited}>
+        <Prompt selected={selected} edited={edited}>
+          {format === 'code' && `In [${'   '}] :`}
+        </Prompt>
         {content}
       </Line>
       {out?.length && (

@@ -135,9 +135,9 @@ const resetAllCell = () => (dispatch: DispatchType, getState: Function) => {
   dispatch(save({ files: true }));
 };
 
-const selectCell = (action: { selected: number | undefined }) => (dispatch: DispatchType) => {
-  const { selected } = action;
-  dispatch({ type: APP.SELECTCELL + DONE, selected });
+const selectCell = (action: { selected: number | undefined; mode: 'edit' | undefined }) => (dispatch: DispatchType) => {
+  const { selected, mode } = action;
+  dispatch({ type: APP.SELECTCELL + DONE, selected, mode });
   dispatch(save({ editor: true }));
 };
 
