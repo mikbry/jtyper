@@ -40,7 +40,7 @@ test('Notebook without notebook should display "No content"', async () => {
 
 test('Notebook selected with data should display content', async () => {
   const state: Partial<StateType> = {
-    editor: { selected: 0, selectedCell: 0 },
+    editor: { selected: 0, selectedCell: 0, mode: 'edit' },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
   const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
@@ -89,6 +89,28 @@ test('Notebook readonly should not  delete content', async () => {
 test('Notebook editable should have content deleted', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
+    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text' }] }],
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'd',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  const files = state.files as NotebookType[];
+  expect(files[0].cells?.length).toBe(0);
+});
+
+test('Notebook edited should have content deleted', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0, mode: 'edit' },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text' }] }],
   };
   const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
@@ -315,7 +337,7 @@ test('Notebook editable should copy/paste content', async () => {
 
 test('Notebook editable should escape', async () => {
   let state: Partial<StateType> = {
-    editor: { selected: 0, selectedCell: 0 },
+    editor: { selected: 0, selectedCell: 0, mode: 'edit' },
     files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'text' }] }],
     saved: false,
   };

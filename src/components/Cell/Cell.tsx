@@ -33,7 +33,6 @@ interface StyledProps {
 }
 
 const chooseBorderColor = (props: StyledProps, hover = false) => {
-  console.log('props.edited=', props.edited);
   if (props.selected && props.edited) return props.theme.palette.secondary;
   if (props.selected) return props.theme.palette.surface;
   if (props.editable && hover) return props.theme.palette.surface;
