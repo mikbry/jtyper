@@ -22,6 +22,7 @@ beforeAll(() => {
     value: () => ({ left: 22, top: 90 }),
   });
   Object.defineProperty(document.body, 'createTextRange', {
+    configurable: true,
     value: () => ({ getBoundingClientRect: jest.fn(), getClientRects: () => ({ length: 0 }) }),
   });
   Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
