@@ -1,0 +1,29 @@
+{
+  "files": [
+   {
+    "type": "notebook",
+    "metadata": {},
+    "source": [
+     "./home.ipynb"
+    ]
+   }
+  ],
+  "metadata": {
+   "kernelspec": {
+    "display_name": "ES6",
+    "language": "javascript",
+    "name": "ES6"
+   },
+   "language_info": {
+    "codemirror_mode": {
+     "name": "javascript"
+    },
+    "file_extension": ".js",
+    "mimetype": "text/javascript",
+    "name": "javascript",
+    "nbconvert_exporter": "javascript"
+   }
+  },
+  "jtformat": 1,
+  "jtformat_minor": 1
+ }
