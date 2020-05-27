@@ -27,6 +27,7 @@ beforeAll(() => {
     value: () => ({ getBoundingClientRect: jest.fn(), getClientRects: () => ({ length: 0 }) }),
   });
   Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+    configurable: true,
     value: () => () => {
       /* */
     },
