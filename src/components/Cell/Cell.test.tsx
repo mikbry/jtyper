@@ -26,6 +26,11 @@ beforeAll(() => {
   Object.defineProperty(document.body, 'createTextRange', {
     value: () => ({ getBoundingClientRect: jest.fn(), getClientRects: () => ({ length: 0 }) }),
   });
+  Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+    value: () => () => {
+      /* */
+    },
+  });
 });
 
 test('Cell should render correctly', () => {

@@ -142,9 +142,18 @@ const Cell: FunctionComponent<Props> = ({
 }) => {
   const cellRef = useRef<HTMLInputElement>(null);
   const value = children;
+  const scrollIntoCell = () => {
+    if (selected && cellRef.current) {
+      cellRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      });
+    }
+  };
+  scrollIntoCell();
   useEffect(() => {
-    // setCell
-  }, []);
+    scrollIntoCell();
+  });
   const handleBlur = () => {
     //  if (cellRef.current) onChange(cellRef.current.innerText);
   };
