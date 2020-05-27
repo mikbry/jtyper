@@ -32,7 +32,7 @@ const Notebook: FunctionComponent = () => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const dispatch = useDispatch();
   const handleSelectCell = (selected: number) => {
-    dispatch(selectCell({ selected }));
+    dispatch(selectCell({ selected, mode: 'edit' }));
   };
   const handleCellChange = (index: number, value: string, notebook: NotebookType) => {
     const cell = { ...notebook.cells[index], raw: value };
@@ -41,10 +41,12 @@ const Notebook: FunctionComponent = () => {
 
   let content;
   let readOnly = true;
+  let edited = false;
   let selectedCell = -1;
   const notebook = getNotebook(editor.selected, files);
   if (notebook) {
     ({ selectedCell = -1 } = editor);
+    edited = editor.mode === 'edit';
     ({ readOnly = false } = notebook);
     content = (
       <>
@@ -53,6 +55,7 @@ const Notebook: FunctionComponent = () => {
             key={cell.id}
             format={cell.format}
             out={cell.out}
+            edited={edited}
             editable={!readOnly}
             selected={index === selectedCell}
             onChange={value => {

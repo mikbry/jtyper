@@ -30,6 +30,12 @@ const commands = [
         altKey: false,
         cmd: () => createCell(),
       },
+    ],
+  },
+  {
+    // We could edit a notebook
+    conditions: (editor: EditorType) => !editor.readOnly && !editor.mode,
+    shortcuts: [
       {
         key: 'v',
         name: 'Paste cell',
@@ -44,7 +50,7 @@ const commands = [
         altKey: false,
         cmd: (editor: EditorType) => {
           const selected = editor.selectedCell === undefined ? 0 : editor.selectedCell - 1;
-          return selectCell({ selected });
+          return selectCell({ selected, mode: undefined });
         },
       },
       {
@@ -54,7 +60,7 @@ const commands = [
         altKey: false,
         cmd: (editor: EditorType) => {
           const selected = editor.selectedCell === undefined ? 0 : editor.selectedCell + 1;
-          return selectCell({ selected });
+          return selectCell({ selected, mode: undefined });
         },
       },
     ],
@@ -62,7 +68,7 @@ const commands = [
   {
     // We could have a selected cell and edit it
     conditions: (editor: EditorType) =>
-      !editor.readOnly && editor.selectedCell !== undefined && editor.selectedCell > -1,
+      !editor.readOnly && editor.selectedCell !== undefined && editor.selectedCell > -1 && !editor.mode,
     shortcuts: [
       {
         key: 'd',
@@ -73,13 +79,6 @@ const commands = [
           const selected = editor.selectedCell as number;
           return deleteCell({ selected });
         },
-      },
-      {
-        key: 'Escape',
-        name: 'Escape cell',
-        ctrlKey: false,
-        altKey: false,
-        cmd: () => selectCell({ selected: undefined }),
       },
       {
         key: 'x',
@@ -102,16 +101,40 @@ const commands = [
   },
   {
     // We could have a selected cell and edit it
-    conditions: (editor: EditorType) => !editor.readOnly && editor.selectedCell === undefined,
+    conditions: (editor: EditorType) =>
+      !editor.readOnly && editor.selectedCell !== undefined && editor.selectedCell > -1 && editor.mode === 'edit',
+    shortcuts: [
+      {
+        key: 'd',
+        name: 'Delete cell',
+        ctrlKey: true,
+        altKey: false,
+        cmd: (editor: EditorType) => {
+          const selected = editor.selectedCell as number;
+          return deleteCell({ selected });
+        },
+      },
+      {
+        key: 'Escape',
+        name: 'Escape cell',
+        ctrlKey: false,
+        altKey: false,
+        cmd: () => selectCell({ selected: undefined, mode: undefined }),
+      },
+    ],
+  },
+  {
+    // We could have a selected cell and edit it
+    conditions: (editor: EditorType) => !editor.readOnly && editor.mode === undefined,
     shortcuts: [
       {
         key: 'Enter',
         name: 'Enter cell',
         ctrlKey: false,
         altKey: false,
-        cmd: () => {
-          const selected = 0;
-          return selectCell({ selected });
+        cmd: (editor: EditorType) => {
+          const selected = editor.selectedCell || 0;
+          return selectCell({ selected, mode: 'edit' });
         },
       },
     ],

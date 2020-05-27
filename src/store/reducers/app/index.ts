@@ -48,7 +48,7 @@ const handlers = {
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
     const { editor: e, files } = state;
-    const editor = { ...e, selected, selectedCell: undefined };
+    const editor = { ...e, selected, selectedCell: undefined, mode: undefined };
     const title = getNotebookTitle(editor, files);
     return { ...state, editor, title, saved: false };
   },
@@ -74,6 +74,7 @@ const handlers = {
       localStorage: true,
     };
     editor.selected = files.length;
+    editor.mode = undefined;
     files.push(notebook);
     return { ...state, files, editor, saved: false, title };
   },
@@ -88,6 +89,7 @@ const handlers = {
     const { files, editor } = state;
     files.splice(index, 1);
     editor.selectedCell = undefined;
+    editor.mode = undefined;
     if (files.length === 0) {
       editor.selected = undefined;
     } else if (editor.selected !== undefined && editor.selected >= files.length) {
@@ -116,8 +118,8 @@ const handlers = {
     }
     return { ...state, files, saved: false };
   },
-  [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number | undefined }) => {
-    const { selected } = action;
+  [APP.SELECTCELL + DONE]: (state: StateType, action: { selected: number | undefined; mode: 'edit' | undefined }) => {
+    const { selected, mode } = action;
     const { files, editor } = state;
 
     const notebook = getCurrentNotebook(editor, files);
@@ -127,7 +129,7 @@ const handlers = {
       selectedCell = validateSelectedCell(selected, length);
     }
     const { title } = notebook;
-    return { ...state, editor: { ...editor, selectedCell }, saved: false, title };
+    return { ...state, editor: { ...editor, selectedCell, mode }, saved: false, title };
   },
   [APP.DELETECELL + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
@@ -137,7 +139,7 @@ const handlers = {
     notebook.cells.splice(selected, 1);
     const { length } = notebook.cells;
     selectedCell = validateSelectedCell(selected, length);
-    return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
+    return { ...state, editor: { ...editor, selectedCell, mode: undefined }, files, saved: false };
   },
   [APP.COPY + DONE]: (state: StateType, action: { selected: number; cell: CellType }) => {
     const { selected, cell } = action;
@@ -164,7 +166,7 @@ const handlers = {
       format: copyBuffer.format,
     };
     notebook.cells.splice(selectedCell, 0, cell);
-    return { ...state, editor: { ...editor, selectedCell }, files, saved: false };
+    return { ...state, editor: { ...editor, selectedCell, mode: undefined }, files, saved: false };
   },
   [APP.LOCALSAVE + DONE]: (state: StateType) => ({ ...state, saved: true }),
 };

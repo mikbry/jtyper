@@ -81,11 +81,11 @@ const Toolbar: FunctionComponent = () => {
   };
   const handleUp = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell - 1;
-    dispatch(selectCell({ selected }));
+    dispatch(selectCell({ selected, mode: undefined }));
   };
   const handleDown = () => {
     const selected = selectedCell === undefined ? 0 : selectedCell + 1;
-    dispatch(selectCell({ selected }));
+    dispatch(selectCell({ selected, mode: undefined }));
   };
   const handleFormatChange = (value: string) => {
     const c: CellType = { ...cell } as CellType;

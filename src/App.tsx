@@ -27,8 +27,11 @@ const App: FunctionComponent<Props> = ({ store }) => (
         <Route path='/' element={<Home />} />
         <Route path='/p' element={<Project />} />
         <Route path='/p/:publisherName' element={<Project />} />
+        <Route path='/?p=/p/:publisherName' element={<Project />} />
         <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+        <Route path='/?p=/p/:publisherName/:notebookId' element={<Project />} />
         <Route path='/:publisherName/:notebookId' element={<Publication />} />
+        <Route path='/?p=/:publisherName/:notebookId' element={<Publication />} />
       </Routes>
     </Router>
   </Provider>
