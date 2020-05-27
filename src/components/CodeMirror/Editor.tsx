@@ -40,12 +40,12 @@ const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onCha
         scrollbarStyle: 'null',
       }}
       editorDidMount={editor => {
-        console.log('Edtior focus', editor.hasFocus());
         // Very hard to create a use case for this so we ignore for now
         /* istanbul ignore next */
         if (!editor.hasFocus()) {
           editor.focus();
-          editor.setCursor(0);
+          // TODO setCursor based on mouse position
+          // editor.setCursor(0);
         }
       }}
       onChange={(_editor, _data, newValue) => {
