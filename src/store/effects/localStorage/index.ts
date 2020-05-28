@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { APP, INITIALIZE, FETCH } from '../../../constants';
+import { APP, INITIALIZE, STORAGE, FETCH } from '../../../constants';
 import { ActionsType } from '../../../types';
 
 const get = async ({ name, defaultValue }: any) => {
@@ -35,7 +35,7 @@ const set = async (data: any) => {
 };
 
 const storage: ActionsType = {
-  [INITIALIZE]: { get },
+  [INITIALIZE + STORAGE]: { get },
   [APP.LOCALSAVE + FETCH]: { set },
 };
 

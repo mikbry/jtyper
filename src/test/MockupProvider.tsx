@@ -41,7 +41,7 @@ const MockupProvider: FunctionComponent<MockupProviderProps> = ({
   },
 }) => {
   if (!store || initialstate) {
-    initEffects({});
+    initEffects([{}]);
     const mockStore = configureStore([thunk]);
     store = mockStore({
       editor: {},

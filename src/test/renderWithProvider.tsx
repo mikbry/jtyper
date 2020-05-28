@@ -36,7 +36,7 @@ const renderWithProvider = async (
     const iState = { ...initialState, ...state };
     store = await initStore(iState, true);
   } else if (!store || state) {
-    initEffects({});
+    initEffects([{}]);
     const pk = { name: 'JTyper', version: '0.1.0' };
     const mockStore = configureStore([thunk]);
     store = mockStore({
