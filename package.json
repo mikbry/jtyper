@@ -10,8 +10,8 @@
   "private": true,
   "scripts": {
     "clean": "rimraf build && mkdir build",
-    "build": "yarn clean &  cross-env NODE_ENV=production rollup -c",
-    "start": "yarn clean &  cross-env NODE_ENV=development webpack-dev-server --mode development --open --hot --port 9010",
+    "build": "yarn clean & cross-env NODE_ENV=production rollup -c",
+    "start": "webpack-dev-server --env.NOTEBOOK_PATH=notebooks --mode development --open --hot --port 9010",
     "lint": "$(yarn bin)/eslint src --ext .ts",
     "test": "cross-env NODE_ENV=test  jest",
     "test:watch": "jest --watch",
@@ -42,6 +42,7 @@
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^7.0.0",
     "css-loader": "^3.5.2",
+    "dotenv-webpack": "^1.8.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.10.0",

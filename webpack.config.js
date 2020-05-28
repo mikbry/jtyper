@@ -4,6 +4,7 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const PUBLIC_URL = process.env.PUBLIC_URL || '';
@@ -47,6 +48,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'public'),
   },
   plugins: [
+    new Dotenv(),
     new CopyWebpackPlugin([
       {
         context: path.resolve('./public/'),

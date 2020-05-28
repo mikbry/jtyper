@@ -28,8 +28,10 @@ import initSandbox from '../effects/sandbox';
 const init = async (fxComposer?: ComposerType): Promise<[Partial<StateType>, Function]> => {
   const sandbox = await initSandbox();
   const postInit = async () => {
+    console.log('postInit=', process.env.NOTEBOOK_PATH, process.env.NODE_ENV);
     if (process.env.NOTEBOOK_PATH) {
       // TODO load from server
+      console.log('load from server', process.env.NOTEBOOK_PATH);
     }
   };
   if (fxComposer) {
