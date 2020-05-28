@@ -10,6 +10,7 @@ import { APP, INITIALIZE, DONE } from '../../../constants';
 import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
 import {
   generateId,
+  getNotebookIndexById,
   getCurrentNotebook,
   getNotebookTitle,
   validateSelectedCell,
@@ -45,6 +46,19 @@ const handlers = {
     const title = getNotebookTitle(editor, files);
     return { ...initialState, document, files, editor, init: true, saved: true, title, sandbox };
   },
+  [APP.ADDFILES + DONE]: (state: StateType, action: { files: NotebookType[] }) => {
+    const { files: newFiles } = action;
+    const { files } = state;
+    newFiles.forEach(f => {
+      const i = files.findIndex(ff => ff.id === f.id);
+      if (i > -1) {
+        files.splice(i, 1, f);
+      } else {
+        files.push(f);
+      }
+    });
+    return { ...state, files, saved: true };
+  },
   [APP.SELECTFILE + DONE]: (state: StateType, action: { selected: number }) => {
     const { selected } = action;
     const { editor: e, files } = state;
@@ -79,9 +93,10 @@ const handlers = {
     return { ...state, files, editor, saved: false, title };
   },
   [APP.UPDATENOTEBOOK + DONE]: (state: StateType, action: NotebookType) => {
-    const { files, editor } = state;
-    const selected = editor.selected as number;
-    files.splice(selected, 1, action);
+    const { files } = state;
+    const { id } = action;
+    const i = getNotebookIndexById(id, files);
+    files.splice(i, 1, action);
     return { ...state, files };
   },
   [APP.DELETENOTEBOOK + DONE]: (state: StateType, action: { index: number }) => {

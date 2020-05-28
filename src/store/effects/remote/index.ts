@@ -6,7 +6,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, INITIALIZE, SERVER, FETCH } from '../../../constants';
-import { ActionsType, NotebookType } from '../../../types';
+import { ActionsType, NotebookType, CellType } from '../../../types';
+import { generateId } from '../../selectors';
+
+type CELLFILE = {
+  // eslint-disable-next-line prettier/prettier
+  'cell_type': 'markdown' | 'code' | 'raw';
+  source: string[];
+};
 
 type NOTEBOOKFILE = {
   metadata: { id: string; title: string };
@@ -26,6 +33,7 @@ const getNotebooks = async ({ url }: { url: string }) => {
           title: f.metadata.title,
           cells: [],
           url: f.source[0],
+          readOnly: true,
           state: undefined,
           error: undefined,
         };
@@ -36,13 +44,18 @@ const getNotebooks = async ({ url }: { url: string }) => {
   return files;
 };
 
-const getNotebook = async ({ url }: any) => {
-  console.log('getNotebook TODO', url);
+const getNotebook = async ({ notebook }: { notebook: NotebookType }) => {
+  let url = process.env.PUBLIC_URL || '';
+  url += process.env.CONTENT_BASE || '';
+  url += `/${process.env.NOTEBOOK_PATH}/`;
+  url += notebook.url as string;
   const req = await fetch(url);
   const data = await req.json();
-
-  // TODO parse data
-  return data;
+  const cells: CellType[] = [];
+  data.cells.forEach((c: CELLFILE) => {
+    cells.push({ id: generateId(), format: c.cell_type, raw: c.source[0] });
+  });
+  return { ...notebook, cells, state: 'loaded' };
 };
 
 const files: ActionsType = {

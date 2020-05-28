@@ -5,7 +5,8 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { INITIALIZE, STORAGE, SERVER } from '../../constants';
+import { Store } from 'redux';
+import { INITIALIZE, STORAGE, SERVER, APP, DONE, FETCH } from '../../constants';
 import { DocumentType, ComposerType, StateType, NotebookType, EditorType } from '../../types';
 import {
   createNotebook,
@@ -27,16 +28,26 @@ import initSandbox from '../effects/sandbox';
 
 const init = async (compose?: ComposerType): Promise<[Partial<StateType>, Function]> => {
   const sandbox = await initSandbox();
-  const postInit = async () => {
+  const postInit = async (store: Store) => {
     if (process.env.NOTEBOOK_PATH && compose) {
-      // TODO load from server
+      // load from server
       let url = process.env.PUBLIC_URL || '';
       url += process.env.CONTENT_BASE || '';
       url += `/${process.env.NOTEBOOK_PATH}/index.json`;
-      const data = await compose(INITIALIZE + SERVER, {
+      const files: NotebookType[] = (await compose(INITIALIZE + SERVER, {
         url,
-      });
-      console.log('loaded from server data=', data);
+      })) as NotebookType[];
+      store.dispatch({ type: APP.ADDFILES + DONE, files });
+      const { editor, files: fs } = store.getState();
+      if (editor.selected !== undefined) {
+        //
+        const notebook: NotebookType = fs[editor.selected] as NotebookType;
+        if (notebook.url && !notebook.state) {
+          compose(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then(n =>
+            store.dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }),
+          );
+        }
+      }
     }
   };
   if (compose) {

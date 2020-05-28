@@ -51,8 +51,14 @@ const deleteNotebook = (action: { index: number }) => (dispatch: DispatchType) =
   dispatch(save({ editor: true, files: true }));
 };
 
-const selectFile = (action: { selected: number }) => (dispatch: DispatchType) => {
+const selectFile = (action: { selected: number }) => (dispatch: DispatchType, getState: Function) => {
   const { selected } = action;
+  const { files } = getState();
+  const notebook = files[selected];
+  if (notebook.url && !notebook.state) {
+    // Load notebook
+    composer(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then(n => dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }));
+  }
   dispatch({ type: APP.SELECTFILE + DONE, selected });
   dispatch(save({ editor: true }));
 };

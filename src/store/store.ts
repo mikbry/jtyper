@@ -34,6 +34,6 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
   store = createStore(handler, state, enhancer);
-  postInit(store);
+  postInit(store, fxComposer);
   return store;
 };
