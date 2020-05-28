@@ -12,6 +12,9 @@ export const generateId = () =>
     .toString(36)
     .substr(2, 9);
 
+export const getNotebookIndexById = (id: string, files: Array<NotebookType>): number =>
+  files.findIndex(f => f.id === id);
+
 export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType =>
   files[editor.selected as number] as NotebookType;
 

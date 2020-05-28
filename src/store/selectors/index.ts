@@ -8,6 +8,7 @@
 
 import {
   generateId,
+  getNotebookIndexById,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,
@@ -26,6 +27,7 @@ import {
 
 export {
   generateId,
+  getNotebookIndexById,
   getCurrentNotebook,
   getNotebook,
   validateSelectedCell,
