@@ -29,7 +29,7 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const [_state, postInit] = await init(fxComposer);
   let state = _state as StateType;
   // TODO get name/version from process.env
-  const pk = { name: 'JTyper', version: '0.1.0' };
+  const pk = { name: process.env.APP_NAME || 'JTyper', version: process.env.APP_VERSION || '0.1.0' };
   state = reducers[INITIALIZE + DONE]({ ...initialState, package: pk as PackageType }, state);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
