@@ -16,6 +16,7 @@ import * as reactIs from 'react-is';
 import * as propTypes from 'prop-types';
 
 const appName = 'JTyper';
+const { NOTEBOOK_PATH } = process.env;
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const PUBLIC_URL = process.env.PUBLIC_URL || '';
 const publicUrl = PUBLIC_URL + CONTENT_BASE;
@@ -77,6 +78,7 @@ const plugins = () => [
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
     'process.env.CONTENT_BASE': JSON.stringify(CONTENT_BASE),
+    'process.env.NOTEBOOK_PATH': JSON.stringify(NOTEBOOK_PATH),
   }),
   json(),
   nodePolyfills(),

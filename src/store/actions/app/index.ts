@@ -5,8 +5,8 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
-import { StateType, DispatchType, CellType, CellFormat, NotebookType, ComposerType } from '../../../types';
+import { APP, DONE, FETCH } from '../../../constants';
+import { StateType, DispatchType, CellType, CellFormat, NotebookType } from '../../../types';
 import {
   getNotebook,
   getCurrentNotebook,
@@ -18,22 +18,6 @@ import {
   getNotebookCellByIndex,
 } from '../../selectors';
 import { composer } from '../../effects';
-import initSandbox from '../../effects/sandbox';
-
-const init = (fxComposer?: ComposerType) => async () => {
-  const sandbox = await initSandbox();
-  if (fxComposer) {
-    const document = await fxComposer(INITIALIZE, { name: 'document', defaultValue: undefined });
-    const files = await fxComposer(INITIALIZE, { name: 'files', defaultValue: undefined });
-    const editor = await fxComposer(INITIALIZE, { name: 'editor', defaultValue: undefined });
-    const modules = {
-      '@tensorflow/tfjs': { name: '@tensorflow/tfjs', url: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.js' },
-    };
-    sandbox.setModules(modules);
-    return { type: INITIALIZE + DONE, document, files, editor, sandbox, modules };
-  }
-  return { type: INITIALIZE + DONE, sandbox };
-};
 
 const save = (action: { document?: boolean; files?: boolean; editor?: boolean } | undefined = {}) => (
   dispatch: DispatchType,
@@ -176,7 +160,6 @@ const paste = () => (dispatch: DispatchType) => {
 };
 
 export {
-  init,
   createNotebook,
   deleteNotebook,
   createCell,

@@ -7,6 +7,7 @@
  */
 import { EffectsType, ComposerParameters, ComposerPromise } from '../../types';
 import storage from './localStorage';
+import files from './remote';
 
 export const combineEffects = (effects: Record<string, Record<string, Function>>, _to: EffectsType): EffectsType => {
   const to = _to;
@@ -21,25 +22,29 @@ export const combineEffects = (effects: Record<string, Record<string, Function>>
 
 let effects: EffectsType;
 
-export const initEffects = (fx: Record<string, Record<string, Function>>) => {
-  effects = combineEffects(fx, []);
+export const initEffects = (fxs: Record<string, Record<string, Function>>[]) => {
+  effects = [];
+  fxs.forEach(fx => {
+    effects = combineEffects(fx, effects);
+  });
   return effects;
 };
 
-export default () => initEffects(storage);
+export default () => initEffects([storage, files]);
 
 type FxType = { type: string; func: Function };
 
-export const composeEffects = async (fx: Array<FxType>, type: string, action: ComposerParameters) => {
+export const composeEffects = async (composer: Array<FxType>, type: string, action: ComposerParameters) => {
   const promises: ComposerPromise[] = [];
-  fx.forEach((effect: FxType) => {
+  composer.forEach((effect: FxType) => {
     if (effect.type === type) {
       const p = effect.func(action);
       promises.push(p);
     }
   });
-  const data = await promises[0];
-  return data;
+  // const data = await promises[0];
+  // return data;
+  return promises[0];
 
   /* if (promises.length === 1) {
     const data = await promises[0];

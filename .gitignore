@@ -8,3 +8,4 @@ coverage
 **/dist
 **/__snapshots__
 public/modules
+.env

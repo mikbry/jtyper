@@ -23,8 +23,12 @@ export interface NotebookType {
   folder?: string;
   readOnly?: boolean;
   localStorage?: boolean;
+  loading?: boolean;
+  url?: string;
   cells: Array<CellType>;
   run?: Array<number>;
+  state?: 'loading' | 'error' | 'loaded';
+  error?: string;
 }
 
 export interface DocumentType {
