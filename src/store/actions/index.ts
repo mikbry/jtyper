@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { INITIALIZE, STORAGE } from '../../constants';
+import { INITIALIZE, STORAGE, SERVER } from '../../constants';
 import { DocumentType, ComposerType, StateType, NotebookType, EditorType } from '../../types';
 import {
   createNotebook,
@@ -25,26 +25,31 @@ import {
 import useCommands from './commands';
 import initSandbox from '../effects/sandbox';
 
-const init = async (fxComposer?: ComposerType): Promise<[Partial<StateType>, Function]> => {
+const init = async (compose?: ComposerType): Promise<[Partial<StateType>, Function]> => {
   const sandbox = await initSandbox();
   const postInit = async () => {
-    console.log('postInit=', process.env.NOTEBOOK_PATH, process.env.NODE_ENV);
-    if (process.env.NOTEBOOK_PATH) {
+    if (process.env.NOTEBOOK_PATH && compose) {
       // TODO load from server
-      console.log('load from server', process.env.NOTEBOOK_PATH);
+      let url = process.env.PUBLIC_URL || '';
+      url += process.env.CONTENT_BASE || '';
+      url += `/${process.env.NOTEBOOK_PATH}/index.json`;
+      const data = await compose(INITIALIZE + SERVER, {
+        url,
+      });
+      console.log('loaded from server data=', data);
     }
   };
-  if (fxComposer) {
+  if (compose) {
     // Localstorage
-    const document = (await fxComposer(INITIALIZE + STORAGE, {
+    const document = (await compose(INITIALIZE + STORAGE, {
       name: 'document',
       defaultValue: undefined,
     })) as DocumentType;
-    const files = (await fxComposer(INITIALIZE + STORAGE, {
+    const files = (await compose(INITIALIZE + STORAGE, {
       name: 'files',
       defaultValue: undefined,
     })) as NotebookType[];
-    const editor = (await fxComposer(INITIALIZE + STORAGE, { name: 'editor', defaultValue: undefined })) as EditorType;
+    const editor = (await compose(INITIALIZE + STORAGE, { name: 'editor', defaultValue: undefined })) as EditorType;
 
     const modules = {
       '@tensorflow/tfjs': { name: '@tensorflow/tfjs', url: 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.js' },

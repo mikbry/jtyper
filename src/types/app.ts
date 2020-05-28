@@ -27,6 +27,8 @@ export interface NotebookType {
   url?: string;
   cells: Array<CellType>;
   run?: Array<number>;
+  state?: 'loading' | 'error' | 'loaded';
+  error?: string;
 }
 
 export interface DocumentType {

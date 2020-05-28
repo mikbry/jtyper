@@ -6,19 +6,38 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, INITIALIZE, SERVER, FETCH } from '../../../constants';
-import { ActionsType } from '../../../types';
+import { ActionsType, NotebookType } from '../../../types';
 
-const getNotebooks = async ({ url }: any) => {
+type NOTEBOOKFILE = {
+  metadata: { id: string; title: string };
+  type: string;
+  source: string[];
+};
+
+const getNotebooks = async ({ url }: { url: string }) => {
   const req = await fetch(url);
   const data = await req.json();
-  const files: any = [];
+  const files: NotebookType[] = [];
   if (data.files) {
-    // TODO parse data files
+    data.files.forEach((f: NOTEBOOKFILE) => {
+      if (f.type === 'notebook') {
+        const notebook: NotebookType = {
+          id: f.metadata.id,
+          title: f.metadata.title,
+          cells: [],
+          url: f.source[0],
+          state: undefined,
+          error: undefined,
+        };
+        files.push(notebook);
+      }
+    });
   }
   return files;
 };
 
 const getNotebook = async ({ url }: any) => {
+  console.log('getNotebook TODO', url);
   const req = await fetch(url);
   const data = await req.json();
 
@@ -27,7 +46,7 @@ const getNotebook = async ({ url }: any) => {
 };
 
 const files: ActionsType = {
-  [INITIALIZE + SERVER]: { fetchNotebooks: getNotebooks },
+  [INITIALIZE + SERVER]: { getNotebooks },
   [APP.REQUESTNOTEBOOK + FETCH]: { getNotebook },
 };
 

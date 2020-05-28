@@ -42,8 +42,9 @@ export const composeEffects = async (composer: Array<FxType>, type: string, acti
       promises.push(p);
     }
   });
-  const data = await promises[0];
-  return data;
+  // const data = await promises[0];
+  // return data;
+  return promises[0];
 
   /* if (promises.length === 1) {
     const data = await promises[0];
