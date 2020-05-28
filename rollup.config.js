@@ -14,8 +14,10 @@ import * as react from 'react';
 import * as reactDom from 'react-dom';
 import * as reactIs from 'react-is';
 import * as propTypes from 'prop-types';
+import pk from './package.json';
 
-const appName = 'JTyper';
+const APP_NAME = process.env.APP_NAME || pk.name;
+const APP_VERSION = process.env.APP_VERSION || pk.version;
 const { NOTEBOOK_PATH } = process.env;
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const PUBLIC_URL = process.env.PUBLIC_URL || '';
@@ -75,6 +77,8 @@ const plugins = () => [
     ],
   }),
   replace({
+    'process.env.APP_NAME': JSON.stringify(APP_NAME),
+    'process.env.APP_VERSION': JSON.stringify(APP_VERSION),
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
     'process.env.CONTENT_BASE': JSON.stringify(CONTENT_BASE),
@@ -145,7 +149,7 @@ const iife = {
     format: 'iife',
     entryFileNames: 'js/[name].legacy.js',
     assetFileNames: development ? '[name][hash][extname]' : '[name][extname]',
-    name: appName,
+    name: APP_NAME,
     sourcemap: true,
   },
   watch: watch(),
