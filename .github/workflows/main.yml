@@ -18,8 +18,10 @@ jobs:
           node-version: "12.x"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Tests
-        run: yarn test -u
+
+      - name: Tests & Coverage
+        run: yarn coverage --updateSnapshot
+
       - name: Build
         run: yarn build
         env:
@@ -34,3 +36,10 @@ jobs:
           BRANCH: gh-pages # The branch the action should deploy to.
           FOLDER: build # The folder the action should deploy.
           TARGET_FOLDER: /
+
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: coverage
+          token: ${{ secrets.CODECOV_TOKEN }}    
+          fail_ci_if_error: false # optional (default = false)        
