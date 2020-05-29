@@ -37,5 +37,8 @@ jobs:
           FOLDER: build # The folder the action should deploy.
           TARGET_FOLDER: /
 
+      - name: cov
+        run: ls ./coverage
+
       - name: Codecov
         run: bash <(curl -s https://codecov.io/bash) -f './coverage' -t ${{ secrets.CODECOV_TOKEN }} || echo 'Codecov failed to upload'
