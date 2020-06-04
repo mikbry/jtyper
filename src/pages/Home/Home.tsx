@@ -25,6 +25,7 @@ const Menu = styled.div`
   display: flex;
 
   & > a {
+    margin-left: 12px;
     color: white;
   }
   & > button {
@@ -80,6 +81,7 @@ const Home: FunctionComponent = () => {
       <AppBar noDrawer title={title}>
         <Menu>
           <Link to={`${contentBase}/p/jtyper`}>Examples</Link>
+          <a href='https://github.com/mikbry/jtyper'>Github</a>
           <button onClick={handleCreate}>Create a notebook</button>
         </Menu>
       </AppBar>
