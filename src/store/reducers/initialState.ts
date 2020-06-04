@@ -11,6 +11,10 @@ const initialState: StateType = {
   publisher: {
     name: 'jtyper',
   },
+  website: {
+    title: 'JTyper',
+    home: 'dfggf',
+  },
   document: {
     title: 'project',
   },

@@ -9,6 +9,26 @@
     "source": [
      "home.ipynb"
     ]
+   },
+   {
+    "type": "notebook",
+    "metadata": {
+      "id": "sderfg" ,
+      "title": "First example"
+    },
+    "source": [
+     "first.ipynb"
+    ]
+   },
+   {
+    "type": "notebook",
+    "metadata": {
+      "id": "sdazg" ,
+      "title": "TensorflowJs"
+    },
+    "source": [
+     "tfjs.ipynb"
+    ]
    }
   ],
   "metadata": {
