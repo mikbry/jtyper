@@ -8,8 +8,8 @@
 
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import Page from '../../components/Page';
 import AppBar from '../../components/AppBar';
 import Container from '../../components/Container';
@@ -18,6 +18,15 @@ import Notebook from '../../components/Notebook';
 import { selectFile } from '../../store/actions';
 import { getNotebookIndexById } from '../../store/selectors';
 
+const Menu = styled.div`
+  margin-left: auto;
+  margin-right: 64px;
+  display: flex;
+
+  & > a {
+    color: white;
+  }
+`;
 const Wrapper = styled.div`
   display: flex;
   height: 100%;
@@ -46,7 +55,11 @@ const Home: FunctionComponent = () => {
   }
   return (
     <Page>
-      <AppBar noDrawer title={title} />
+      <AppBar noDrawer title={title}>
+        <Menu>
+          <Link to='/p/jtyper'>Examples</Link>
+        </Menu>
+      </AppBar>
       <Wrapper>
         <Container noDrawer>{content}</Container>
       </Wrapper>
