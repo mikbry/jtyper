@@ -134,10 +134,18 @@
   & > a {
     color: white;
   }
+  & > button {
+    margin-left: 12px;
+    font-size: 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
 `,G_=km.div`
   display: flex;
   height: 100%;
-`,K_=()=>{const e=Eh(),[t,r,n]=Lh(e=>[e.files,e.website,e.editor]);let i,o=ne.createElement(Lm,null,ne.createElement("div",null,"Welcome to JTyper"),ne.createElement($p,{to:"/jtyper/p/jtyper"},"Project demo"));if(r&&r.home){const a=Pw(r.home,t);a!==n.selected&&e(Zw({selected:a})),o=ne.createElement(W_,{notebookId:r.home}),i=r.title}return ne.createElement(Em,null,ne.createElement(Am,{noDrawer:!0,title:i},ne.createElement($_,null,ne.createElement($p,{to:"/p/jtyper"},"Examples"))),ne.createElement(G_,null,ne.createElement(Lm,{noDrawer:!0},o)))};function Q_(e){return Object.keys(e).reduce((t,r)=>(af(r)&&(t[r]=e[r]),t),{})}const Z_=ve((e,t)=>{const{children:r,iconAttrs:n,iconVerticalAlign:i,iconViewBox:o,size:a,title:s}=e,l=function(e,t){var r={};for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&t.indexOf(n)<0&&(r[n]=e[n]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var i=0;for(n=Object.getOwnPropertySymbols(e);i<n.length;i++)t.indexOf(n[i])<0&&Object.prototype.propertyIsEnumerable.call(e,n[i])&&(r[n[i]]=e[n[i]])}return r}(e,["children","iconAttrs","iconVerticalAlign","iconViewBox","size","title"]),u=Object.assign({viewBox:o,height:void 0!==e.height?e.height:a,width:void 0!==e.width?e.width:a,"aria-hidden":null==s?"true":void 0,focusable:"false",role:null!=s?"img":void 0},n),c=Q_(l);return fe("svg",Object.assign({},u,c,{ref:t}),s&&fe("title",{key:"icon-title"},s),r)}),Y_=km(Z_)`
+`,K_=()=>{const e=Eh(),t=Ip(),[r,n,i,o]=Lh(e=>[e.files,e.publisher,e.website,e.editor]);let a,s=ne.createElement(Lm,null,ne.createElement("div",null,"Welcome to JTyper"),ne.createElement($p,{to:"/jtyper/p/jtyper"},"Project demo"));if(i&&i.home){const t=Pw(i.home,r);t!==o.selected&&e(Zw({selected:t})),s=ne.createElement(W_,{notebookId:i.home}),a=i.title}return ne.createElement(Em,null,ne.createElement(Am,{noDrawer:!0,title:a},ne.createElement($_,null,ne.createElement($p,{to:"/jtyper/p/jtyper"},"Examples"),ne.createElement("button",{onClick:i=>{i.preventDefault();const o=qw(r);e(Qw({title:o})),t(Vw(n.name,o))}},"Create a notebook"))),ne.createElement(G_,null,ne.createElement(Lm,{noDrawer:!0},s)))};function Q_(e){return Object.keys(e).reduce((t,r)=>(af(r)&&(t[r]=e[r]),t),{})}const Z_=ve((e,t)=>{const{children:r,iconAttrs:n,iconVerticalAlign:i,iconViewBox:o,size:a,title:s}=e,l=function(e,t){var r={};for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&t.indexOf(n)<0&&(r[n]=e[n]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var i=0;for(n=Object.getOwnPropertySymbols(e);i<n.length;i++)t.indexOf(n[i])<0&&Object.prototype.propertyIsEnumerable.call(e,n[i])&&(r[n[i]]=e[n[i]])}return r}(e,["children","iconAttrs","iconVerticalAlign","iconViewBox","size","title"]),u=Object.assign({viewBox:o,height:void 0!==e.height?e.height:a,width:void 0!==e.width?e.width:a,"aria-hidden":null==s?"true":void 0,focusable:"false",role:null!=s?"img":void 0},n),c=Q_(l);return fe("svg",Object.assign({},u,c,{ref:t}),s&&fe("title",{key:"icon-title"},s),r)}),Y_=km(Z_)`
   display: inline-block;
   vertical-align: ${e=>e.iconVerticalAlign};
   overflow: hidden;
