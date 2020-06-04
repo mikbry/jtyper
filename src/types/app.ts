@@ -49,3 +49,8 @@ export interface EditorType {
   readOnly?: boolean;
   copyBuffer?: Partial<CellType>;
 }
+
+export interface WebsiteType {
+  title: string;
+  home: string;
+}

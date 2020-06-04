@@ -8,7 +8,7 @@
  */
 import { AnyAction } from 'redux';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
-import { PublisherType, NotebookType, DocumentType, CellType, CellFormat, EditorType } from './app';
+import { PublisherType, NotebookType, DocumentType, CellType, CellFormat, EditorType, WebsiteType } from './app';
 import {
   SandboxType,
   ParserType,
@@ -38,6 +38,7 @@ export interface PackageType {
 
 export interface StateType {
   publisher: PublisherType;
+  website: WebsiteType;
   document: DocumentType;
   files: Array<NotebookType>;
   editor: EditorType;

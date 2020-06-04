@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
 import { selectCell, updateCell, useCommands } from '../../store/actions';
-import { getNotebook } from '../../store/selectors';
+import { getNotebook, getNotebookById } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
 
@@ -28,7 +28,7 @@ const NoContent = styled.div`
   margin-top: 50%;
 `;
 
-const Notebook: FunctionComponent = () => {
+const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const dispatch = useDispatch();
   const handleSelectCell = (selected: number) => {
@@ -43,7 +43,11 @@ const Notebook: FunctionComponent = () => {
   let readOnly = true;
   let edited = false;
   let selectedCell = -1;
-  const notebook = getNotebook(editor.selected, files);
+  let notebook: NotebookType | undefined;
+  if (notebookId) {
+    notebook = getNotebookById(notebookId, files);
+  }
+  notebook = getNotebook(editor.selected, files);
   if (notebook) {
     ({ selectedCell = -1 } = editor);
     edited = editor.mode === 'edit';
@@ -59,7 +63,7 @@ const Notebook: FunctionComponent = () => {
             editable={!readOnly}
             selected={index === selectedCell}
             onChange={value => {
-              handleCellChange(index, value, notebook);
+              handleCellChange(index, value, notebook as NotebookType);
             }}
             onClick={() => {
               if (!readOnly) handleSelectCell(index);

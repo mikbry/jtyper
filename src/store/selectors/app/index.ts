@@ -12,6 +12,9 @@ export const generateId = () =>
     .toString(36)
     .substr(2, 9);
 
+export const getNotebookById = (id: string, files: Array<NotebookType>): NotebookType | undefined =>
+  files.find(f => f.id === id);
+
 export const getNotebookIndexById = (id: string, files: Array<NotebookType>): number =>
   files.findIndex(f => f.id === id);
 

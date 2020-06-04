@@ -8,6 +8,7 @@
 
 import {
   generateId,
+  getNotebookById,
   getNotebookIndexById,
   getCurrentNotebook,
   getNotebook,
@@ -27,6 +28,7 @@ import {
 
 export {
   generateId,
+  getNotebookById,
   getNotebookIndexById,
   getCurrentNotebook,
   getNotebook,

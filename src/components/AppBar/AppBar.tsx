@@ -6,18 +6,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { StateType } from '../../types';
 import { BasicTheme } from '../../themes';
 
+interface StyledProps {
+  noDrawer?: boolean;
+  theme: DefaultTheme;
+}
+
 const Styled = styled.header`
   position: fixed;
   top: 0px;
-  left: ${props => (props.theme.spacing.fullHeightDrawer ? props.theme.spacing.drawerWidth : '0')}px;
+  left: ${(props: StyledProps) =>
+    props.theme.spacing.fullHeightDrawer && !props.noDrawer ? props.theme.spacing.drawerWidth : '0'}px;
   z-index: 3;
   width: ${props =>
-    props.theme.spacing.fullHeightDrawer ? `calc(100% - ${props.theme.spacing.drawerWidth}px)` : '100%'};
+    props.theme.spacing.fullHeightDrawer && !props.noDrawer
+      ? `calc(100% - ${props.theme.spacing.drawerWidth}px)`
+      : '100%'};
   color: ${props => props.theme.palette.onPrimary};
   font-size: 1.25em;
   line-height: ${props => props.theme.spacing.headerHeight}px;
@@ -40,10 +48,10 @@ const Styled = styled.header`
 `;
 Styled.defaultProps = { theme: BasicTheme };
 
-const AppBar: FunctionComponent = ({ children }) => {
-  const title = useSelector((state: StateType) => state.title);
+const AppBar: FunctionComponent<{ noDrawer?: boolean; title?: string }> = ({ noDrawer, title: _title, children }) => {
+  const title = _title || useSelector((state: StateType) => state.title);
   return (
-    <Styled data-testid='appbar'>
+    <Styled noDrawer={noDrawer} data-testid='appbar'>
       {title}
       {children}
     </Styled>
