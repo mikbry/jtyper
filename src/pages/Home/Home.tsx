@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /**
  * Copyright (c) Mik BRY
  * mik@miklabs.com
@@ -8,15 +9,15 @@
 
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Page from '../../components/Page';
 import AppBar from '../../components/AppBar';
 import Container from '../../components/Container';
 import { StateType } from '../../types';
 import Notebook from '../../components/Notebook';
-import { selectFile } from '../../store/actions';
-import { getNotebookIndexById } from '../../store/selectors';
+import { selectFile, createNotebook } from '../../store/actions';
+import { getNotebookIndexById, createNewTitle, generateUrl } from '../../store/selectors';
 
 const Menu = styled.div`
   margin-left: auto;
@@ -25,6 +26,14 @@ const Menu = styled.div`
 
   & > a {
     color: white;
+  }
+  & > button {
+    margin-left: 12px;
+    font-size: 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
   }
 `;
 const Wrapper = styled.div`
@@ -36,7 +45,20 @@ const contentBase = process.env.CONTENT_BASE || '';
 
 const Home: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const [files, website, editor] = useSelector((state: StateType) => [state.files, state.website, state.editor]);
+  const navigate = useNavigate();
+  const [files, publisher, website, editor] = useSelector((state: StateType) => [
+    state.files,
+    state.publisher,
+    state.website,
+    state.editor,
+  ]);
+
+  const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    const title = createNewTitle(files);
+    dispatch(createNotebook({ title }));
+    navigate(generateUrl(publisher.name as string, title));
+  };
 
   let content = (
     <Container>
@@ -57,7 +79,8 @@ const Home: FunctionComponent = () => {
     <Page>
       <AppBar noDrawer title={title}>
         <Menu>
-          <Link to='/p/jtyper'>Examples</Link>
+          <Link to={`${contentBase}/p/jtyper`}>Examples</Link>
+          <button onClick={handleCreate}>Create a notebook</button>
         </Menu>
       </AppBar>
       <Wrapper>
