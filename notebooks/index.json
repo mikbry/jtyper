@@ -1,0 +1,52 @@
+{
+  "files": [
+   {
+    "type": "notebook",
+    "metadata": {
+      "id": "dfggf" ,
+      "title": "Home"
+    },
+    "source": [
+     "home.ipynb"
+    ]
+   },
+   {
+    "type": "notebook",
+    "metadata": {
+      "id": "sderfg" ,
+      "title": "First example"
+    },
+    "source": [
+     "example.ipynb"
+    ]
+   },
+   {
+    "type": "notebook",
+    "metadata": {
+      "id": "sdazg" ,
+      "title": "TensorflowJs"
+    },
+    "source": [
+     "tfjs.ipynb"
+    ]
+   }
+  ],
+  "metadata": {
+   "kernelspec": {
+    "display_name": "ES6",
+    "language": "javascript",
+    "name": "ES6"
+   },
+   "language_info": {
+    "codemirror_mode": {
+     "name": "javascript"
+    },
+    "file_extension": ".js",
+    "mimetype": "text/javascript",
+    "name": "javascript",
+    "nbconvert_exporter": "javascript"
+   }
+  },
+  "jtformat": 1,
+  "jtformat_minor": 1
+ }
