@@ -28,6 +28,7 @@ jobs:
           PUBLIC_URL: https://mikbry.github.io
           CONTENT_BASE: /jtyper
           NODE_ENV: production
+          NOTEBOOK_PATH: notebooks
 
       - name: Deploy app
         uses: JamesIves/github-pages-deploy-action@releases/v3
