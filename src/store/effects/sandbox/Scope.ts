@@ -74,7 +74,7 @@ class Scope implements ScopeType {
     // console.log('start=', start);
     // console.log('end=', end);
     const sse = start + script + end;
-    console.log(sse);
+    // console.log(sse);
     const response = await runner.execute(sse, this);
     // console.log('response=', response);
     Object.keys(response).forEach(varName => {
