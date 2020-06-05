@@ -45,16 +45,18 @@ class Scope implements ScopeType {
         if (!code.variables[varName]) {
           const variable = this.variables[varName];
           // Not present in code block, add it
-          start += variable.kind === 'const' ? 'const ' : 'let ';
-          start += varName;
           let { value } = variable;
-          if (value && (variable.type === 'object' || variable.type === 'array')) {
-            value = `JSON.parse('${JSON.stringify(value)}')`;
-          } else if (value && variable.type === 'string') {
-            value = `'${value}'`;
+          if (value !== undefined || variable.kind !== 'const') {
+            start += variable.kind === 'const' ? 'const ' : 'let ';
+            start += varName;
+            if (value && (variable.type === 'object' || variable.type === 'array')) {
+              value = `JSON.parse('${JSON.stringify(value)}')`;
+            } else if (value && variable.type === 'string') {
+              value = `'${value}'`;
+            }
+            // console.log('name=', varName, value);
+            start += value === undefined ? ';\n' : ` = ${value};\n`;
           }
-          // console.log('name=', varName, value);
-          start += value === undefined ? ';\n' : ` = ${value};\n`;
         }
         const va = this.variables[varName];
         if (
@@ -72,7 +74,7 @@ class Scope implements ScopeType {
     // console.log('start=', start);
     // console.log('end=', end);
     const sse = start + script + end;
-    // console.log(sse);
+    console.log(sse);
     const response = await runner.execute(sse, this);
     // console.log('response=', response);
     Object.keys(response).forEach(varName => {
