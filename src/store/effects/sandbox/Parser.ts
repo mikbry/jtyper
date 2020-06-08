@@ -57,7 +57,7 @@ class Parser implements ParserType {
         declarations.forEach(declaration => {
           const id = declaration.id as ESTreeNode;
           const init = declaration.init as ESTreeNode;
-          // console.log('id=', id, init);
+          console.log('var id=', id, init);
           const name = id.name as string;
           let value;
           let type: DataType = 'undefined';
@@ -71,6 +71,9 @@ class Parser implements ParserType {
               type = 'object';
               value = input.substring(init.start, init.end);
             } else if (init.type === 'ArrowFunctionExpression') {
+              type = 'function';
+              value = input.substring(init.start, init.end);
+            } else if (init.type === 'CallExpression') {
               type = 'function';
               value = input.substring(init.start, init.end);
             }
