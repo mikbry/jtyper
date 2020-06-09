@@ -54,6 +54,7 @@ module.exports = env => {
       new webpack.DefinePlugin({
         'process.env.APP_NAME': JSON.stringify(pk.name),
         'process.env.APP_VERSION': JSON.stringify(pk.version),
+        'process.env.APP_HOMEPAGE': JSON.stringify(pk.homepage),
       }),
       new Dotenv(),
       new CopyWebpackPlugin([

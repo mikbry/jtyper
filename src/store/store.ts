@@ -29,7 +29,11 @@ export const initStore = async (initialState: StateType, disableEffects = false)
   const [_state, postInit] = await init(fxComposer);
   let state = _state as StateType;
   // TODO get name/version from process.env
-  const pk = { name: process.env.APP_NAME || 'JTyper', version: process.env.APP_VERSION || '0.1.0' };
+  const pk = {
+    name: process.env.APP_NAME || 'JTyper',
+    version: process.env.APP_VERSION || '0.1.0',
+    homepage: process.env.APP_HOMEPAGE || 'https://github.com/mikbry/jtyper',
+  };
   state = reducers[INITIALIZE + DONE]({ ...initialState, package: pk as PackageType }, state);
   const middlewares = [thunk];
   const enhancer = composeEnhancers(applyMiddleware(...middlewares));
