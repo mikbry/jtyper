@@ -196,23 +196,24 @@ const Cell: FunctionComponent<Props> = ({
     >
       <Line selected={selected} edited={edited}>
         <Prompt selected={selected} edited={edited}>
-          {format === 'code' && `In [${'   '}] :`}
+          {format === 'code' && `${out ? 'In[*]' : 'In[    ]'}`}
         </Prompt>
         {content}
       </Line>
-      {out?.length && (
-        <Line selected={false}>
-          <Prompt selected={false} />
-          <OutContent>
-            {out.map(o => {
-              if (o.type === 'error') {
-                return <OutError key={o.id}>{o.text}</OutError>;
-              }
-              return <OutText key={o.id}>{o.text}</OutText>;
-            })}
-          </OutContent>
-        </Line>
-      )}
+      <Line selected={false}>
+        <Prompt selected={false} />
+        <OutContent>
+          {out &&
+            (out.length
+              ? out.map(o => {
+                  if (o.type === 'error') {
+                    return <OutError key={o.id}>{o.text}</OutError>;
+                  }
+                  return <OutText key={o.id}>{o.text}</OutText>;
+                })
+              : '_')}
+        </OutContent>
+      </Line>
     </Styled>
   );
 };
