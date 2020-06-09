@@ -184,6 +184,12 @@ const handlers = {
     return { ...state, editor: { ...editor, selectedCell, mode: undefined }, files, saved: false };
   },
   [APP.LOCALSAVE + DONE]: (state: StateType) => ({ ...state, saved: true }),
+  [APP.TOGGLEHELP]: (state: StateType, action: { enable: boolean }) => {
+    const { enable } = action;
+    const { editor } = state;
+    editor.displayHelp = enable;
+    return { ...state, editor };
+  },
 };
 
 export default handlers;

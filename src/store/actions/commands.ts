@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
-import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste } from './app';
+import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste, toggleHelp } from './app';
 
 const commands = [
   {
@@ -162,6 +162,13 @@ const commands = [
           const next = editor.selectedCell as number;
           return runCell({ all: true, next });
         },
+      },
+      {
+        key: 'h',
+        name: 'Display help',
+        ctrlKey: true,
+        altKey: false,
+        cmd: (editor: EditorType) => toggleHelp({ enable: !editor.displayHelp }),
       },
     ],
   },

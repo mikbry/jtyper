@@ -27,6 +27,7 @@ declare module 'styled-components' {
       disabled: string;
       notebook: string;
     };
+    shadow: string;
     fontFamily: string;
     spacing: {
       headerHeight: number;

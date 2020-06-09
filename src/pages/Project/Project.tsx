@@ -18,6 +18,7 @@ import Drawer from '../../components/Drawer';
 import Explorer from '../../components/Explorer';
 import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
+import Modal from '../../components/Modal';
 import { selectFile } from '../../store/actions';
 import { StateType } from '../../types';
 
@@ -52,6 +53,10 @@ const Project: FunctionComponent = () => {
     // Another screen
     dispatch(selectFile({ selected: i }));
   }
+  let modal;
+  if (editor.displayHelp) {
+    modal = <Modal>help</Modal>;
+  }
   return (
     <Page>
       <AppBar>
@@ -66,6 +71,7 @@ const Project: FunctionComponent = () => {
           <Notebook />
         </Container>
       </Wrapper>
+      {modal}
     </Page>
   );
 };

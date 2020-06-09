@@ -41,6 +41,11 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
   composer(APP.LOCALSAVE + FETCH, data).then(() => dispatch({ type: APP.LOCALSAVE + DONE }));
 };
 
+const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) => {
+  console.log('toggle=', action);
+  dispatch({ ...action, type: APP.TOGGLEHELP });
+};
+
 const createNotebook = (action: Partial<NotebookType>) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
   dispatch(save({ editor: true, files: true }));
@@ -202,4 +207,5 @@ export {
   copy,
   paste,
   save,
+  toggleHelp,
 };
