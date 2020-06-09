@@ -41,29 +41,28 @@ class Scope implements ScopeType {
     const names = Object.keys(this.variables);
     // console.log('scope.variables', this.variables);
     if (names.length > 0) {
+      let sep = ' ';
       names.forEach(varName => {
         const variable = this.variables[varName];
         const i = variable.index;
         // console.log(varName, i, index, variable, code.variables[varName]);
-        if (index > i) {
-          // Not present in code block, add it
-          let { value } = variable;
-          start += variable.kind === 'const' ? 'const ' : 'let ';
-          start += varName;
-          if (value && (variable.type === 'object' || variable.type === 'array')) {
-            value = `JSON.parse('${JSON.stringify(value)}')`;
-          } else if (value && variable.type === 'string') {
-            value = `'${value}'`;
-          }
-          start += value === undefined ? ` = localscope.${varName};\n` : ` = ${value};\n`;
-        }
         if (index >= i) {
-          end += ` ${varName},`;
+          if (index > i) {
+            // Not present in code block, add it
+            let { value } = variable;
+            start += variable.kind === 'const' ? 'const ' : 'let ';
+            start += varName;
+            if (value && (variable.type === 'object' || variable.type === 'array')) {
+              value = `JSON.parse('${JSON.stringify(value)}')`;
+            } else if (value && variable.type === 'string') {
+              value = `'${value}'`;
+            }
+            start += value === undefined ? ` = localscope.${varName};\n` : ` = ${value};\n`;
+          }
+          end += `${sep}${varName}`;
+          sep = ' ,';
         }
       });
-      if (end.length) {
-        end = end.substring(0, end.length - 1);
-      }
     }
     end = `\n// */\nreturn {${end} };`;
     // console.log('start=', start);

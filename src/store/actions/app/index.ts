@@ -55,7 +55,7 @@ const selectFile = (action: { selected: number }) => (dispatch: DispatchType, ge
   const { selected } = action;
   const { files } = getState();
   const notebook = files[selected];
-  if (notebook.url && !notebook.state) {
+  if (notebook && notebook.url && !notebook.state) {
     // Load notebook
     composer(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then(n => dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }));
   }
