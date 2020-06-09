@@ -26,6 +26,7 @@ const BasicTheme: DefaultTheme = {
     disabled: 'rgba(255,255,255,0.4)',
     notebook: 'white',
   },
+  shadow: '1px 1px 1px rgba(0,0,0,0.8)',
   fontFamily: 'sans-serif',
   spacing: {
     headerHeight: 48,

@@ -22,6 +22,7 @@ import {
   copy,
   paste,
   save,
+  toggleHelp,
 } from './app';
 import useCommands from './commands';
 import initSandbox from '../effects/sandbox';
@@ -87,4 +88,5 @@ export {
   paste,
   save,
   useCommands,
+  toggleHelp,
 };
