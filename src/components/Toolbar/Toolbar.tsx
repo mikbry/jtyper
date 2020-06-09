@@ -93,7 +93,8 @@ const Toolbar: FunctionComponent = () => {
     dispatch(updateCell(c));
   };
   const handleRun = () => {
-    dispatch(runCell({ cell: cell as CellType }));
+    const selected = editor.selectedCell as number;
+    dispatch(runCell({ selected }));
   };
   const handleReset = () => {
     dispatch(resetCell({ cell: cell as CellType }));
