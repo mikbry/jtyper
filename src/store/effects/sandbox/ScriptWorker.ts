@@ -29,6 +29,7 @@ class ScriptWorker {
 
   private handlerScript = `
   let data;
+  let localscope = {};
   const print = (_value) => {
     let value = _value;
     if (typeof value === 'function') value = 'Function';
@@ -49,10 +50,10 @@ class ScriptWorker {
     if (data.type === 'execute') {
       let code = data.scripts[0];
       let result;
-      var e = null;
       Function(\`(async (data) => {\n\` + code + \`\n})(data).then(result => {
+        localscope = { ...localscope, ...result };
         const r = JSON.parse(JSON.stringify(result));
-        // console.log('post message' + r);
+        // console.log('post message r=' + r);
         postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
       }, error => { 
         const r = error.toString();

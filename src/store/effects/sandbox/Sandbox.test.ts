@@ -92,7 +92,7 @@ test('Sandbox should out execution error code', async () => {
   });
   const [out] = await sandbox.execute(['h[1].param = true;']);
   expect(out.length).toBe(1);
-  expect(out[0].text).toBe('h is not defined');
+  expect(out[0].text).toBe('ReferenceError: h is not defined');
   expect(out[0].type).toBe('error');
   expect(out[0].id).toBeDefined();
 });
@@ -104,7 +104,7 @@ test('Sandbox should stop execution on previous error', async () => {
   });
   const [out] = await sandbox.execute(['h[1].param = true;', 'p[0].param=2']);
   expect(out.length).toBe(1);
-  expect(out[0].text).toBe('h is not defined');
+  expect(out[0].text).toBe('ReferenceError: h is not defined');
   expect(out[0].type).toBe('error');
   expect(out[0].id).toBeDefined();
 });

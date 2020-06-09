@@ -39,7 +39,7 @@ interface ESTreeNode extends acorn.Node {
 class Parser implements ParserType {
   last: string | undefined;
 
-  async parse(input: string, scope: ScopeType) {
+  async parse(input: string, scope: ScopeType, index: number) {
     const { variables } = scope;
     let parsed = input;
     let offset = 0;
@@ -57,7 +57,7 @@ class Parser implements ParserType {
         declarations.forEach(declaration => {
           const id = declaration.id as ESTreeNode;
           const init = declaration.init as ESTreeNode;
-          console.log('var id=', id, init);
+          // console.log('var id=', id, init);
           const name = id.name as string;
           let value;
           let type: DataType = 'undefined';
@@ -75,14 +75,14 @@ class Parser implements ParserType {
               value = input.substring(init.start, init.end);
             } else if (init.type === 'CallExpression') {
               type = 'function';
-              value = input.substring(init.start, init.end);
+              // value = input.substring(init.start, init.end);
             }
           }
           /* if (variables[name] && variables[name].value && value === undefined) {
             ({ value } = variables[name]);
           } */
-          code.variables[name] = { kind, value, type };
-          variables[name] = { kind, value, type };
+          code.variables[name] = { kind, value, type, index };
+          variables[name] = { kind, value, type, index };
           // console.log('var=', name, variables[name]);
         });
       } else if (element.type === 'ExpressionStatement' && element.expression.type === 'CallExpression') {

@@ -43,6 +43,7 @@ export interface VariableType {
   kind: string;
   value?: string | number | boolean | object | Function;
   type: DataType;
+  index: number;
 }
 
 export interface FuncType {
