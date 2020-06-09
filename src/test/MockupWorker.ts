@@ -22,6 +22,7 @@ class BlobEx {
 }
 
 const script = `
+let localscope = {};
 const print = (_value) => {
   let value = _value;
   if (typeof value === 'function') value = 'Function';

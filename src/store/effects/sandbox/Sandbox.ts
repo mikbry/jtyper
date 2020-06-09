@@ -46,8 +46,8 @@ class Sandbox implements SandboxType {
     this.modules = modules;
   }
 
-  async parse(input: string, scope: ScopeType): Promise<CodeType> {
-    return this.parser.parse(input, scope);
+  async parse(input: string, scope: ScopeType, index: number): Promise<CodeType> {
+    return this.parser.parse(input, scope, index);
   }
 
   async execute(code: string[], all = false) {
@@ -59,7 +59,7 @@ class Sandbox implements SandboxType {
       // eslint-disable-next-line no-restricted-syntax
       for (const c of code) {
         // eslint-disable-next-line no-await-in-loop
-        const parsed = await this.parse(c, scope);
+        const parsed = await this.parse(c, scope, funcs.length);
         Object.keys(parsed.imports).forEach(i => {
           if (this.modules[i]) {
             parsed.imports[i].url = this.modules[i].url;
@@ -82,6 +82,7 @@ class Sandbox implements SandboxType {
     let err;
     if (this.lastFunc) {
       await this.scriptWorker.loadModules();
+      let index = 0;
       // eslint-disable-next-line no-restricted-syntax
       for (func of funcs) {
         this.logger.clear();
@@ -89,8 +90,9 @@ class Sandbox implements SandboxType {
           this.logger.log(err);
         }
         try {
+          index += 1;
           // eslint-disable-next-line no-await-in-loop
-          await scope.bindCode(func, this.scriptWorker);
+          await scope.bindCode(func, this.scriptWorker, index - 1);
         } catch (error) {
           if (!err) {
             this.logger.log(error);

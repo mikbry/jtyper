@@ -28,3 +28,17 @@ test('ScriptWorker should timeout', async () => {
   // console.log(error);
   expect(error.message).toBe('Timeout Error');
 });
+
+test('ScriptWorker should post error', async () => {
+  const sw = new ScriptWorker();
+  let error;
+  try {
+    await sw.execute(
+      `this.onmessage({ data: { type: 'error', scopeId: 'test', result: 'BadError' } });`,
+      new Scope(new Logger()),
+    );
+  } catch (e) {
+    error = e;
+  }
+  expect(error.toString()).toBe('BadError');
+});

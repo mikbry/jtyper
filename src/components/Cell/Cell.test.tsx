@@ -184,7 +184,7 @@ test('editable & selected Cell with code should be changed', async () => {
   const content = getByRole('button').firstChild?.childNodes[1] as HTMLElement;
   expect(content?.textContent?.trim()).toBe('');
   const container = content?.firstChild as HTMLElement;
-  const helloword = 'Hello world';
+  const helloord = 'Hello world';
   const textarea: HTMLTextAreaElement = content?.firstChild?.firstChild?.firstChild as HTMLTextAreaElement;
   if (textarea) {
     fireEvent(
@@ -198,10 +198,10 @@ test('editable & selected Cell with code should be changed', async () => {
     );
     jest.advanceTimersByTime(1000);
     expect(container).toHaveClass('CodeMirror-focused');
-    await userEvent.type(textarea, helloword);
+    await userEvent.type(textarea, helloord);
   }
-  expect(onChange).toHaveBeenCalledTimes(helloword.length);
-  expect(value.trim()).toBe(helloword);
+  expect(onChange).toHaveBeenCalledTimes(helloord.length);
+  expect(value.trim()).toBe(helloord);
 });
 
 test('Cell with code out should display it', () => {

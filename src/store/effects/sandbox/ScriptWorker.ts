@@ -29,6 +29,7 @@ class ScriptWorker {
 
   private handlerScript = `
   let data;
+  let localscope = {};
   const print = (_value) => {
     let value = _value;
     if (typeof value === 'function') value = 'Function';
@@ -44,17 +45,21 @@ class ScriptWorker {
 
 
   onmessage=(e)=> {
-    // console.log('onmessage=', e);
+    // console.log('worker onmessage=' + e.data.type);
     data = e.data;
     if (data.type === 'execute') {
       let code = data.scripts[0];
       let result;
-      var e = null;
       Function(\`(async (data) => {\n\` + code + \`\n})(data).then(result => {
+        localscope = { ...localscope, ...result };
         const r = JSON.parse(JSON.stringify(result));
-        // console.log('post message', data, result);
+        // console.log('post message r=' + r);
         postMessage({ type: data.type, scopeId: data.scopeId, result: r });  
-      });\`).bind(self)();
+      }, error => { 
+        const r = error.toString();
+        // console.error(r); 
+        postMessage({ type: 'error', scopeId: data.scopeId, result: r }); 
+      });\`)(); 
     }
   };\n`;
 
@@ -125,13 +130,15 @@ class ScriptWorker {
       }, timeout);
       worker.onmessage = e => {
         clearTimeout(handle);
-        // console.log('onmessage', e);
+        // console.log('exec onmessage', e.data);
         const data: MessageType = e.data as MessageType;
         if (data.type === 'execute') {
           // console.log('result=', data.result);
           resolve(data.result);
         } else if (data.print) {
           scope.print(data.print.value);
+        } else if (data.type === 'error') {
+          reject(data.result);
         }
       };
       worker.onerror = e => {
@@ -139,6 +146,7 @@ class ScriptWorker {
         clearTimeout(handle);
         reject(e);
       };
+      // console.log('postMessage', worker);
       worker.postMessage({ type: 'execute', scopeId: scope.id, scripts: [script] });
     });
   }

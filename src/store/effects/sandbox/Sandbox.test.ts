@@ -23,11 +23,12 @@ const value = true;
 const str = 'hello';
 const array = ["1",2,3,4];
 const obj = { id: 1, name: 'name' };
+const json = \`{ "id": 1 }\`;
 const func = (v) => {
   if (v) return 'nok';
   return 'ok'
 };
-
+const callExp = print();
 let v;
 
 print(v);
@@ -92,7 +93,7 @@ test('Sandbox should out execution error code', async () => {
   });
   const [out] = await sandbox.execute(['h[1].param = true;']);
   expect(out.length).toBe(1);
-  expect(out[0].text).toBe('h is not defined');
+  expect(out[0].text).toBe('ReferenceError: h is not defined');
   expect(out[0].type).toBe('error');
   expect(out[0].id).toBeDefined();
 });
@@ -104,7 +105,7 @@ test('Sandbox should stop execution on previous error', async () => {
   });
   const [out] = await sandbox.execute(['h[1].param = true;', 'p[0].param=2']);
   expect(out.length).toBe(1);
-  expect(out[0].text).toBe('h is not defined');
+  expect(out[0].text).toBe('ReferenceError: h is not defined');
   expect(out[0].type).toBe('error');
   expect(out[0].id).toBeDefined();
 });
@@ -115,12 +116,12 @@ test('Sandbox should execute and return all variables', async () => {
     value: sandbox.logger.print.bind(sandbox.logger),
   });
   const [out] = await sandbox.execute([code1]);
-  expect(out.length).toBe(8);
+  expect(out.length).toBe(9);
   expect(out[0].text).toBe('Hello world!');
   expect(out[0].type).toBe('text');
   expect(out[0].id).toBeDefined();
   const scope = sandbox.scope as ScopeType;
-  expect(Object.keys(scope.variables).length).toBe(7);
+  expect(Object.keys(scope.variables).length).toBe(9);
   expect(scope.variables.value.kind).toBe('const');
   expect(scope.variables.value.value).toBe(true);
   expect(scope.variables.value.type).toBe('boolean');
@@ -152,7 +153,7 @@ test('Sandbox should execute several codes and return all variables', async () =
   const [out] = await sandbox.execute([code1, code2, code3]);
   expect(out.length).toBe(0);
   const scope = sandbox.scope as ScopeType;
-  expect(Object.keys(scope.variables).length).toBe(9);
+  expect(Object.keys(scope.variables).length).toBe(11);
   expect(scope.variables.value.kind).toBe('const');
   expect(scope.variables.value.value).toBe(true);
   expect(scope.variables.value.type).toBe('boolean');
