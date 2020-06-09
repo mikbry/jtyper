@@ -19,7 +19,7 @@ interface StyledProps extends Props {
   theme: DefaultTheme;
 }
 
-const Styled = styled.ul`
+const Styled = styled.li`
   width: 100%;
   min-height: 24px;
   line-height: 24px;

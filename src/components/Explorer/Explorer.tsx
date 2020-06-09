@@ -8,6 +8,7 @@
  */
 import React, { FunctionComponent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
@@ -18,6 +19,12 @@ import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
 import Item from '../Item';
 import { getNotebook, createNewTitle, generateUrl, getNextFile } from '../../store/selectors';
+
+const List = styled.ul`
+  width: 100%;
+  list-style: none;
+  padding: 0;
+`;
 
 const Explorer: FunctionComponent = () => {
   const [publisher, files, editor, pkg] = useSelector((state: StateType) => [
@@ -67,13 +74,13 @@ const Explorer: FunctionComponent = () => {
           />
         </div>
       </DrawerToolbar>
-      <li>
+      <List>
         {files?.map((file: NotebookType, index: number) => (
           <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
             {file.title}
           </Item>
         ))}
-      </li>
+      </List>
       <DrawerFooter>
         <a href={pkg.homepage} target='_blank' rel='noopener noreferrer'>
           {pkg.name} v{pkg.version}
