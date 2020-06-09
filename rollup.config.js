@@ -18,6 +18,7 @@ import pk from './package.json';
 
 const APP_NAME = process.env.APP_NAME || pk.name;
 const APP_VERSION = process.env.APP_VERSION || pk.version;
+const APP_HOMEPAGE = process.env.APP_HOMEPAGE || pk.homepage;
 const { NOTEBOOK_PATH } = process.env;
 const CONTENT_BASE = process.env.CONTENT_BASE || '';
 const PUBLIC_URL = process.env.PUBLIC_URL || '';
@@ -79,6 +80,7 @@ const plugins = () => [
   replace({
     'process.env.APP_NAME': JSON.stringify(APP_NAME),
     'process.env.APP_VERSION': JSON.stringify(APP_VERSION),
+    'process.env.APP_HOMEPAGE': JSON.stringify(APP_HOMEPAGE),
     'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
     'process.env.PUBLIC_URL': JSON.stringify(PUBLIC_URL),
     'process.env.CONTENT_BASE': JSON.stringify(CONTENT_BASE),
