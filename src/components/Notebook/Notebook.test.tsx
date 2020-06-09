@@ -391,7 +391,16 @@ test('Notebook editable should enter', async () => {
 test('Notebook editable should run once', async done => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
-    files: [{ id: '1', title: 'notebook', cells: [{ id: '1', raw: 'print("hello");', format: 'code' }] }],
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '0', raw: 'demo', format: 'markdown' },
+          { id: '1', raw: 'print("hello");', format: 'code' },
+        ],
+      },
+    ],
     saved: false,
   };
   const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
@@ -411,9 +420,125 @@ test('Notebook editable should run once', async done => {
     state = store.getState();
     const files = state.files as NotebookType[];
     const cs = files[0].cells as CellType[];
-    const out = cs[0].out as LogEntryType[];
+    const out = cs[1].out as LogEntryType[];
     expect(out.length).toBe(1);
     expect(out[0].text).toBe('hello');
+    unsub();
+    done();
+  });
+});
+
+test('Notebook selected code should run once', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 1 },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '0', raw: 'demo', format: 'markdown' },
+          { id: '1', raw: 'print("hello");', format: 'code' },
+        ],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    const files = state.files as NotebookType[];
+    const cs = files[0].cells as CellType[];
+    const out = cs[1].out as LogEntryType[];
+    expect(out.length).toBe(1);
+    expect(out[0].text).toBe('hello');
+    expect(state.editor?.selectedCell).toBe(1);
+    unsub();
+    done();
+  });
+});
+
+test('Notebook selected code should run once and select next code', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 1 },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '0', raw: 'demo', format: 'markdown' },
+          { id: '1', raw: 'print("hello");', format: 'code' },
+          { id: '2', raw: 'print("world");', format: 'code' },
+        ],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    const files = state.files as NotebookType[];
+    const cs = files[0].cells as CellType[];
+    const out = cs[1].out as LogEntryType[];
+    expect(out.length).toBe(1);
+    expect(out[0].text).toBe('hello');
+    expect(state.editor?.selectedCell).toBe(1);
+    unsub();
+    done();
+  });
+});
+
+test('Notebook editable without code should not run', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0 },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [{ id: '0', raw: 'demo', format: 'markdown' }],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.selectedCell).toBe(0);
     unsub();
     done();
   });
@@ -422,7 +547,7 @@ test('Notebook editable should run once', async done => {
 test('Notebook editable should run all', async done => {
   Object.defineProperty(window.navigator, 'platform', { value: 'Mac-Os' });
   let state: Partial<StateType> = {
-    editor: { selected: 0 },
+    editor: { selected: 0, selectedCell: 0 },
     files: [
       {
         id: '1',

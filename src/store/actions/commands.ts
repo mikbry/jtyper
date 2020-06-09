@@ -158,7 +158,10 @@ const commands = [
         name: 'Run all',
         ctrlKey: false,
         altKey: true,
-        cmd: () => runCell({ all: true }),
+        cmd: (editor: EditorType) => {
+          const next = editor.selectedCell as number;
+          return runCell({ all: true, next });
+        },
       },
     ],
   },

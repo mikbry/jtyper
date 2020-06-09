@@ -15,6 +15,7 @@ import {
   getNotebookCellIndex,
   getAllCodeCells,
   getFullCode,
+  getNextCodeCell,
   getNotebookCellByIndex,
 } from '../../selectors';
 import { composer } from '../../effects';
@@ -80,14 +81,6 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
 ) => {
   const { editor, files, sandbox } = getState();
   const notebook = getCurrentNotebook(editor, files);
-  let cell = c;
-  if (!cell) {
-    if (s !== undefined) {
-      cell = getNotebookCellByIndex(s, notebook);
-    } else {
-      cell = findNotebookCodeCell(notebook) as CellType;
-    }
-  }
   if (all) {
     const { cells, code } = getAllCodeCells(notebook);
     if (cells.length === 0) {
@@ -99,17 +92,46 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
       return i === -1 ? cl : { ...cl, out: out[i] };
     });
     dispatch({ ...notebook, cells: ncells, type: APP.UPDATENOTEBOOK + DONE });
-  } else if (cell && cell.format === 'code') {
-    const code = getFullCode(notebook, cell.id);
-    const [out] = await sandbox.execute(code);
-    dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
+  } else {
+    let cell = c;
+    let si = s;
+    if (s !== undefined) {
+      cell = getNotebookCellByIndex(s, notebook);
+      if (!cell || cell.format !== 'code') {
+        si = getNextCodeCell(notebook as NotebookType, s);
+        if (si) {
+          cell = getNotebookCellByIndex(si, notebook);
+        }
+      }
+    } else {
+      cell = findNotebookCodeCell(notebook) as CellType;
+      if (cell) {
+        si = getNotebookCellIndex(notebook, cell.id);
+      }
+    }
+
+    if (cell) {
+      const code = getFullCode(notebook, cell.id);
+      const [out] = await sandbox.execute(code);
+      dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
+      let selected = next;
+      // console.log('run=', si, selected, editor.selectedCell);
+      // if (selected === undefined) {
+      if (si !== editor.selectedCell) {
+        selected = si;
+        // console.log('selected=', si);
+      } else {
+        selected = getNextCodeCell(notebook as NotebookType, si);
+        // console.log('next=', selected);
+        if (selected === undefined) {
+          selected = editor.selectedCell;
+        }
+      }
+      dispatch({ type: APP.SELECTCELL + DONE, selected });
+      dispatch(save({ files: true, editor: true }));
+      // }
+    }
   }
-  let selected = next;
-  if (cell && selected === undefined && !all) {
-    selected = getNotebookCellIndex(notebook, cell.id) + 1;
-  }
-  dispatch({ type: APP.SELECTCELL + DONE, selected });
-  dispatch(save({ files: true, editor: true }));
 };
 
 const resetCell = ({ cell }: { cell: CellType }) => (dispatch: DispatchType) => {
