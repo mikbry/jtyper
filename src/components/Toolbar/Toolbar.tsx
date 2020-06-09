@@ -93,8 +93,7 @@ const Toolbar: FunctionComponent = () => {
     dispatch(updateCell(c));
   };
   const handleRun = () => {
-    const next = selectedCell === undefined ? undefined : selectedCell + 1;
-    dispatch(runCell({ cell: cell as CellType, next }));
+    dispatch(runCell({ cell: cell as CellType }));
   };
   const handleReset = () => {
     dispatch(resetCell({ cell: cell as CellType }));

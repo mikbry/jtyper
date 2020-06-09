@@ -57,6 +57,11 @@ export const validateSelectedCell = (selected: number, length: number): number |
 export const getNotebookCellIndex = (notebook: NotebookType, id: string): number =>
   notebook.cells.findIndex(c => c.id === id) as number;
 
+export const getNextCodeCell = (notebook: NotebookType, selected: number | undefined): number | undefined => {
+  const next = notebook.cells.findIndex((c, i) => (selected === undefined || i > selected) && c.format === 'code');
+  return next > -1 ? next : undefined;
+};
+
 export const getFullCode = (notebook: NotebookType, id: string): string[] => {
   const index = getNotebookCellIndex(notebook, id);
   const code: string[] = [];
