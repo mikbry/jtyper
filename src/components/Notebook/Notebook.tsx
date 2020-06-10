@@ -31,23 +31,23 @@ const NoContent = styled.div`
 const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) => {
   const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
   const dispatch = useDispatch();
+  let content;
+  let readOnly = true;
+  let edited = false;
+  let selectedCell = -1;
   const handleSelectCell = (selected: number) => {
-    dispatch(selectCell({ selected, mode: 'edit' }));
+    dispatch(selectCell({ selected, mode: readOnly ? undefined : 'edit' }));
   };
   const handleCellChange = (index: number, value: string, notebook: NotebookType) => {
     const cell = { ...notebook.cells[index], raw: value };
     dispatch(updateCell(cell));
   };
-
-  let content;
-  let readOnly = true;
-  let edited = false;
-  let selectedCell = -1;
   let notebook: NotebookType | undefined;
   if (notebookId) {
     notebook = getNotebookById(notebookId, files);
+  } else {
+    notebook = getNotebook(editor.selected, files);
   }
-  notebook = getNotebook(editor.selected, files);
   if (notebook) {
     ({ selectedCell = -1 } = editor);
     edited = editor.mode === 'edit';
@@ -66,7 +66,7 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
               handleCellChange(index, value, notebook as NotebookType);
             }}
             onClick={() => {
-              if (!readOnly) handleSelectCell(index);
+              if (!readOnly || cell.format === 'code') handleSelectCell(index);
             }}
           >
             {cell.raw}
