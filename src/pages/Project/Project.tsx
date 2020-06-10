@@ -68,11 +68,17 @@ const Project: FunctionComponent = () => {
     );
     noDrawer = false;
   }
-  return (
-    <Page>
+  let topBar;
+  if (!editor.hideTopBar) {
+    topBar = (
       <AppBar noDrawer={noDrawer}>
         <Toolbar />
       </AppBar>
+    );
+  }
+  return (
+    <Page>
+      {topBar}
       <Wrapper>
         {explorer}
         <Container noDrawer={noDrawer}>

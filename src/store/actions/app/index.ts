@@ -45,7 +45,9 @@ const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) => 
   dispatch({ ...action, type: APP.TOGGLEHELP });
 };
 
-const toggleView = (action: { explorer: { enable: boolean } }) => (dispatch: DispatchType) => {
+const toggleView = (action: { explorer?: { enable: boolean }; topBar?: { enable: boolean } }) => (
+  dispatch: DispatchType,
+) => {
   dispatch({ ...action, type: APP.TOGGLEVIEW });
 };
 
