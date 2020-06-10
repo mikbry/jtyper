@@ -45,6 +45,10 @@ const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) => 
   dispatch({ ...action, type: APP.TOGGLEHELP });
 };
 
+const toggleView = (action: { explorer: { enable: boolean } }) => (dispatch: DispatchType) => {
+  dispatch({ ...action, type: APP.TOGGLEVIEW });
+};
+
 const createNotebook = (action: Partial<NotebookType>) => (dispatch: DispatchType) => {
   dispatch({ ...action, type: APP.CREATENOTEBOOK + DONE });
   dispatch(save({ editor: true, files: true }));
@@ -208,4 +212,5 @@ export {
   paste,
   save,
   toggleHelp,
+  toggleView,
 };

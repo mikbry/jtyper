@@ -190,6 +190,12 @@ const handlers = {
     editor.displayHelp = enable;
     return { ...state, editor };
   },
+  [APP.TOGGLEVIEW]: (state: StateType, action: { explorer: { enable: boolean } }) => {
+    const { explorer } = action;
+    const { editor } = state;
+    editor.hideExplorer = explorer.enable;
+    return { ...state, editor };
+  },
 };
 
 export default handlers;

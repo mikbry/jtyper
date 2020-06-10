@@ -9,7 +9,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
-import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste, toggleHelp } from './app';
+import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste, toggleHelp, toggleView } from './app';
 
 export const commands = [
   {
@@ -165,10 +165,17 @@ export const commands = [
       },
       {
         key: 'h',
-        name: 'Display help',
+        name: 'Toggle Help',
         ctrlKey: true,
         altKey: false,
         cmd: (editor: EditorType) => toggleHelp({ enable: !editor.displayHelp }),
+      },
+      {
+        key: 'e',
+        name: 'Toggle Explorer',
+        ctrlKey: true,
+        altKey: false,
+        cmd: (editor: EditorType) => toggleView({ explorer: { enable: !editor.hideExplorer } }),
       },
     ],
   },

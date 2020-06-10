@@ -57,17 +57,25 @@ const Project: FunctionComponent = () => {
   if (editor.displayHelp) {
     modal = <Help />;
   }
+  let explorer;
+  let noDrawer = true;
+  if (!editor.hideExplorer) {
+    explorer = (
+      <Drawer>
+        <Header />
+        <Explorer />
+      </Drawer>
+    );
+    noDrawer = false;
+  }
   return (
     <Page>
-      <AppBar>
+      <AppBar noDrawer={noDrawer}>
         <Toolbar />
       </AppBar>
       <Wrapper>
-        <Drawer>
-          <Header />
-          <Explorer />
-        </Drawer>
-        <Container>
+        {explorer}
+        <Container noDrawer={noDrawer}>
           <Notebook />
         </Container>
       </Wrapper>
