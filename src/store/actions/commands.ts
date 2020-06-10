@@ -177,6 +177,13 @@ export const commands = [
         altKey: false,
         cmd: (editor: EditorType) => toggleView({ explorer: { enable: !editor.hideExplorer } }),
       },
+      {
+        key: 'b',
+        name: 'Toggle Topbar',
+        ctrlKey: true,
+        altKey: false,
+        cmd: (editor: EditorType) => toggleView({ topBar: { enable: !editor.hideTopBar } }),
+      },
     ],
   },
 ];

@@ -50,6 +50,7 @@ export interface EditorType {
   copyBuffer?: Partial<CellType>;
   displayHelp?: boolean;
   hideExplorer?: boolean;
+  hideTopBar?: boolean;
 }
 
 export interface WebsiteType {

@@ -190,10 +190,15 @@ const handlers = {
     editor.displayHelp = enable;
     return { ...state, editor };
   },
-  [APP.TOGGLEVIEW]: (state: StateType, action: { explorer: { enable: boolean } }) => {
-    const { explorer } = action;
+  [APP.TOGGLEVIEW]: (state: StateType, action: { explorer?: { enable: boolean }; topBar?: { enable: boolean } }) => {
+    const { explorer, topBar } = action;
     const { editor } = state;
-    editor.hideExplorer = explorer.enable;
+    if (explorer) {
+      editor.hideExplorer = explorer.enable;
+    }
+    if (topBar) {
+      editor.hideTopBar = topBar.enable;
+    }
     return { ...state, editor };
   },
 };
