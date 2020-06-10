@@ -42,7 +42,6 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
 };
 
 const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) => {
-  console.log('toggle=', action);
   dispatch({ ...action, type: APP.TOGGLEHELP });
 };
 
@@ -149,6 +148,7 @@ const resetAllCell = () => (dispatch: DispatchType, getState: Function) => {
   const notebook = getCurrentNotebook(editor, files);
   const cells = notebook.cells.map(c => ({ ...c, out: undefined }));
   dispatch({ ...notebook, cells, type: APP.UPDATENOTEBOOK + DONE });
+  dispatch({ type: APP.SELECTCELL + DONE, selected: undefined, mode: undefined });
   dispatch(save({ files: true }));
 };
 
