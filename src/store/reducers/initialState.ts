@@ -29,7 +29,7 @@ const initialState: StateType = {
           id: 'a',
           format: 'markdown',
         },
-        { raw: 'Try this code to see how JTyper works !', id: 'b' },
+        { raw: 'Try this code to see how JTyper works !', id: 'b', format: 'raw' },
         { raw: `print('hello world !')`, id: 'c', format: 'code' },
       ],
     },
