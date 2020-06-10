@@ -18,7 +18,7 @@ import Drawer from '../../components/Drawer';
 import Explorer from '../../components/Explorer';
 import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
-import Modal from '../../components/Modal';
+import Help from '../../components/Help';
 import { selectFile } from '../../store/actions';
 import { StateType } from '../../types';
 
@@ -55,7 +55,7 @@ const Project: FunctionComponent = () => {
   }
   let modal;
   if (editor.displayHelp) {
-    modal = <Modal>help</Modal>;
+    modal = <Help />;
   }
   return (
     <Page>
