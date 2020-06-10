@@ -11,11 +11,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { EditorType, StateType } from '../../types';
 import { runCell, createCell, deleteCell, selectCell, save, cut, copy, paste, toggleHelp } from './app';
 
-const commands = [
+export const commands = [
   {
-    // We could edit a notebook
+    when: 'We could edit a notebook',
     conditions: (editor: EditorType) => !editor.readOnly,
-    shortcuts: [
+    keybindings: [
       {
         key: 's',
         name: 'Save notebook',
@@ -33,9 +33,9 @@ const commands = [
     ],
   },
   {
-    // We could edit a notebook
+    when: 'We could edit a notebook and not in editor mode',
     conditions: (editor: EditorType) => !editor.readOnly && !editor.mode,
-    shortcuts: [
+    keybindings: [
       {
         key: 'v',
         name: 'Paste cell',
@@ -66,10 +66,10 @@ const commands = [
     ],
   },
   {
-    // We could have a selected cell and edit it
+    when: 'We have a selected cell and editable notebook',
     conditions: (editor: EditorType) =>
       !editor.readOnly && editor.selectedCell !== undefined && editor.selectedCell > -1 && !editor.mode,
-    shortcuts: [
+    keybindings: [
       {
         key: 'd',
         name: 'Delete cell',
@@ -100,10 +100,10 @@ const commands = [
     ],
   },
   {
-    // We could have a selected cell and edit it
+    when: 'We have a selected cell in edit mode',
     conditions: (editor: EditorType) =>
       !editor.readOnly && editor.selectedCell !== undefined && editor.selectedCell > -1 && editor.mode === 'edit',
-    shortcuts: [
+    keybindings: [
       {
         key: 'd',
         name: 'Delete cell',
@@ -124,9 +124,9 @@ const commands = [
     ],
   },
   {
-    // We could have a selected cell and edit it
+    when: 'We have a selected cell not in edit mode',
     conditions: (editor: EditorType) => !editor.readOnly && editor.mode === undefined,
-    shortcuts: [
+    keybindings: [
       {
         key: 'Enter',
         name: 'Enter cell',
@@ -140,9 +140,9 @@ const commands = [
     ],
   },
   {
-    // Work for any conditions
+    when: 'Any time',
     conditions: () => true,
-    shortcuts: [
+    keybindings: [
       {
         key: 'Enter',
         name: 'Run cell',
@@ -181,7 +181,7 @@ const useCommands = () => {
   const handleKeyboard = async (event: KeyboardEvent) => {
     for (const c of commands) {
       if (c.conditions(editor)) {
-        for (const s of c.shortcuts) {
+        for (const s of c.keybindings) {
           if (
             s.key === event.key &&
             (isMac ? s.ctrlKey === event.metaKey : s.ctrlKey === event.ctrlKey) &&
