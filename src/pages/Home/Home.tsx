@@ -48,14 +48,16 @@ const Home: FunctionComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  let redirection;
+  let redirection: Array<string> | undefined;
   params.forEach((p, k) => {
     if (k === 'p') {
-      redirection = p.split('/');
+      redirection = p.split('-');
     }
   });
   if (redirection) {
-    navigate(generateUrl(redirection[1], redirection[2]), { replace: true });
+    const name = redirection[1];
+    const title = redirection.slice(2).join('-');
+    navigate(generateUrl(name, title), { replace: true });
   }
   const [files, publisher, website, editor] = useSelector((state: StateType) => [
     state.files,
@@ -63,7 +65,6 @@ const Home: FunctionComponent = () => {
     state.website,
     state.editor,
   ]);
-
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     const title = createNewTitle(files);
