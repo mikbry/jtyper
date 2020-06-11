@@ -9,6 +9,7 @@
     padding: 0;
     margin: 0;
     position: relative;
+    line-height: 1.5em;
     background-color: ${e=>e.theme.palette.background}
   }
   #root {

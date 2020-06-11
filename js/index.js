@@ -9,6 +9,7 @@ var e=function(){return(e=Object.assign||function(e){for(var t,r=1,n=arguments.l
     padding: 0;
     margin: 0;
     position: relative;
+    line-height: 1.5em;
     background-color: ${e=>e.theme.palette.background}
   }
   #root {
