@@ -9,7 +9,7 @@
 
 import React, { FunctionComponent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Page from '../../components/Page';
 import AppBar from '../../components/AppBar';
@@ -47,6 +47,16 @@ const contentBase = process.env.CONTENT_BASE || '';
 const Home: FunctionComponent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  let redirection;
+  params.forEach((p, k) => {
+    if (k === 'p') {
+      redirection = p.split('/');
+    }
+  });
+  if (redirection) {
+    navigate(generateUrl(redirection[1], redirection[2]), { replace: true });
+  }
   const [files, publisher, website, editor] = useSelector((state: StateType) => [
     state.files,
     state.publisher,
