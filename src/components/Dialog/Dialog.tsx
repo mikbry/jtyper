@@ -8,6 +8,7 @@
 import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import Modal from '../Modal';
+import Button from '../Button';
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,7 +37,7 @@ const Dialog: FunctionComponent<{ title?: string; actions: Array<string>; onActi
         {children}
         <div>
           {actions.map(a => (
-            <button
+            <Button
               type='button'
               key={a}
               onClick={() => {
@@ -44,7 +45,7 @@ const Dialog: FunctionComponent<{ title?: string; actions: Array<string>; onActi
               }}
             >
               {a}
-            </button>
+            </Button>
           ))}
         </div>
       </Wrapper>
