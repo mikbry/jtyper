@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -22,6 +22,7 @@ import Notebook from '../../components/Notebook';
 import Help from '../../components/Help';
 import { selectFile } from '../../store/actions';
 import { StateType } from '../../types';
+import Dialog from '../../components/Dialog';
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Wrapper = styled.div`
 
 const Project: FunctionComponent = () => {
   const { publisherName, notebookId } = useParams();
+  const [displayCreateNotebook, toggleCreateNotebook] = useState(false);
   const dispatch = useDispatch();
   const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
   if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
@@ -42,13 +44,31 @@ const Project: FunctionComponent = () => {
   if (i === -1) {
     return <PageError code={404} description='Notebook was not found.' />;
   }
+
+  const handleCreateNotebook = () => {
+    toggleCreateNotebook(true);
+  };
+
+  const handleCreatedNotebook = (action: string) => {
+    // TODO
+    console.log('action', action);
+    toggleCreateNotebook(false);
+  };
+
   if (editor.selected !== undefined && i !== editor.selected) {
     // Another screen
     dispatch(selectFile({ selected: i }));
     return <div>Please wait</div>;
   }
   let modal;
-  if (editor.displayHelp) {
+  if (displayCreateNotebook) {
+    modal = (
+      <Dialog title='Create a notebook' actions={['Ok', 'Cancel']} onAction={handleCreatedNotebook}>
+        <input placeholder='Notebook name' />
+        <p>This notebook will be stored locally in your browser storage.</p>
+      </Dialog>
+    );
+  } else if (editor.displayHelp) {
     modal = <Help />;
   }
   let explorer;
@@ -57,7 +77,7 @@ const Project: FunctionComponent = () => {
     explorer = (
       <Drawer>
         <Header />
-        <Explorer />
+        <Explorer onCreateNotebook={handleCreateNotebook} />
       </Drawer>
     );
     noDrawer = false;
