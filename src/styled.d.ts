@@ -26,6 +26,7 @@ declare module 'styled-components' {
       onHover: string;
       disabled: string;
       notebook: string;
+      text: string;
     };
     shadow: string;
     fontFamily: string;
