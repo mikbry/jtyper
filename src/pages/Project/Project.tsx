@@ -20,6 +20,7 @@ import Explorer from '../../components/Explorer';
 import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
 import Help from '../../components/Help';
+import Input from '../../components/Input';
 import { selectFile } from '../../store/actions';
 import { StateType } from '../../types';
 import Dialog from '../../components/Dialog';
@@ -64,7 +65,7 @@ const Project: FunctionComponent = () => {
   if (displayCreateNotebook) {
     modal = (
       <Dialog title='Create a notebook' actions={['Ok', 'Cancel']} onAction={handleCreatedNotebook}>
-        <input placeholder='Notebook name' />
+        <Input placeholder='Notebook name' />
         <p>This notebook will be stored locally in your browser storage.</p>
       </Dialog>
     );
