@@ -71,7 +71,7 @@ test('Project should render 404 when notebook was not found', async () => {
       history,
     },
   );
-  const text = findByText('404 Notebook not found');
+  const text = findByText('Notebook was not found.');
   expect(text).toBeDefined();
 });
 

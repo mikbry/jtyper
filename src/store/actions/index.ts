@@ -44,7 +44,7 @@ const init = async (compose?: ComposerType): Promise<[Partial<StateType>, Functi
       if (editor.selected !== undefined) {
         //
         const notebook: NotebookType = fs[editor.selected] as NotebookType;
-        if (notebook.url && !notebook.state) {
+        if (notebook && notebook.url && !notebook.state) {
           compose(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then(n =>
             store.dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }),
           );

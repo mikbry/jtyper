@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Page from '../../components/Page';
+import PageError from '../../components/PageError';
 import AppBar from '../../components/AppBar';
 import Toolbar from '../../components/Toolbar';
 import Header from '../../components/Header';
@@ -32,22 +33,14 @@ const Project: FunctionComponent = () => {
   const dispatch = useDispatch();
   const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
   if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
-    return (
-      <Page>
-        <div>404 Publisher doesn&apos;t exist</div>
-      </Page>
-    );
+    return <PageError code={404} description="Publisher doesn't exist." />;
   }
   const i = files.findIndex(
     (file, index) =>
       (notebookId === undefined && index === 0) || (file.title && file.title.toLowerCase() === notebookId),
   );
   if (i === -1) {
-    return (
-      <Page>
-        <div>404 Notebook not found</div>
-      </Page>
-    );
+    return <PageError code={404} description='Notebook was not found.' />;
   }
   if (editor.selected !== undefined && i !== editor.selected) {
     // Another screen
