@@ -70,7 +70,7 @@ const Help: FunctionComponent = () => {
             </td>
             <td>
               {keybindings[n].when.map(w => (
-                <div>{w}</div>
+                <div key={`${w.length} _${keybindings[n].key}`}>{w}</div>
               ))}
             </td>
           </tr>
