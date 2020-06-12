@@ -26,7 +26,7 @@ const List = styled.ul`
   padding: 0;
 `;
 
-const Explorer: FunctionComponent = () => {
+const Explorer: FunctionComponent<{ onCreateNotebook?: Function }> = ({ onCreateNotebook }) => {
   const [publisher, files, editor, pkg] = useSelector((state: StateType) => [
     state.publisher as PublisherType,
     state.files,
@@ -38,9 +38,13 @@ const Explorer: FunctionComponent = () => {
   const notebook = getNotebook(editor.selected, files) as NotebookType;
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
-    const title = createNewTitle(files);
-    dispatch(createNotebook({ title }));
-    navigate(generateUrl(publisher.name as string, title));
+    if (onCreateNotebook) {
+      onCreateNotebook();
+    } else {
+      const title = createNewTitle(files);
+      dispatch(createNotebook({ title }));
+      navigate(generateUrl(publisher.name as string, title));
+    }
   };
   const handleDuplicate = () => {
     const title = createNewTitle(files, notebook.title);
