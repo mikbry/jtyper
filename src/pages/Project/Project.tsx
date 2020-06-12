@@ -8,7 +8,7 @@
 
 import React, { FunctionComponent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Page from '../../components/Page';
 import PageError from '../../components/PageError';
@@ -21,9 +21,10 @@ import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
 import Help from '../../components/Help';
 import Input from '../../components/Input';
-import { selectFile } from '../../store/actions';
+import { createNotebook, selectFile } from '../../store/actions';
 import { StateType } from '../../types';
 import Dialog from '../../components/Dialog';
+import { createNewTitle, generateUrl } from '../../store/selectors';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,7 +34,9 @@ const Wrapper = styled.div`
 const Project: FunctionComponent = () => {
   const { publisherName, notebookId } = useParams();
   const [displayCreateNotebook, toggleCreateNotebook] = useState(false);
+  const [name, setName] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
   if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
     return <PageError code={404} description="Publisher doesn't exist." />;
@@ -51,9 +54,23 @@ const Project: FunctionComponent = () => {
   };
 
   const handleCreatedNotebook = (action: string) => {
-    // TODO
-    console.log('action', action);
-    toggleCreateNotebook(false);
+    let toggle = false;
+    if (name.length > 0 && action === 'Create') {
+      // Create
+      const title = createNewTitle(files, name);
+      dispatch(createNotebook({ title }));
+      navigate(generateUrl(publisher.name as string, title));
+    } else if (action === 'Create') {
+      toggle = true;
+    }
+    toggleCreateNotebook(toggle);
+  };
+
+  const handleNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target?.value;
+    if (text.length > 0) {
+      setName(text);
+    }
   };
 
   if (editor.selected !== undefined && i !== editor.selected) {
@@ -64,8 +81,8 @@ const Project: FunctionComponent = () => {
   let modal;
   if (displayCreateNotebook) {
     modal = (
-      <Dialog title='Create a notebook' actions={['Ok', 'Cancel']} onAction={handleCreatedNotebook}>
-        <Input placeholder='Notebook name' />
+      <Dialog title='New notebook' actions={['Create', 'Cancel']} onAction={handleCreatedNotebook}>
+        <Input placeholder='Notebook name' defaultValue={name} onChange={handleNameChanged} />
         <p>This notebook will be stored locally in your browser storage.</p>
       </Dialog>
     );
