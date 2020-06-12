@@ -13,7 +13,7 @@ import { FileText2 } from '@styled-icons/icomoon/FileText2';
 import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
 import { useSelector, useDispatch } from 'react-redux';
-import { createNotebook, deleteNotebook } from '../../store/actions';
+import { createNotebook, deleteNotebook, selectFile } from '../../store/actions';
 import { StateType, NotebookType, PublisherType, PackageType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
@@ -56,6 +56,7 @@ const Explorer: FunctionComponent = () => {
   const handleSelect = (event: React.MouseEvent<HTMLElement>, selected: number) => {
     event.preventDefault();
     const n = getNotebook(selected, files) as NotebookType;
+    dispatch(selectFile({ selected }));
     navigate(generateUrl(publisher.name as string, n.title));
   };
   const { selected } = editor;

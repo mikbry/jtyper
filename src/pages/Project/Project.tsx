@@ -45,6 +45,7 @@ const Project: FunctionComponent = () => {
   if (editor.selected !== undefined && i !== editor.selected) {
     // Another screen
     dispatch(selectFile({ selected: i }));
+    return <div>Please wait</div>;
   }
   let modal;
   if (editor.displayHelp) {
