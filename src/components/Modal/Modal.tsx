@@ -22,6 +22,7 @@ const Background = styled.div`
   width: 100%;
   height: 100%;
 `;
+Background.defaultProps = { theme: BasicTheme };
 
 const Wrapper = styled.div`
   position: fixed;
@@ -39,6 +40,7 @@ Wrapper.defaultProps = { theme: BasicTheme };
 
 const Modal: FunctionComponent<{ onClose?: Function }> = ({ children, onClose }) => (
   <Background
+    data-testid='modal-background'
     onClick={() => {
       if (onClose) {
         onClose();
