@@ -13,6 +13,7 @@ const BasicTheme: DefaultTheme = {
     secondary: 'orange',
     onPrimary: 'white',
     background: 'white',
+    backgroundModal: 'rgba(0,0,0,0.5)',
     surface: 'gainsboro',
     onSurface: '#999',
     menu: '#333',

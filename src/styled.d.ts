@@ -14,6 +14,7 @@ declare module 'styled-components' {
       secondary: string;
       onPrimary: string;
       background: string;
+      backgroundModal: string;
       surface: string;
       onSurface: string;
       menu: string;

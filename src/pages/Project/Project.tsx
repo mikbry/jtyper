@@ -21,7 +21,7 @@ import Container from '../../components/Container';
 import Notebook from '../../components/Notebook';
 import Help from '../../components/Help';
 import Input from '../../components/Input';
-import { createNotebook, selectFile } from '../../store/actions';
+import { createNotebook, selectFile, toggleHelp } from '../../store/actions';
 import { StateType } from '../../types';
 import Dialog from '../../components/Dialog';
 import { createNewTitle, generateUrl } from '../../store/selectors';
@@ -73,6 +73,10 @@ const Project: FunctionComponent = () => {
     }
   };
 
+  const handleHideHelp = () => {
+    dispatch(toggleHelp({ enable: false }));
+  };
+
   if (editor.selected !== undefined && i !== editor.selected) {
     // Another screen
     dispatch(selectFile({ selected: i }));
@@ -87,7 +91,7 @@ const Project: FunctionComponent = () => {
       </Dialog>
     );
   } else if (editor.displayHelp) {
-    modal = <Help />;
+    modal = <Help onClose={handleHideHelp} />;
   }
   let explorer;
   let noDrawer = true;
