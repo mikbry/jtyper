@@ -37,7 +37,7 @@ type Keybinding = {
   altKey: boolean;
 };
 
-const Help: FunctionComponent = () => {
+const Help: FunctionComponent<{ onClose?: Function }> = ({ onClose }) => {
   const keybindings: Record<string, Keybinding> = {};
   commands.forEach(cmd => {
     const { when } = cmd;
@@ -79,7 +79,7 @@ const Help: FunctionComponent = () => {
     </Table>
   );
   return (
-    <Modal>
+    <Modal onClose={onClose}>
       <Container>Help{shortcuts}</Container>
     </Modal>
   );

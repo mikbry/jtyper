@@ -31,7 +31,7 @@ const Dialog: FunctionComponent<{ title?: string; actions: Array<string>; onActi
     }
   };
   return (
-    <Modal>
+    <Modal onClose={handleAction}>
       <Wrapper>
         <h2>{title}</h2>
         {children}
