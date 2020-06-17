@@ -30,3 +30,11 @@ test('Modal click outside without onClose should not call onClose', () => {
   bg.click();
   expect(onClose).toHaveBeenCalledTimes(0);
 });
+
+test('Modal click inside should not call onClose', () => {
+  const onClose = jest.fn();
+  const { getByTestId } = render(<Modal>content</Modal>);
+  const bg = getByTestId('modal-wrapper');
+  bg.click();
+  expect(onClose).toHaveBeenCalledTimes(0);
+});

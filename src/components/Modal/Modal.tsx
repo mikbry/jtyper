@@ -48,6 +48,7 @@ const Modal: FunctionComponent<{ onClose?: Function }> = ({ children, onClose })
     }}
   >
     <Wrapper
+      data-testid='modal-wrapper'
       onClick={event => {
         event.stopPropagation();
       }}
