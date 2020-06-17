@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -57,7 +57,9 @@ const Home: FunctionComponent = () => {
   if (redirection) {
     const name = redirection[1];
     const title = redirection.slice(2).join('-');
-    navigate(generateUrl(name, title), { replace: true });
+    useEffect(() => {
+      navigate(generateUrl(name, title), { replace: true });
+    }, []);
   }
   const [files, publisher, website, editor] = useSelector((state: StateType) => [
     state.files,

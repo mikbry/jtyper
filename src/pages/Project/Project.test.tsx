@@ -51,7 +51,7 @@ test('Project should render 404 when publisher was not found', async () => {
       history,
     },
   );
-  const text = findByText('404 Publisher doesn&apos;t exist');
+  const text = await findByText('Publisher do not exist.');
   expect(text).toBeDefined();
 });
 
@@ -71,7 +71,7 @@ test('Project should render 404 when notebook was not found', async () => {
       history,
     },
   );
-  const text = findByText('Notebook was not found.');
+  const text = await findByText('Notebook was not found.');
   expect(text).toBeDefined();
 });
 
@@ -91,6 +91,70 @@ test('Project should render correctly with url /p/jtyper/notebook1', async () =>
       history,
     },
   );
-  const text = findByText('notebook1');
+  const text = await findByText('notebook1');
   expect(text).toBeDefined();
+});
+
+test("Project should hide Explorer's drawer", async () => {
+  const state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideExplorer: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+    },
+  );
+  const drawer = queryByTestId('drawer');
+  expect(drawer).toEqual(null);
+});
+
+test('Project should hide topBar', async () => {
+  const state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+    },
+  );
+  const topBar = queryByTestId('appbar');
+  expect(topBar).toEqual(null);
+});
+
+test('Project should display Help', async () => {
+  const state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { displayHelp: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+    },
+  );
+  const help = queryByTestId('modal-background') as HTMLElement;
+  help.click();
+  expect(help).toBeDefined();
 });

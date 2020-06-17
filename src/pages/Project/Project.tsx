@@ -39,7 +39,7 @@ const Project: FunctionComponent = () => {
   const navigate = useNavigate();
   const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
   if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
-    return <PageError code={404} description="Publisher doesn't exist." />;
+    return <PageError code={404} description='Publisher do not exist.' />;
   }
   const i = files.findIndex(
     (file, index) =>
