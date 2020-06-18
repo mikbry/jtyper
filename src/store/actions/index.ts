@@ -23,7 +23,6 @@ import {
   paste,
   save,
   toggleHelp,
-  toggleView,
 } from './app';
 import useCommands from './commands';
 import initSandbox from '../effects/sandbox';
@@ -90,5 +89,4 @@ export {
   save,
   useCommands,
   toggleHelp,
-  toggleView,
 };

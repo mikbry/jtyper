@@ -67,8 +67,8 @@ const Project: FunctionComponent = () => {
   };
 
   const handleNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const text = e.target?.value;
-    if (text.length > 0) {
+    const text = e.target.value;
+    if (text.trim().length > 0) {
       setName(text);
     }
   };

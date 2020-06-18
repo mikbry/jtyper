@@ -240,3 +240,81 @@ test('Project shortcut should hide topBar', async done => {
   );
   state = store.getState();
 });
+
+test('Project should display create notebook Dialog', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store, findAllByRole, getByTestId, getByPlaceholderText, getByText } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const buttons = await findAllByRole('button');
+  buttons[0].click();
+  state = store.getState();
+  const dialog = getByTestId('modal-wrapper');
+  expect(dialog).toBeDefined();
+  const input = getByPlaceholderText('Notebook name');
+  expect(input).toBeDefined();
+  fireEvent.change(input, { target: { value: ' ' } });
+  const create = getByText('Create');
+  expect(create).toBeDefined();
+  create.click();
+  const cancel = getByText('Cancel');
+  expect(cancel).toBeDefined();
+  cancel.click();
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideTopBar).toBe(true);
+    unsub();
+    done();
+  });
+  done();
+});
+
+test('Project should display and create notebook using Dialog', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store, findAllByRole, getByTestId, getByPlaceholderText, getByText } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const buttons = await findAllByRole('button');
+  buttons[0].click();
+  state = store.getState();
+  const dialog = getByTestId('modal-wrapper');
+  expect(dialog).toBeDefined();
+  const input = getByPlaceholderText('Notebook name');
+  expect(input).toBeDefined();
+  fireEvent.change(input, { target: { value: 'new notebook' } });
+  const create = getByText('Create');
+  expect(create).toBeDefined();
+  create.click();
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.files?.length).toBe(2);
+    unsub();
+    done();
+  });
+});
