@@ -3,8 +3,9 @@
    {
     "type": "notebook",
     "metadata": {
-      "id": "dfggf" ,
-      "title": "Home"
+      "id": "dfggf",
+      "title": "Home",
+      "readOnly": true
     },
     "source": [
      "home.ipynb"
