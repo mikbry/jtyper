@@ -439,6 +439,46 @@ test('Notebook editable should run once', async done => {
   });
 });
 
+test('Notebook without code should not run', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: undefined },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '0', raw: 'demo', format: 'markdown' },
+          { id: '1', raw: 'print("hello");', format: 'raw' },
+        ],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    const files = state.files as NotebookType[];
+    const cs = files[0].cells as CellType[];
+    const out = cs[1].out as LogEntryType[];
+    expect(out).toBe(undefined);
+    unsub();
+    done();
+  });
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  done();
+});
+
 test('Notebook selected code should run once', async done => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 1 },
