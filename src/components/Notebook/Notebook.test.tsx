@@ -587,3 +587,37 @@ test('Notebook editable should run all', async done => {
     done();
   });
 });
+
+test('Notebook shortcut should display Help', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0 },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [{ id: '0', raw: 'demo', format: 'markdown' }],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.displayHelp).toBe(true);
+    unsub();
+    done();
+  });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'h',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
+});

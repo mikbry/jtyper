@@ -41,9 +41,8 @@ const save = (action: { document?: boolean; files?: boolean; editor?: boolean } 
   composer(APP.LOCALSAVE + FETCH, data).then(() => dispatch({ type: APP.LOCALSAVE + DONE }));
 };
 
-const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) => {
+const toggleHelp = (action: { enable: boolean }) => (dispatch: DispatchType) =>
   dispatch({ ...action, type: APP.TOGGLEHELP });
-};
 
 const toggleView = (action: { explorer?: { enable: boolean }; topBar?: { enable: boolean } }) => (
   dispatch: DispatchType,

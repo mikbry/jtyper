@@ -8,8 +8,9 @@
  */
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { fireEvent } from '@testing-library/react';
 import Project from './index';
-import { renderWithProvider } from '../../test';
+import { renderWithProvider, MockupEvent } from '../../test';
 import { StateType } from '../../types';
 
 test('Project should render correctly', async () => {
@@ -137,24 +138,105 @@ test('Project should hide topBar', async () => {
   expect(topBar).toEqual(null);
 });
 
-test('Project should display Help', async () => {
-  const state: Partial<StateType> = {
+test('Project should display Help', async done => {
+  let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: { displayHelp: true },
     publisher: { name: 'jtyper' },
     files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
   };
   const history = ['/p/jtyper/notebook1'];
-  const { queryByTestId } = await renderWithProvider(
+  const { store, queryByTestId } = await renderWithProvider(
     <Routes>
       <Route path='/p/:publisherName/:notebookId' element={<Project />} />
     </Routes>,
     {
       state,
       history,
+      real: true,
     },
   );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.displayHelp).toBe(false);
+    unsub();
+    done();
+  });
   const help = queryByTestId('modal-background') as HTMLElement;
   help.click();
-  expect(help).toBeDefined();
+  state = store.getState();
+});
+
+test('Project shortcut should hide Explorer', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: {},
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideExplorer).toBe(true);
+    unsub();
+    done();
+  });
+  fireEvent(
+    window,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'e',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
+});
+
+test('Project shortcut should hide topBar', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: {},
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideTopBar).toBe(true);
+    unsub();
+    done();
+  });
+  fireEvent(
+    window,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'b',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
 });
