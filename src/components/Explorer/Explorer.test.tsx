@@ -68,6 +68,25 @@ test('Explorer should create a notebook', async () => {
   expect(items[0].textContent).toBe('Notebook1'); */
 });
 
+test('Explorer with onCreateNotebook should call it', async () => {
+  const onCreateNotebook = jest.fn();
+  const dispatch = jest.fn().mockImplementation(() => {
+    // console.log('dispatch', action);
+  });
+  const state: Partial<StateType> = {
+    files: [],
+    editor: { selected: undefined },
+  };
+  const { getAllByRole } = await renderWithProvider(<Explorer onCreateNotebook={onCreateNotebook} />, {
+    state,
+    dispatch,
+    real: true,
+  });
+  const buttons = getAllByRole('button');
+  fireEvent.click(buttons[0]);
+  expect(onCreateNotebook).toHaveBeenCalledTimes(1);
+});
+
 test('Explorer should duplicate a notebook', async () => {
   const dispatch = jest.fn().mockImplementation(() => {
     // console.log('dispatch', action);

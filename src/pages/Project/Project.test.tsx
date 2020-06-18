@@ -8,8 +8,9 @@
  */
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { fireEvent } from '@testing-library/react';
 import Project from './index';
-import { renderWithProvider } from '../../test';
+import { renderWithProvider, MockupEvent } from '../../test';
 import { StateType } from '../../types';
 
 test('Project should render correctly', async () => {
@@ -51,7 +52,7 @@ test('Project should render 404 when publisher was not found', async () => {
       history,
     },
   );
-  const text = findByText('404 Publisher doesn&apos;t exist');
+  const text = await findByText('Publisher do not exist.');
   expect(text).toBeDefined();
 });
 
@@ -71,7 +72,7 @@ test('Project should render 404 when notebook was not found', async () => {
       history,
     },
   );
-  const text = findByText('Notebook was not found.');
+  const text = await findByText('Notebook was not found.');
   expect(text).toBeDefined();
 });
 
@@ -91,6 +92,229 @@ test('Project should render correctly with url /p/jtyper/notebook1', async () =>
       history,
     },
   );
-  const text = findByText('notebook1');
+  const text = await findByText('notebook1');
   expect(text).toBeDefined();
+});
+
+test("Project should hide Explorer's drawer", async () => {
+  const state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideExplorer: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+    },
+  );
+  const drawer = queryByTestId('drawer');
+  expect(drawer).toEqual(null);
+});
+
+test('Project should hide topBar', async () => {
+  const state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+    },
+  );
+  const topBar = queryByTestId('appbar');
+  expect(topBar).toEqual(null);
+});
+
+test('Project should display Help', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { displayHelp: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store, queryByTestId } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.displayHelp).toBe(false);
+    unsub();
+    done();
+  });
+  const help = queryByTestId('modal-background') as HTMLElement;
+  help.click();
+  state = store.getState();
+});
+
+test('Project shortcut should hide Explorer', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: {},
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideExplorer).toBe(true);
+    unsub();
+    done();
+  });
+  fireEvent(
+    window,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'e',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
+});
+
+test('Project shortcut should hide topBar', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: {},
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideTopBar).toBe(true);
+    unsub();
+    done();
+  });
+  fireEvent(
+    window,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'b',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
+});
+
+test('Project should display create notebook Dialog', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store, findAllByRole, getByTestId, getByPlaceholderText, getByText } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const buttons = await findAllByRole('button');
+  buttons[0].click();
+  state = store.getState();
+  const dialog = getByTestId('modal-wrapper');
+  expect(dialog).toBeDefined();
+  const input = getByPlaceholderText('Notebook name');
+  expect(input).toBeDefined();
+  fireEvent.change(input, { target: { value: ' ' } });
+  const create = getByText('Create');
+  expect(create).toBeDefined();
+  create.click();
+  const cancel = getByText('Cancel');
+  expect(cancel).toBeDefined();
+  cancel.click();
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.hideTopBar).toBe(true);
+    unsub();
+    done();
+  });
+  done();
+});
+
+test('Project should display and create notebook using Dialog', async done => {
+  let state: Partial<StateType> = {
+    document: { title: 'title' },
+    editor: { hideTopBar: true },
+    publisher: { name: 'jtyper' },
+    files: [{ id: '1', title: 'notebook1', cells: [{ id: '1', raw: 'text', format: 'markdown' }] }],
+  };
+  const history = ['/p/jtyper/notebook1'];
+  const { store, findAllByRole, getByTestId, getByPlaceholderText, getByText } = await renderWithProvider(
+    <Routes>
+      <Route path='/p/:publisherName/:notebookId' element={<Project />} />
+    </Routes>,
+    {
+      state,
+      history,
+      real: true,
+    },
+  );
+  const buttons = await findAllByRole('button');
+  buttons[0].click();
+  state = store.getState();
+  const dialog = getByTestId('modal-wrapper');
+  expect(dialog).toBeDefined();
+  const input = getByPlaceholderText('Notebook name');
+  expect(input).toBeDefined();
+  fireEvent.change(input, { target: { value: 'new notebook' } });
+  const create = getByText('Create');
+  expect(create).toBeDefined();
+  create.click();
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.files?.length).toBe(2);
+    unsub();
+    done();
+  });
 });

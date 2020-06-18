@@ -73,6 +73,17 @@ test('Notebook readonly selected with data should display content', async () => 
   fireEvent.click(cells[0]);
 });
 
+test('Notebook readonly selected code with data should be selected', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', readOnly: true, cells: [{ id: '1', raw: 'text', format: 'code' }] }],
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
+  const cells = getAllByRole('button');
+  expect(cells.length).toBe(1);
+  fireEvent.click(cells[0]);
+});
+
 test('Notebook readonly should not  delete content', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0 },
@@ -428,6 +439,46 @@ test('Notebook editable should run once', async done => {
   });
 });
 
+test('Notebook without code should not run', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: undefined },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [
+          { id: '0', raw: 'demo', format: 'markdown' },
+          { id: '1', raw: 'print("hello");', format: 'raw' },
+        ],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    const files = state.files as NotebookType[];
+    const cs = files[0].cells as CellType[];
+    const out = cs[1].out as LogEntryType[];
+    expect(out).toBe(undefined);
+    unsub();
+    done();
+  });
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'Enter',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  done();
+});
+
 test('Notebook selected code should run once', async done => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 1 },
@@ -586,4 +637,38 @@ test('Notebook editable should run all', async done => {
     unsub();
     done();
   });
+});
+
+test('Notebook shortcut should display Help', async done => {
+  let state: Partial<StateType> = {
+    editor: { selected: 0, selectedCell: 0 },
+    files: [
+      {
+        id: '1',
+        title: 'notebook',
+        cells: [{ id: '0', raw: 'demo', format: 'markdown' }],
+      },
+    ],
+    saved: false,
+  };
+  const { getAllByRole, store } = await renderWithProvider(<Notebook />, { state, real: true });
+  const unsub = store.subscribe(() => {
+    state = store.getState();
+    expect(state.editor?.displayHelp).toBe(true);
+    unsub();
+    done();
+  });
+  const cells = getAllByRole('button');
+  const notebook = cells[0].parentNode as Node;
+  fireEvent(
+    notebook,
+    new MockupEvent('keydown', {
+      bubbles: true,
+      key: 'h',
+      metaKey: true,
+      ctrlKey: true,
+      altKey: false,
+    }),
+  );
+  state = store.getState();
 });
