@@ -29,8 +29,9 @@ const development = NODE_ENV === 'development';
 const outputFile = production ? 'js/index' : '/index.[hash]';
 const esmFile = `${outputFile}.js`;
 const iifeFile = `${outputFile}.legacy.js`;
-let styles = development ? '/styles.[hash].css' : `${CONTENT_BASE}/css/styles.css`;
-styles = `<link rel="stylesheet" type="text/css" href="${styles}">`;
+const cssFile = development ? 'styles.[hash].css' : `css/styles.css`;
+const stylesFile = development ? cssFile : `${CONTENT_BASE}/${cssFile}`;
+const styles = `<link rel="stylesheet" type="text/css" href="${stylesFile}">`;
 
 const genScripts = () => {
   let scripts = `<script async type="module" src="${publicUrl}/${esmFile}"></script>`;
@@ -92,7 +93,7 @@ const plugins = () => [
   typescript({ abortOnError: false }),
   hotcss({
     hot: development,
-    filename: development ? 'styles.css' : 'css/styles.css',
+    filename: cssFile,
   }),
   string({
     include: ['**/*.fs', '**/*.vs'],
