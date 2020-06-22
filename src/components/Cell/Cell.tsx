@@ -5,20 +5,22 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { /* KeyboardEvent, */ FunctionComponent, /* useState, */ useEffect, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
-// import ContentEditable from '../ContentEditable';
 import { BasicTheme } from '../../themes';
-import { LogEntryType } from '../../types';
+import { LogEntryType, CellState } from '../../types';
+import Action from './Action';
 
 interface Props {
   selected?: boolean;
   edited?: boolean;
   editable?: boolean;
+  state?: CellState;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange: (value: string) => void;
+  onRun: () => void;
   children: string;
   format?: string;
   out?: LogEntryType[];
@@ -32,11 +34,11 @@ interface StyledProps {
   theme: DefaultTheme;
 }
 
-const chooseBorderColor = (props: StyledProps, hover = false) => {
+const chooseBorderColor = (props: StyledProps, hover = false, defaultColor = props.theme.palette.notebook) => {
   if (props.selected && props.edited) return props.theme.palette.secondary;
   if (props.selected) return props.theme.palette.surface;
   if (props.editable && hover) return props.theme.palette.surface;
-  return props.theme.palette.notebook;
+  return defaultColor;
 };
 
 const Styled = styled.div`
@@ -136,8 +138,10 @@ const Cell: FunctionComponent<Props> = ({
   editable = false,
   format = undefined,
   out = undefined,
+  state,
   onClick,
   onChange,
+  onRun,
   children,
 }) => {
   const cellRef = useRef<HTMLInputElement>(null);
@@ -184,6 +188,7 @@ const Cell: FunctionComponent<Props> = ({
   return (
     <Styled
       role='button'
+      data-testid='cell'
       selected={selected}
       edited={edited}
       editable={editable}
@@ -196,7 +201,17 @@ const Cell: FunctionComponent<Props> = ({
     >
       <Line selected={selected} edited={edited}>
         <Prompt selected={selected} edited={edited}>
-          {format === 'code' && `${out ? 'In[*]' : 'In[    ]'}`}
+          {format === 'code' && (
+            <Action
+              state={state}
+              onAction={onRun}
+              selectionColor={chooseBorderColor(
+                { selected, editable, edited, theme: BasicTheme },
+                true,
+                BasicTheme.palette.onSurface,
+              )}
+            />
+          )}
         </Prompt>
         {content}
       </Line>

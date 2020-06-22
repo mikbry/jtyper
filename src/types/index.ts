@@ -8,7 +8,16 @@
  */
 import { AnyAction } from 'redux';
 import { ThunkDispatch, ThunkAction } from 'redux-thunk';
-import { PublisherType, NotebookType, DocumentType, CellType, CellFormat, EditorType, WebsiteType } from './app';
+import {
+  PublisherType,
+  NotebookType,
+  DocumentType,
+  CellType,
+  CellFormat,
+  CellState,
+  EditorType,
+  WebsiteType,
+} from './app';
 import {
   SandboxType,
   ParserType,
@@ -81,6 +90,7 @@ export {
   DocumentType,
   CellType,
   CellFormat,
+  CellState,
   SandboxType,
   ParserType,
   LogEntryType,

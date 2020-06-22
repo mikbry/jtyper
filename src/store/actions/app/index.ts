@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { APP, DONE, FETCH } from '../../../constants';
-import { StateType, DispatchType, CellType, CellFormat, NotebookType } from '../../../types';
+import { StateType, DispatchType, CellType, CellFormat, NotebookType, LogEntryType } from '../../../types';
 import {
   getNotebook,
   getCurrentNotebook,
@@ -118,11 +118,17 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
         si = getNotebookCellIndex(notebook, cell.id);
       }
     }
-
     if (cell) {
+      dispatch({ ...cell, type: APP.UPDATECELL + FETCH });
       const code = getFullCode(notebook, cell.id);
       const [out] = await sandbox.execute(code);
-      dispatch({ ...cell, out, type: APP.UPDATECELL + DONE });
+      let state = 'ran';
+      out.forEach((o: LogEntryType) => {
+        if (o.type === 'error') {
+          state = 'error';
+        }
+      });
+      dispatch({ ...cell, out, state, type: APP.UPDATECELL + DONE });
       let selected = next;
       // console.log('run=', si, selected, editor.selectedCell);
       // if (selected === undefined) {
@@ -144,7 +150,7 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
 };
 
 const resetCell = ({ cell }: { cell: CellType }) => (dispatch: DispatchType) => {
-  dispatch({ ...cell, out: undefined, type: APP.UPDATECELL + DONE });
+  dispatch({ ...cell, out: undefined, state: undefined, type: APP.UPDATECELL + DONE });
   dispatch(save({ files: true }));
 };
 
