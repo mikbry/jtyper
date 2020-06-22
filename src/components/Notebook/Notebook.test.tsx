@@ -84,6 +84,17 @@ test('Notebook readonly selected code with data should be selected', async () =>
   fireEvent.click(cells[0]);
 });
 
+test('Notebook selected code should run', async () => {
+  const state: Partial<StateType> = {
+    editor: { selected: 0 },
+    files: [{ id: '1', title: 'notebook', readOnly: true, cells: [{ id: '1', raw: 'text', format: 'code' }] }],
+  };
+  const { getAllByRole } = await renderWithProvider(<Notebook />, { state, real: true });
+  const cells = getAllByRole('button');
+  expect(cells.length).toBe(2);
+  fireEvent.click(cells[1]);
+});
+
 test('Notebook readOnly+editCodeOnly selected code with data should be selected', async () => {
   const state: Partial<StateType> = {
     editor: { selected: 0 },
