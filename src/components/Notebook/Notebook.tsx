@@ -53,7 +53,6 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
     edited = editor.mode === 'edit';
     ({ readOnly = false } = notebook);
     const { editCodeOnly } = notebook;
-    console.log('editCodeOnly', editCodeOnly);
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
