@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { APP, INITIALIZE, DONE } from '../../../constants';
+import { APP, INITIALIZE, DONE, FETCH } from '../../../constants';
 import { StateType, NotebookType, CellFormat, CellType } from '../../../types';
 import {
   generateId,
@@ -122,6 +122,15 @@ const handlers = {
     notebook.cells.push(cell);
     return { ...state, files, saved: false };
   },
+  [APP.UPDATECELL + FETCH]: (state: StateType, action: CellType) => {
+    const { files, editor } = state;
+    const notebook = getCurrentNotebook(editor, files);
+    const cell = getNotebookCell(action.id, notebook) as CellType;
+    if (cell.format === 'code') {
+      cell.state = 'run';
+    }
+    return { ...state, files };
+  },
   [APP.UPDATECELL + DONE]: (state: StateType, action: CellType) => {
     const { files, editor } = state;
     const notebook = getCurrentNotebook(editor, files);
@@ -130,6 +139,7 @@ const handlers = {
     cell.format = action.format;
     if (cell.format === 'code') {
       cell.out = action.out;
+      cell.state = action.state;
     }
     return { ...state, files, saved: false };
   },

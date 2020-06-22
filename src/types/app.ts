@@ -9,11 +9,14 @@ import { LogEntryType } from './sandbox';
 
 export type CellFormat = 'markdown' | 'code' | 'raw' | undefined;
 
+export type CellState = 'error' | 'run' | 'ran';
+
 export interface CellType {
   format?: 'markdown' | 'code' | 'raw';
   id: string;
   raw: string;
   out?: LogEntryType[];
+  state?: CellState;
 }
 
 export interface NotebookType {

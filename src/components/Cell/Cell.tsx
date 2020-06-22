@@ -10,13 +10,14 @@ import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
 import { BasicTheme } from '../../themes';
-import { LogEntryType } from '../../types';
+import { LogEntryType, CellState } from '../../types';
 import Action from './Action';
 
 interface Props {
   selected?: boolean;
   edited?: boolean;
   editable?: boolean;
+  state?: CellState;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange: (value: string) => void;
   onRun: () => void;
@@ -137,6 +138,7 @@ const Cell: FunctionComponent<Props> = ({
   editable = false,
   format = undefined,
   out = undefined,
+  state,
   onClick,
   onChange,
   onRun,
@@ -201,7 +203,7 @@ const Cell: FunctionComponent<Props> = ({
         <Prompt selected={selected} edited={edited}>
           {format === 'code' && (
             <Action
-              out={out}
+              state={state}
               onAction={onRun}
               selectionColor={chooseBorderColor(
                 { selected, editable, edited, theme: BasicTheme },

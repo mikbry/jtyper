@@ -66,6 +66,7 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
             edited={edited}
             editable={!readOnly || (editCodeOnly && cell.format === 'code')}
             selected={index === selectedCell}
+            state={cell.state}
             onChange={value => {
               handleCellChange(index, value, notebook as NotebookType);
             }}
