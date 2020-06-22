@@ -19,6 +19,7 @@ interface Props {
   editable?: boolean;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   onChange: (value: string) => void;
+  onRun: () => void;
   children: string;
   format?: string;
   out?: LogEntryType[];
@@ -32,11 +33,11 @@ interface StyledProps {
   theme: DefaultTheme;
 }
 
-const chooseBorderColor = (props: StyledProps, hover = false) => {
+const chooseBorderColor = (props: StyledProps, hover = false, defaultColor = props.theme.palette.notebook) => {
   if (props.selected && props.edited) return props.theme.palette.secondary;
   if (props.selected) return props.theme.palette.surface;
   if (props.editable && hover) return props.theme.palette.surface;
-  return props.theme.palette.notebook;
+  return defaultColor;
 };
 
 const Styled = styled.div`
@@ -138,6 +139,7 @@ const Cell: FunctionComponent<Props> = ({
   out = undefined,
   onClick,
   onChange,
+  onRun,
   children,
 }) => {
   const cellRef = useRef<HTMLInputElement>(null);
@@ -184,6 +186,7 @@ const Cell: FunctionComponent<Props> = ({
   return (
     <Styled
       role='button'
+      data-testid='cell'
       selected={selected}
       edited={edited}
       editable={editable}
@@ -196,7 +199,17 @@ const Cell: FunctionComponent<Props> = ({
     >
       <Line selected={selected} edited={edited}>
         <Prompt selected={selected} edited={edited}>
-          {format === 'code' && <Action out={out} />}
+          {format === 'code' && (
+            <Action
+              out={out}
+              onAction={onRun}
+              selectionColor={chooseBorderColor(
+                { selected, editable, edited, theme: BasicTheme },
+                true,
+                BasicTheme.palette.onSurface,
+              )}
+            />
+          )}
         </Prompt>
         {content}
       </Line>

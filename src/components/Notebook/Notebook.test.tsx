@@ -80,7 +80,7 @@ test('Notebook readonly selected code with data should be selected', async () =>
   };
   const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
   const cells = getAllByRole('button');
-  expect(cells.length).toBe(1);
+  expect(cells.length).toBe(2);
   fireEvent.click(cells[0]);
 });
 
@@ -99,7 +99,7 @@ test('Notebook readOnly+editCodeOnly selected code with data should be selected'
   };
   const { getAllByRole } = await renderWithProvider(<Notebook />, { state });
   const cells = getAllByRole('button');
-  expect(cells.length).toBe(1);
+  expect(cells.length).toBe(2);
   fireEvent.click(cells[0]);
 });
 

@@ -9,7 +9,7 @@ import React, { FunctionComponent } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
-import { selectCell, updateCell, useCommands } from '../../store/actions';
+import { selectCell, updateCell, useCommands, runCell } from '../../store/actions';
 import { getNotebook, getNotebookById } from '../../store/selectors';
 import { CellType, StateType, NotebookType } from '../../types';
 import { BasicTheme } from '../../themes';
@@ -42,6 +42,9 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
     const cell = { ...notebook.cells[index], raw: value };
     dispatch(updateCell(cell));
   };
+  const handleRun = (selected: number) => {
+    dispatch(runCell({ selected }));
+  };
   let notebook: NotebookType | undefined;
   if (notebookId) {
     notebook = getNotebookById(notebookId, files);
@@ -69,6 +72,9 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
             onClick={() => {
               const mode = !readOnly || (editCodeOnly && cell.format === 'code') ? 'edit' : undefined;
               if (!readOnly || cell.format === 'code') handleSelectCell(index, mode);
+            }}
+            onRun={() => {
+              handleRun(index);
             }}
           >
             {cell.raw}

@@ -39,7 +39,7 @@ test('Cell should render correctly', () => {
   const on = jest.fn();
   const { asFragment } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on}>
+      <Cell onClick={on} onChange={on} onRun={on}>
         text
       </Cell>
     </MockupProvider>,
@@ -51,7 +51,7 @@ test('Cell should have a value', () => {
   const on = jest.fn();
   const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on}>
+      <Cell onClick={on} onChange={on} onRun={on}>
         text
       </Cell>
     </MockupProvider>,
@@ -79,7 +79,7 @@ test('Cell should be editable and hover', () => {
   const on = jest.fn();
   const { getByTestId, getAllByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} editable>
+      <Cell onClick={on} onChange={on} onRun={on} editable>
         text
       </Cell>
     </MockupProvider>,
@@ -97,7 +97,7 @@ test('Cell should be editable and selected', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} editable selected edited>
+      <Cell onClick={on} onChange={on} onRun={on} editable selected edited>
         text
       </Cell>
     </MockupProvider>,
@@ -113,7 +113,7 @@ test('Cell with markdown should display Highlighter', () => {
   const on = jest.fn();
   const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='markdown'>
+      <Cell onClick={on} onChange={on} onRun={on} format='markdown'>
         text
       </Cell>
     </MockupProvider>,
@@ -127,7 +127,7 @@ test('editable & selected Cell with markdown should display Editor', () => {
   const on = jest.fn();
   const { getByRole } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='markdown' editable selected edited>
+      <Cell onClick={on} onChange={on} onRun={on} format='markdown' editable selected edited>
         text
       </Cell>
     </MockupProvider>,
@@ -140,14 +140,14 @@ test('editable & selected Cell with markdown should display Editor', () => {
 
 test('Cell with code should display CodeHighlighter', () => {
   const on = jest.fn();
-  const { getByRole } = render(
+  const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code'>
+      <Cell onClick={on} onChange={on} onRun={on} format='code'>
         text
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild?.childNodes[1];
+  const content = getByTestId('cell').firstChild?.childNodes[1];
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
 });
@@ -155,14 +155,14 @@ test('Cell with code should display CodeHighlighter', () => {
 test('editable & selected Cell with code should display Editor', () => {
   jest.useFakeTimers();
   const on = jest.fn();
-  const { getByRole } = render(
+  const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code' editable selected edited>
+      <Cell onClick={on} onChange={on} onRun={on} format='code' editable selected edited>
         text
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild?.childNodes[1];
+  const content = getByTestId('cell').firstChild?.childNodes[1];
   expect(content).toHaveClass('react-codemirror2');
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
@@ -174,14 +174,14 @@ test('editable & selected Cell with code should be changed', async () => {
   const onChange = jest.fn().mockImplementation(newValue => {
     value = newValue;
   });
-  const { getByRole } = render(
+  const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={onClick} onChange={onChange} format='code' editable selected edited>
+      <Cell onClick={onClick} onChange={onChange} onRun={onClick} format='code' editable selected edited>
         {' '}
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild?.childNodes[1] as HTMLElement;
+  const content = getByTestId('cell').firstChild?.childNodes[1] as HTMLElement;
   expect(content?.textContent?.trim()).toBe('');
   const container = content?.firstChild as HTMLElement;
   const helloord = 'Hello world';
@@ -210,14 +210,14 @@ test('Cell with code out should display it', () => {
     { type: 'text', id: '1', text: 'text' },
     { type: 'error', id: '2', text: 'error' },
   ];
-  const { getByRole } = render(
+  const { getByTestId } = render(
     <MockupProvider>
-      <Cell onClick={on} onChange={on} format='code' out={out}>
+      <Cell onClick={on} onChange={on} onRun={on} format='code' out={out}>
         text
       </Cell>
     </MockupProvider>,
   );
-  const content = getByRole('button').firstChild?.childNodes[1];
+  const content = getByTestId('cell').firstChild?.childNodes[1];
   expect(content?.textContent?.trim()).toBe('text');
   expect(on).toHaveBeenCalledTimes(0);
 });

@@ -6,15 +6,28 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { FunctionComponent } from 'react';
+import { Play3 } from '@styled-icons/icomoon/Play3';
 import { LogEntryType } from '../../types';
+import IconButton from '../IconButton';
 
 interface Props {
   out?: LogEntryType[];
+  selectionColor: string;
+  onAction: (action: string) => void;
 }
 
-const Action: FunctionComponent<Props> = ({ out }) => {
-  const inp = out ? 'In[*]' : 'In[    ]';
-  return <span>{inp}</span>;
+const Action: FunctionComponent<Props> = ({ out, selectionColor, onAction }) => {
+  const color = out ? 'green' : undefined;
+  const hover = out ? 'green' : selectionColor;
+  const handleRun = () => {
+    //
+    onAction('run');
+  };
+  return (
+    <>
+      <IconButton icon={Play3} onClick={handleRun} hover={hover} color={color} />
+    </>
+  );
 };
 
 export default Action;
