@@ -15,7 +15,9 @@
     "type": "notebook",
     "metadata": {
       "id": "sderfg" ,
-      "title": "First example"
+      "title": "First example",
+      "readOnly": true,
+      "editCodeOnly": true
     },
     "source": [
      "example.ipynb"
@@ -25,7 +27,9 @@
     "type": "notebook",
     "metadata": {
       "id": "sdazg" ,
-      "title": "TensorflowJs"
+      "title": "TensorflowJs",
+      "readOnly": true,
+      "editCodeOnly": true
     },
     "source": [
      "tfjs.ipynb"
