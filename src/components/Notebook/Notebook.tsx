@@ -35,8 +35,8 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
   let readOnly = true;
   let edited = false;
   let selectedCell = -1;
-  const handleSelectCell = (selected: number) => {
-    dispatch(selectCell({ selected, mode: readOnly ? undefined : 'edit' }));
+  const handleSelectCell = (selected: number, mode?: 'edit') => {
+    dispatch(selectCell({ selected, mode }));
   };
   const handleCellChange = (index: number, value: string, notebook: NotebookType) => {
     const cell = { ...notebook.cells[index], raw: value };
@@ -52,6 +52,7 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
     ({ selectedCell = -1 } = editor);
     edited = editor.mode === 'edit';
     ({ readOnly = false } = notebook);
+    const { editCodeOnly } = notebook;
     content = (
       <>
         {notebook.cells.map((cell: CellType, index: number) => (
@@ -60,13 +61,14 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
             format={cell.format}
             out={cell.out}
             edited={edited}
-            editable={!readOnly}
+            editable={!readOnly || (editCodeOnly && cell.format === 'code')}
             selected={index === selectedCell}
             onChange={value => {
               handleCellChange(index, value, notebook as NotebookType);
             }}
             onClick={() => {
-              if (!readOnly || cell.format === 'code') handleSelectCell(index);
+              const mode = !readOnly || (editCodeOnly && cell.format === 'code') ? 'edit' : undefined;
+              if (!readOnly || cell.format === 'code') handleSelectCell(index, mode);
             }}
           >
             {cell.raw}

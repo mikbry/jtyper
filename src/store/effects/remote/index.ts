@@ -16,7 +16,7 @@ type CELLFILE = {
 };
 
 type NOTEBOOKFILE = {
-  metadata: { id: string; title: string; readOnly?: boolean };
+  metadata: { id: string; title: string; readOnly?: boolean; editCodeOnly?: boolean };
   type: string;
   source: string[];
 };
@@ -34,6 +34,7 @@ const getNotebooks = async ({ url }: { url: string }) => {
           cells: [],
           url: f.source[0],
           readOnly: !!f.metadata.readOnly,
+          editCodeOnly: f.metadata.editCodeOnly,
           state: undefined,
           error: undefined,
         };
