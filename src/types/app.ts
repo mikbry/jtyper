@@ -22,6 +22,7 @@ export interface NotebookType {
   filename?: string;
   folder?: string;
   readOnly?: boolean;
+  editCodeOnly?: boolean;
   localStorage?: boolean;
   loading?: boolean;
   url?: string;
