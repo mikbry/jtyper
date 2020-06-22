@@ -5,13 +5,13 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import React, { /* KeyboardEvent, */ FunctionComponent, /* useState, */ useEffect, useRef } from 'react';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 import Highlighter from '../Highlighter';
 import { CodeHighlighter, Editor } from '../CodeMirror';
-// import ContentEditable from '../ContentEditable';
 import { BasicTheme } from '../../themes';
 import { LogEntryType } from '../../types';
+import Action from './Action';
 
 interface Props {
   selected?: boolean;
@@ -196,7 +196,7 @@ const Cell: FunctionComponent<Props> = ({
     >
       <Line selected={selected} edited={edited}>
         <Prompt selected={selected} edited={edited}>
-          {format === 'code' && `${out ? 'In[*]' : 'In[    ]'}`}
+          {format === 'code' && <Action out={out} />}
         </Prompt>
         {content}
       </Line>
