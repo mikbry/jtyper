@@ -18,7 +18,7 @@
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
     "report-coverage": "$(yarn bin)/nyc report --reporter=text-lcov > coverage.lcov",
     "prepublishOnly": "yarn build",
-    "prod": "cp -r public/notebooks build"
+    "prod": "yarn build & cp -r public/notebooks build"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
