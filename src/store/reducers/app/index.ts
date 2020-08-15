@@ -28,7 +28,7 @@ const handlers = {
       ({ files } = initialState);
     } else {
       // merge files
-      initialState.files.forEach(file => {
+      initialState.files.forEach((file) => {
         // const fi = files.findIndex(f => f.id === file.id);
         /* if (fi > -1 && file.readOnly) {
           files.splice(fi, 1, file);
@@ -49,8 +49,8 @@ const handlers = {
   [APP.ADDFILES + DONE]: (state: StateType, action: { files: NotebookType[] }) => {
     const { files: newFiles } = action;
     const { files } = state;
-    newFiles.forEach(f => {
-      const i = files.findIndex(ff => ff.id === f.id);
+    newFiles.forEach((f) => {
+      const i = files.findIndex((ff) => ff.id === f.id);
       if (i > -1) {
         files.splice(i, 1, f);
       } else {
@@ -77,7 +77,7 @@ const handlers = {
     } */
     let cells;
     if (action.cells) {
-      cells = action.cells.map(cell => ({ ...cell, id: generateId() }));
+      cells = action.cells.map((cell) => ({ ...cell, id: generateId() }));
     } else {
       cells = [{ id: generateId(), raw: `# ${title}`, format: 'markdown' as CellFormat }];
     }

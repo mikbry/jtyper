@@ -12,7 +12,7 @@ import files from './remote';
 export const combineEffects = (effects: Record<string, Record<string, Function>>, _to: EffectsType): EffectsType => {
   const to = _to;
   const types = Object.keys(effects);
-  types.forEach(type => {
+  types.forEach((type) => {
     const effect = effects[type];
     const name = Object.keys(effect)[0];
     to.push({ name, type, func: effect[name] });
@@ -24,7 +24,7 @@ let effects: EffectsType;
 
 export const initEffects = (fxs: Record<string, Record<string, Function>>[]) => {
   effects = [];
-  fxs.forEach(fx => {
+  fxs.forEach((fx) => {
     effects = combineEffects(fx, effects);
   });
   return effects;

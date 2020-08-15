@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com

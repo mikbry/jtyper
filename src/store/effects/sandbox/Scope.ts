@@ -42,7 +42,7 @@ class Scope implements ScopeType {
     // console.log('scope.variables', this.variables);
     if (names.length > 0) {
       let sep = ' ';
-      names.forEach(varName => {
+      names.forEach((varName) => {
         const variable = this.variables[varName];
         const i = variable.index;
         // console.log(varName, i, index, variable, code.variables[varName]);
@@ -72,7 +72,7 @@ class Scope implements ScopeType {
     try {
       const response = await runner.execute(sse, this);
       // console.log('response=', response);
-      Object.keys(response).forEach(varName => {
+      Object.keys(response).forEach((varName) => {
         let value = response[varName];
         if (this.variables[varName].type === 'function') {
           value = this.variables[varName].value;

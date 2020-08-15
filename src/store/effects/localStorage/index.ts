@@ -20,7 +20,7 @@ const get = async ({ name, defaultValue }: any) => {
 
 const set = async (data: any) => {
   const names = Object.keys(data);
-  names.forEach(name => {
+  names.forEach((name) => {
     const json = JSON.stringify(data[name]);
     // TODO check json
     window.localStorage.setItem(name, json);

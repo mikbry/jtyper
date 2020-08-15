@@ -67,7 +67,9 @@ const selectFile = (action: { selected: number }) => (dispatch: DispatchType, ge
   const notebook = files[selected];
   if (notebook && notebook.url && !notebook.state) {
     // Load notebook
-    composer(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then(n => dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }));
+    composer(APP.REQUESTNOTEBOOK + FETCH, { notebook }).then((n) =>
+      dispatch({ type: APP.UPDATENOTEBOOK + DONE, ...n }),
+    );
   }
   dispatch({ type: APP.SELECTFILE + DONE, selected });
   dispatch(save({ editor: true }));
@@ -96,8 +98,8 @@ const runCell = ({ cell: c, selected: s, next, all }: RunCellType) => async (
       return;
     }
     const out = await sandbox.execute(code, all);
-    const ncells = notebook.cells.map(cl => {
-      const i = cells.findIndex(cc => cc.id === cl.id);
+    const ncells = notebook.cells.map((cl) => {
+      const i = cells.findIndex((cc) => cc.id === cl.id);
       return i === -1 ? cl : { ...cl, out: out[i] };
     });
     dispatch({ ...notebook, cells: ncells, type: APP.UPDATENOTEBOOK + DONE });
@@ -157,7 +159,7 @@ const resetCell = ({ cell }: { cell: CellType }) => (dispatch: DispatchType) => 
 const resetAllCell = () => (dispatch: DispatchType, getState: Function) => {
   const { editor, files } = getState();
   const notebook = getCurrentNotebook(editor, files);
-  const cells = notebook.cells.map(c => ({ ...c, out: undefined }));
+  const cells = notebook.cells.map((c) => ({ ...c, out: undefined }));
   dispatch({ ...notebook, cells, type: APP.UPDATENOTEBOOK + DONE });
   dispatch({ type: APP.SELECTCELL + DONE, selected: undefined, mode: undefined });
   dispatch(save({ files: true }));

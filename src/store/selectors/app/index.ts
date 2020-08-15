@@ -7,16 +7,13 @@
  */
 import { EditorType, NotebookType, CellType } from '../../../types';
 
-export const generateId = () =>
-  Math.random()
-    .toString(36)
-    .substr(2, 9);
+export const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const getNotebookById = (id: string, files: Array<NotebookType>): NotebookType | undefined =>
-  files.find(f => f.id === id);
+  files.find((f) => f.id === id);
 
 export const getNotebookIndexById = (id: string, files: Array<NotebookType>): number =>
-  files.findIndex(f => f.id === id);
+  files.findIndex((f) => f.id === id);
 
 export const getCurrentNotebook = (editor: EditorType, files: Array<NotebookType>): NotebookType =>
   files[editor.selected as number] as NotebookType;
@@ -37,7 +34,7 @@ export const getCurrentCell = (editor: EditorType, notebook: NotebookType | unde
 };
 
 export const getNotebookCell = (id: string, notebook: NotebookType): CellType | undefined =>
-  notebook.cells.find(c => c.id === id);
+  notebook.cells.find((c) => c.id === id);
 
 export const findNotebookCodeCell = (notebook: NotebookType, start = 0): CellType | undefined =>
   notebook.cells.find((c, index) => c.format === 'code' && start <= index);
@@ -55,7 +52,7 @@ export const validateSelectedCell = (selected: number, length: number): number |
 };
 
 export const getNotebookCellIndex = (notebook: NotebookType, id: string): number =>
-  notebook.cells.findIndex(c => c.id === id) as number;
+  notebook.cells.findIndex((c) => c.id === id) as number;
 
 export const getNextCodeCell = (notebook: NotebookType, selected: number | undefined): number | undefined => {
   const next = notebook.cells.findIndex((c, i) => (selected === undefined || i > selected) && c.format === 'code');
@@ -78,7 +75,7 @@ type CodeCells = { code: string[]; cells: CellType[] };
 export const getAllCodeCells = (notebook: NotebookType): CodeCells => {
   const cells: CellType[] = [];
   const code: string[] = [];
-  notebook.cells.forEach(cell => {
+  notebook.cells.forEach((cell) => {
     if (cell.format === 'code') {
       cells.push(cell);
       code.push(cell.raw);

@@ -60,7 +60,7 @@ class Sandbox implements SandboxType {
       for (const c of code) {
         // eslint-disable-next-line no-await-in-loop
         const parsed = await this.parse(c, scope, funcs.length);
-        Object.keys(parsed.imports).forEach(i => {
+        Object.keys(parsed.imports).forEach((i) => {
           if (this.modules[i]) {
             parsed.imports[i].url = this.modules[i].url;
             this.scriptWorker.addModule(this.modules[i]);
