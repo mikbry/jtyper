@@ -33,6 +33,7 @@
   },
   "ignorePatterns": ["**/dist", "node_modules/", "public"],
   "rules": {
+    "@typescript-eslint/ban-types": "off",
     "arrow-body-style": ["error", "as-needed"],
     "import/prefer-default-export": "off",
     "react/prop-types": 0,

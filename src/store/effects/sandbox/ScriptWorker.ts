@@ -77,8 +77,8 @@ class ScriptWorker {
   async loadModules() {
     const keys = Object.keys(this.modules);
     const loader = keys
-      .filter(m => !this.modules[m].data)
-      .map(k => {
+      .filter((m) => !this.modules[m].data)
+      .map((k) => {
         const module = this.modules[k];
         const asyncFetch = async () => {
           // console.log('load module=', module.url);
@@ -102,8 +102,8 @@ class ScriptWorker {
       return;
     }
     const modules: Blob[] = Object.keys(this.modules)
-      .map(m => this.modules[m].data)
-      .filter(d => !!d) as Blob[];
+      .map((m) => this.modules[m].data)
+      .filter((d) => !!d) as Blob[];
     // console.log('createWorker modules=', modules);
     const blob = new Blob([this.globalScript, ...modules, this.handlerScript], { type: 'application/javascript' });
     this.worker = new Worker(URL.createObjectURL(blob));
@@ -128,7 +128,7 @@ class ScriptWorker {
         this.kill();
         reject(new Error('Timeout Error'));
       }, timeout);
-      worker.onmessage = e => {
+      worker.onmessage = (e) => {
         clearTimeout(handle);
         // console.log('exec onmessage', e.data);
         const data: MessageType = e.data as MessageType;
@@ -141,7 +141,7 @@ class ScriptWorker {
           reject(data.result);
         }
       };
-      worker.onerror = e => {
+      worker.onerror = (e) => {
         // console.log('worker error', e);
         clearTimeout(handle);
         reject(e);

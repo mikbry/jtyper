@@ -87,7 +87,7 @@ class Logger {
   }
 
   appendConsole({ args, type }: { args: RestType; type: string }) {
-    args.forEach(a => {
+    args.forEach((a) => {
       this.print(a, type);
     });
   }

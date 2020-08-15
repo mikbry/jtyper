@@ -50,11 +50,11 @@ class Parser implements ParserType {
       allowAwaitOutsideFunction: true,
     }) as ESTreeNode;
     // console.log('tree', tree);
-    tree.body.forEach(element => {
+    tree.body.forEach((element) => {
       if (element.type === 'VariableDeclaration') {
         const kind = element.kind as string;
         const { declarations } = element;
-        declarations.forEach(declaration => {
+        declarations.forEach((declaration) => {
           const id = declaration.id as ESTreeNode;
           const init = declaration.init as ESTreeNode;
           // console.log('var id=', id, init);
@@ -123,7 +123,7 @@ class Parser implements ParserType {
         const source = element.source as ESTreeNode;
         const name = source.value as string;
         const specifiers: Array<{ name: string; type: string; alias?: string }> = [];
-        element.specifiers.forEach(sp => {
+        element.specifiers.forEach((sp) => {
           let type = '';
           if (sp.type === 'ImportNamespaceSpecifier') {
             type = 'namespace';

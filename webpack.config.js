@@ -57,14 +57,14 @@ module.exports = env => {
         'process.env.APP_HOMEPAGE': JSON.stringify(pk.homepage),
       }),
       new Dotenv(),
-      new CopyWebpackPlugin([
+      new CopyWebpackPlugin({ patterns: [
         {
           context: path.resolve('./public/'),
           from: './**/*',
           to: path.resolve('./dist'),
           force: true,
         },
-      ]),
+      ] }),
       new HtmlWebpackPlugin({
         path: path.resolve('./dist'),
         template: './public/index.html',

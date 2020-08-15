@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint @typescript-eslint/no-explicit-any: ["error", { "ignoreRestArgs": false }] */
 /**
  * Copyright (c) Mik BRY
