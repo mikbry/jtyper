@@ -9,7 +9,7 @@ const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const pk = require('./package.json');
 
-module.exports = env => {
+module.exports = (env) => {
   const CONTENT_BASE = env.CONTENT_BASE || '';
   const PUBLIC_URL = env.PUBLIC_URL || '';
   const publicUrl = PUBLIC_URL + CONTENT_BASE;
@@ -57,14 +57,16 @@ module.exports = env => {
         'process.env.APP_HOMEPAGE': JSON.stringify(pk.homepage),
       }),
       new Dotenv(),
-      new CopyWebpackPlugin({ patterns: [
-        {
-          context: path.resolve('./public/'),
-          from: './**/*',
-          to: path.resolve('./dist'),
-          force: true,
-        },
-      ] }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            context: path.resolve('./public/'),
+            from: './**/*',
+            to: path.resolve('./dist'),
+            force: true,
+          },
+        ],
+      }),
       new HtmlWebpackPlugin({
         path: path.resolve('./dist'),
         template: './public/index.html',
