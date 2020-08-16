@@ -15,7 +15,7 @@
 
 ## Why JTyper ?
 
-We are at a crossroad in Web development : Javascript ecosystem is strong (ReactJs, Node.js, ...) and new technologies are rising (Typescript, WASM, WebGPU, Deno). Running heavy computational applications in browser will be soon a really. JTyper is a vision of this future. Where applications will run transparently some processes on a PC, a smartphone, and distribute others to a cluster of servers. 
+We are at a crossroad in Web development : Javascript ecosystem is strong (ReactJs, Node.js, ...) and new technologies are rising (Typescript, WASM, WebGPU, Deno). Running heavy computational applications in browser is soon a reality. JTyper is a vision of this future. Where applications will run transparently some processes on a PC, a smartphone, and distribute others to a cluster of servers. 
 
 So we outline some mandatories points:
 - No complex installation needed, no VM
