@@ -9,10 +9,12 @@ import React, { FunctionComponent, useState } from 'react';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
-import { UnControlled as CodeMirror2 } from 'react-codemirror2';
+import { UnControlled } from 'react-codemirror2';
 import '../../styles/codemirror/theme/ayu-dark.css';
 import '../../styles/codemirror/codemirror.css';
 import '../../styles/code.css';
+
+const CodeMirror2 = UnControlled;
 
 type Props = {
   value: string;
@@ -39,7 +41,7 @@ const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onCha
         mode,
         scrollbarStyle: 'null',
       }}
-      editorDidMount={editor => {
+      editorDidMount={(editor) => {
         // Very hard to create a use case for this so we ignore for now
         /* istanbul ignore next */
         if (!editor.hasFocus()) {

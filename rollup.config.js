@@ -1,19 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import resolve from '@rollup/plugin-node-resolve';
-import typescript from 'rollup-plugin-typescript2';
+// import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 import hotcss from 'rollup-plugin-hot-css';
-import commonjs from 'rollup-plugin-commonjs-alternate';
+import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import json from '@rollup/plugin-json';
-import { string } from 'rollup-plugin-string';
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-
-import * as react from 'react';
-import * as reactDom from 'react-dom';
-import * as reactIs from 'react-is';
-import * as propTypes from 'prop-types';
 import pk from './package.json';
 
 const APP_NAME = process.env.APP_NAME || pk.name;
@@ -69,7 +64,7 @@ const plugins = () => [
       {
         src: 'public/index.html',
         dest: 'build',
-        transform: contents =>
+        transform: (contents) =>
           contents
             .toString()
             .replace('%SCRIPTS%', genScripts())
@@ -89,46 +84,13 @@ const plugins = () => [
   }),
   json(),
   nodePolyfills(),
-  resolve({ preferBuiltins: true }),
-  typescript({ abortOnError: false }),
+  resolve(),
+  typescript(),
   hotcss({
     hot: development,
     filename: cssFile,
   }),
-  string({
-    include: ['**/*.fs', '**/*.vs'],
-  }),
-  commonjs({
-    include: 'node_modules/**',
-    /* namedExports: {
-      'node_modules/react/index.js': [
-        'cloneElement',
-        'forwardRef',
-        'createContext',
-        'Component',
-        'createElement',
-        'useMemo',
-        'useEffect',
-        'useState',
-        'useRef',
-        'useCallback',
-        'useContext',
-        'useLayoutEffect',
-        'useReducer',
-        'Children',
-        'isValidElement',
-        'useDebugValue',
-      ],
-      'node_modules/react-dom/index.js': ['render', 'hydrate'],
-      'node_modules/react-is/index.js': ['isElement', 'isValidElementType', 'ForwardRef'],
-    }, */
-    namedExports: {
-      'node_modules/react/index.js': Object.keys(react),
-      'node_modules/react-dom/index.js': Object.keys(reactDom),
-      'node_modules/react-is/index.js': Object.keys(reactIs),
-      'prop-types': Object.keys(propTypes),
-    },
-  }),
+  commonjs({}),
   production && terser(),
 ];
 

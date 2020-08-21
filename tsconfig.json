@@ -2,7 +2,9 @@
   "compilerOptions": {
     "declaration": false,
     "noImplicitAny": true,
+    "rootDir": "./src",
     "outDir": "./build",
+    "incremental": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowJs": true,
@@ -22,11 +24,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "experimentalDecorators": true,
-    "incremental": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src/**/*"
   ],
-  "exclude": ["node_modules", "src/**/*.test.ts", "src/store/devtools.ts"]
+  "exclude": ["node_modules", "src/**/*.test.ts"]
 }
