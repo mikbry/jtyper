@@ -31,7 +31,7 @@
     "jquery": false,
     "node": true
   },
-  "ignorePatterns": ["**/dist", "node_modules/", "public"],
+  "ignorePatterns": ["**/dist", "node_modules/", "public", "src/react-codemirror2"],
   "rules": {
     "@typescript-eslint/ban-types": "off",
     "arrow-body-style": ["error", "as-needed"],
