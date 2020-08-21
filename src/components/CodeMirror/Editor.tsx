@@ -9,12 +9,10 @@ import React, { FunctionComponent, useState } from 'react';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
-import { UnControlled } from 'react-codemirror2';
+import { UnControlled as CodeMirror } from '../../react-codemirror2';
 import '../../styles/codemirror/theme/ayu-dark.css';
 import '../../styles/codemirror/codemirror.css';
 import '../../styles/code.css';
-
-const CodeMirror2 = UnControlled;
 
 type Props = {
   value: string;
@@ -33,7 +31,7 @@ const Editor: FunctionComponent<Props> = ({ value: defaultValue, language, onCha
   const [value] = useState(defaultValue);
   const mode = modes[language];
   return (
-    <CodeMirror2
+    <CodeMirror
       value={value}
       autoScroll={false}
       options={{
