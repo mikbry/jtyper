@@ -37,7 +37,7 @@ const Project: FunctionComponent = () => {
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [f, p, ed] = useSelector((state: StateType) => [state.files, state.publisher, state.website, state.editor]);
+  const [f, p, ed] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
   const files = f as NotebookType[];
   const publisher = p as PublisherType;
   const editor = ed as EditorType;
