@@ -22,7 +22,7 @@ import Notebook from '../../components/Notebook';
 import Help from '../../components/Help';
 import Input from '../../components/Input';
 import { createNotebook, selectFile, toggleHelp } from '../../store/actions';
-import { StateType } from '../../types';
+import { StateType, PublisherType, NotebookType, EditorType } from '../../types';
 import Dialog from '../../components/Dialog';
 import { createNewTitle, generateUrl } from '../../store/selectors';
 
@@ -37,7 +37,10 @@ const Project: FunctionComponent = () => {
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [files, publisher, editor] = useSelector((state: StateType) => [state.files, state.publisher, state.editor]);
+  const [f, p, ed] = useSelector((state: StateType) => [state.files, state.publisher, state.website, state.editor]);
+  const files = f as NotebookType[];
+  const publisher = p as PublisherType;
+  const editor = ed as EditorType;
   if (publisher.name && publisher.name.toLowerCase() !== publisherName) {
     return <PageError code={404} description='Publisher do not exist.' />;
   }

@@ -39,9 +39,9 @@ type Keybinding = {
 
 const Help: FunctionComponent<{ onClose?: Function }> = ({ onClose }) => {
   const keybindings: Record<string, Keybinding> = {};
-  commands.forEach(cmd => {
+  commands.forEach((cmd) => {
     const { when } = cmd;
-    cmd.keybindings.forEach(kb => {
+    cmd.keybindings.forEach((kb) => {
       if (keybindings[kb.name]) {
         keybindings[kb.name].when.push(when);
       } else {
@@ -60,7 +60,7 @@ const Help: FunctionComponent<{ onClose?: Function }> = ({ onClose }) => {
         </tr>
       </thead>
       <tbody>
-        {Object.keys(keybindings).map(n => (
+        {Object.keys(keybindings).map((n) => (
           <tr key={`${keybindings[n].key}_${keybindings[n].ctrlKey}_${keybindings[n].altKey}`}>
             <td>{keybindings[n].name}</td>
             <td>
@@ -69,7 +69,7 @@ const Help: FunctionComponent<{ onClose?: Function }> = ({ onClose }) => {
               {keybindings[n].key}
             </td>
             <td>
-              {keybindings[n].when.map(w => (
+              {keybindings[n].when.map((w) => (
                 <div key={`${w.length} _${keybindings[n].key}`}>{w}</div>
               ))}
             </td>

@@ -42,7 +42,7 @@ test('Toolbar without notebook should have all items disabled', async () => {
   expect(items[11].innerText).toBe(undefined);
 
   // Just a brute test for code coverage
-  items.forEach(item => {
+  items.forEach((item) => {
     fireEvent.click(item);
   });
 });
@@ -72,7 +72,7 @@ test('Toolbar with notebook should have only paste disabled', async () => {
   expect(items[11].innerText).toBe(undefined);
 
   // Just a brute test for code coverage
-  items.forEach(item => {
+  items.forEach((item) => {
     fireEvent.click(item);
   });
 });
@@ -102,7 +102,7 @@ test('Toolbar with notebook and no selectedCell should have edit & format disabl
   expect(items[11].innerText).toBe(undefined);
 
   // Just a brute test for code coverage
-  items.forEach(item => {
+  items.forEach((item) => {
     fireEvent.click(item);
   });
 });
@@ -154,7 +154,7 @@ test('Toolbar with notebook and paste should have all enabled', async () => {
   expect(items[11].innerText).toBe(undefined);
 
   // Just a brute test for code coverage
-  items.forEach(item => {
+  items.forEach((item) => {
     fireEvent.click(item);
   });
 });

@@ -22,15 +22,15 @@ const Styled = styled.header`
   left: ${(props: StyledProps) =>
     props.theme.spacing.fullHeightDrawer && !props.noDrawer ? props.theme.spacing.drawerWidth : '0'}px;
   z-index: 3;
-  width: ${props =>
+  width: ${(props) =>
     props.theme.spacing.fullHeightDrawer && !props.noDrawer
       ? `calc(100% - ${props.theme.spacing.drawerWidth}px)`
       : '100%'};
-  color: ${props => props.theme.palette.onPrimary};
+  color: ${(props) => props.theme.palette.onPrimary};
   font-size: 1.25em;
-  line-height: ${props => props.theme.spacing.headerHeight}px;
-  background: ${props => props.theme.palette.primary};
-  min-height: ${props => props.theme.spacing.headerHeight}px;
+  line-height: ${(props) => props.theme.spacing.headerHeight}px;
+  background: ${(props) => props.theme.palette.primary};
+  min-height: ${(props) => props.theme.spacing.headerHeight}px;
   padding-left: 0.6em;
   padding-right: 0.3em;
   display: flex;

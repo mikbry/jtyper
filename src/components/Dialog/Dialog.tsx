@@ -36,7 +36,7 @@ const Dialog: FunctionComponent<{ title?: string; actions: Array<string>; onActi
         <h2>{title}</h2>
         {children}
         <div>
-          {actions.map(a => (
+          {actions.map((a) => (
             <Button
               type='button'
               key={a}

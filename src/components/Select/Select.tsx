@@ -51,7 +51,7 @@ const Wrapper = styled.div`
   text-align: center;
 
   &:hover {
-    color: ${props => (props.disabled ? props.theme.palette.surface : 'white')};
+    color: ${(props) => (props.disabled ? props.theme.palette.surface : 'white')};
   }
 
   & > ul {
@@ -91,7 +91,7 @@ const Select: FunctionComponent<Props> = ({ options, disabled, open: o = false, 
   const onClose = () => {
     if (open) setOpen(false);
   };
-  const selected = options.find(item => item.selected);
+  const selected = options.find((item) => item.selected);
   return (
     <Wrapper
       role='button'
@@ -106,7 +106,7 @@ const Select: FunctionComponent<Props> = ({ options, disabled, open: o = false, 
     >
       {selected ? selected.value : placeholder}
       <ul>
-        {options.map(option => (
+        {options.map((option) => (
           <Item
             key={option.key}
             selecting={option.selected}

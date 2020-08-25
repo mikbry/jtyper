@@ -14,7 +14,7 @@ import { initStore } from './store';
 import { localStorageMock } from './test';
 
 afterEach(() => {
-  delete global.fetch;
+  Reflect.deleteProperty(global, 'fetch');
 });
 
 test('App should launch correctly', async () => {
@@ -84,7 +84,7 @@ test('init a notebook folder with one unselected file', async () => {
   const fileResponse = {
     json: () => Promise.resolve({ cells: [] }),
   };
-  global.fetch = jest.fn().mockImplementation(url => {
+  global.fetch = jest.fn().mockImplementation((url) => {
     let response;
     if (url === '/notebook/index.json') {
       response = folderResponse;
@@ -128,7 +128,7 @@ test('init a notebook folder with one file', async () => {
   const fileResponse = {
     json: () => Promise.resolve({ cells: [] }),
   };
-  global.fetch = jest.fn().mockImplementation(url => {
+  global.fetch = jest.fn().mockImplementation((url) => {
     let response;
     if (url === '/notebook/index.json') {
       response = folderResponse;
@@ -185,7 +185,7 @@ test('init a notebook folder using one file and several cells', async () => {
     json: () => Promise.resolve({ cells: [{ 'cell_type': 'markdown', source: ['textB'] }] }),
   };
   // let loaded = false;
-  global.fetch = jest.fn().mockImplementation(url => {
+  global.fetch = jest.fn().mockImplementation((url) => {
     let response;
     if (url === '/notebook/index.json') {
       response = folderResponse;
@@ -204,7 +204,7 @@ test('init a notebook folder using one file and several cells', async () => {
   const store = await initStore(state);
   state = store.getState();
   const subscribe = async (max = 0) =>
-    new Promise(resolve => {
+    new Promise((resolve) => {
       let count = 0;
       const u = store.subscribe(() => {
         count += 1;

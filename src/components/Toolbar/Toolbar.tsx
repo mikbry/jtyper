@@ -31,7 +31,7 @@ import {
   copy,
   paste,
 } from '../../store/actions';
-import { StateType, CellType, CellFormat } from '../../types';
+import { StateType, CellType, CellFormat, NotebookType, EditorType } from '../../types';
 import { getNotebook, getCurrentCell } from '../../store/selectors';
 import IconButton from '../IconButton';
 import Select, { OptionType } from '../Select';
@@ -47,7 +47,7 @@ Styled.defaultProps = { theme: BasicTheme };
 const Bar = styled.div`
   margin: 4px 0 4px 4px;
   line-height: 36px;
-  border-right: 1px solid ${props => props.theme.palette.group};
+  border-right: 1px solid ${(props) => props.theme.palette.group};
 `;
 Bar.defaultProps = { theme: BasicTheme };
 
@@ -58,7 +58,9 @@ const StyledSelect = styled(Select)`
 StyledSelect.defaultProps = { theme: BasicTheme };
 
 const Toolbar: FunctionComponent = () => {
-  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
+  const [f, ed] = useSelector((state: StateType) => [state.files, state.editor]);
+  const files = f as NotebookType[];
+  const editor = ed as EditorType;
   const dispatch = useDispatch();
   const { selectedCell } = editor;
   const notebook = getNotebook(editor.selected, files);
@@ -119,7 +121,7 @@ const Toolbar: FunctionComponent = () => {
     { key: 'o2', value: 'code' },
     { key: 'o3', value: 'raw' },
   ];
-  const option = options.find(o => o.value === cell?.format || (o.value === 'raw' && cell?.format === undefined));
+  const option = options.find((o) => o.value === cell?.format || (o.value === 'raw' && cell?.format === undefined));
   if (option && selectedCell !== undefined) option.selected = true;
   let selectPlaceholder = 'No format';
   if (selectedCell === undefined) selectPlaceholder = 'No selection';

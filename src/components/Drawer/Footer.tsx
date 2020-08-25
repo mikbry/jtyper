@@ -18,13 +18,13 @@ const Wrapper = styled.div`
   padding: 0.6em;
   display: flex;
   font-size: 12px;
-  color: ${props => props.theme.palette.disabled};
+  color: ${(props) => props.theme.palette.disabled};
 
   & > a {
-    color: ${props => props.theme.palette.disabled};
+    color: ${(props) => props.theme.palette.disabled};
   }
   & > a:hover {
-    color: ${props => props.theme.palette.onPrimary};
+    color: ${(props) => props.theme.palette.onPrimary};
   }
 `;
 Wrapper.defaultProps = { theme: BasicTheme };

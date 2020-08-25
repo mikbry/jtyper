@@ -14,14 +14,14 @@ const GlobalStyle = createGlobalStyle`
    height: 100%;
   }
   body {
-    font-family: ${props => props.theme.fontFamily};
+    font-family: ${(props) => props.theme.fontFamily};
     width: 100%;
     height: 100%;
     padding: 0;
     margin: 0;
     position: relative;
     line-height: 1.5em;
-    background-color: ${props => props.theme.palette.background}
+    background-color: ${(props) => props.theme.palette.background}
   }
   #root {
     height: 100%;

@@ -429,7 +429,7 @@ test('Notebook editable should enter', async () => {
   expect(state.editor?.selectedCell).toBe(0);
 });
 
-test('Notebook editable should run once', async done => {
+test('Notebook editable should run once', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
     files: [
@@ -469,7 +469,7 @@ test('Notebook editable should run once', async done => {
   });
 });
 
-test('Notebook without code should not run', async done => {
+test('Notebook without code should not run', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: undefined },
     files: [
@@ -509,7 +509,7 @@ test('Notebook without code should not run', async done => {
   done();
 });
 
-test('Notebook selected code should run once', async done => {
+test('Notebook selected code should run once', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 1 },
     files: [
@@ -550,7 +550,7 @@ test('Notebook selected code should run once', async done => {
   });
 });
 
-test('Notebook selected code should run once and select next code', async done => {
+test('Notebook selected code should run once and select next code', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 1 },
     files: [
@@ -592,7 +592,7 @@ test('Notebook selected code should run once and select next code', async done =
   });
 });
 
-test('Notebook editable without code should not run', async done => {
+test('Notebook editable without code should not run', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
     files: [
@@ -625,7 +625,7 @@ test('Notebook editable without code should not run', async done => {
   });
 });
 
-test('Notebook editable should run all', async done => {
+test('Notebook editable should run all', async (done) => {
   Object.defineProperty(window.navigator, 'platform', { value: 'Mac-Os' });
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
@@ -669,7 +669,7 @@ test('Notebook editable should run all', async done => {
   });
 });
 
-test('Notebook shortcut should display Help', async done => {
+test('Notebook shortcut should display Help', async (done) => {
   let state: Partial<StateType> = {
     editor: { selected: 0, selectedCell: 0 },
     files: [

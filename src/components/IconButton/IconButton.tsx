@@ -18,11 +18,11 @@ type StyleProps = {
 };
 
 const Button = styled.button`
-  height: ${props => props.theme.spacing.iconSize}px;
+  height: ${(props) => props.theme.spacing.iconSize}px;
   line-height: 1;
   background: transparent;
   border: 0px;
-  color: ${props =>
+  color: ${(props) =>
     // eslint-disable-next-line no-nested-ternary
     props.color ? props.color : props.disabled ? props.theme.palette.disabled : props.theme.palette.surface};
   cursor: pointer;
@@ -31,7 +31,7 @@ const Button = styled.button`
     height: ${(props: StyleProps) => props.size || props.theme.spacing.iconSize}px;
   }
   &:hover {
-    color: ${props =>
+    color: ${(props) =>
       // eslint-disable-next-line no-nested-ternary
       props.hover ? props.hover : props.disabled ? props.theme.palette.disabled : 'white'};
   }
@@ -65,4 +65,4 @@ const IconButton: FunctionComponent<IconButtonProps> = ({
   );
 };
 
-export default IconButton;
+export { IconButton };
