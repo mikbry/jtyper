@@ -11,14 +11,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import Cell from '../Cell';
 import { selectCell, updateCell, useCommands, runCell } from '../../store/actions';
 import { getNotebook, getNotebookById } from '../../store/selectors';
-import { CellType, StateType, NotebookType } from '../../types';
+import { CellType, StateType, NotebookType, EditorType } from '../../types';
 import { BasicTheme } from '../../themes';
 
 const Wrapper = styled.div`
   margin: 0.6em;
   width: 50vw;
-  background-color: ${props => props.theme.palette.notebook};
-  height: calc(100% - ${props => props.theme.spacing.headerHeight}px);
+  background-color: ${(props) => props.theme.palette.notebook};
+  height: calc(100% - ${(props) => props.theme.spacing.headerHeight}px);
 `;
 Wrapper.defaultProps = { theme: BasicTheme };
 
@@ -29,7 +29,9 @@ const NoContent = styled.div`
 `;
 
 const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) => {
-  const [files, editor] = useSelector((state: StateType) => [state.files, state.editor]);
+  const [f, e] = useSelector((state: StateType) => [state.files, state.editor]);
+  const files = f as NotebookType[];
+  const editor = e as EditorType;
   const dispatch = useDispatch();
   let content;
   let readOnly = true;
@@ -67,7 +69,7 @@ const Notebook: FunctionComponent<{ notebookId?: string }> = ({ notebookId }) =>
             editable={!readOnly || (editCodeOnly && cell.format === 'code')}
             selected={index === selectedCell}
             state={cell.state}
-            onChange={value => {
+            onChange={(value) => {
               handleCellChange(index, value, notebook as NotebookType);
             }}
             onClick={() => {

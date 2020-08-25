@@ -138,7 +138,7 @@ test('Project should hide topBar', async () => {
   expect(topBar).toEqual(null);
 });
 
-test('Project should display Help', async done => {
+test('Project should display Help', async (done) => {
   let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: { displayHelp: true },
@@ -167,7 +167,7 @@ test('Project should display Help', async done => {
   state = store.getState();
 });
 
-test('Project shortcut should hide Explorer', async done => {
+test('Project shortcut should hide Explorer', async (done) => {
   let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: {},
@@ -204,7 +204,7 @@ test('Project shortcut should hide Explorer', async done => {
   state = store.getState();
 });
 
-test('Project shortcut should hide topBar', async done => {
+test('Project shortcut should hide topBar', async (done) => {
   let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: {},
@@ -241,7 +241,7 @@ test('Project shortcut should hide topBar', async done => {
   state = store.getState();
 });
 
-test('Project should display create notebook Dialog', async done => {
+test('Project should display create notebook Dialog', async (done) => {
   let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: { hideTopBar: true },
@@ -282,7 +282,7 @@ test('Project should display create notebook Dialog', async done => {
   done();
 });
 
-test('Project should display and create notebook using Dialog', async done => {
+test('Project should display and create notebook using Dialog', async (done) => {
   let state: Partial<StateType> = {
     document: { title: 'title' },
     editor: { hideTopBar: true },

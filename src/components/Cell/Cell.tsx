@@ -72,10 +72,10 @@ const Styled = styled.div`
     border: 1px solid ${(props: StyledProps) => chooseBorderColor(props, true)};
   }
   &:hover > div:first-child > pre {
-    border: 1px solid ${props => chooseBorderColor(props, true)};
+    border: 1px solid ${(props) => chooseBorderColor(props, true)};
   }
   &:hover > div:first-child aside {
-    border-left: 8px solid ${props => chooseBorderColor(props, true)};
+    border-left: 8px solid ${(props) => chooseBorderColor(props, true)};
   }
 
   &:focus {
@@ -121,14 +121,14 @@ const OutContent = styled.div`
 
 const OutText = styled.div`
   padding: 4px 0;
-  border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
+  border-bottom: 1px solid ${(props) => props.theme.palette.dividerOnLight};
 `;
 OutText.defaultProps = { theme: BasicTheme };
 
 const OutError = styled.div`
   padding: 4px 0;
   color: red;
-  border-bottom: 1px solid ${props => props.theme.palette.dividerOnLight};
+  border-bottom: 1px solid ${(props) => props.theme.palette.dividerOnLight};
 `;
 OutError.defaultProps = { theme: BasicTheme };
 
@@ -220,7 +220,7 @@ const Cell: FunctionComponent<Props> = ({
         <OutContent>
           {out &&
             (out.length
-              ? out.map(o => {
+              ? out.map((o) => {
                   if (o.type === 'error') {
                     return <OutError key={o.id}>{o.text}</OutError>;
                   }

@@ -13,14 +13,14 @@ const Button = styled('button')`
   margin: 0.6em;
   padding: 0.3em 1em;
   border-radius: 3px;
-  color: ${props => props.theme.palette.secondary};
-  border: 2px solid ${props => props.theme.palette.secondary};
+  color: ${(props) => props.theme.palette.secondary};
+  border: 2px solid ${(props) => props.theme.palette.secondary};
   background: none;
   cursor: pointer;
   &:hover {
-    color: ${props => props.theme.palette.onHover};
-    border: 2px solid ${props => props.theme.palette.secondary};
-    background: ${props => props.theme.palette.secondary};
+    color: ${(props) => props.theme.palette.onHover};
+    border: 2px solid ${(props) => props.theme.palette.secondary};
+    background: ${(props) => props.theme.palette.secondary};
   }
 `;
 

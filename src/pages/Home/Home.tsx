@@ -14,10 +14,11 @@ import styled from 'styled-components';
 import Page from '../../components/Page';
 import AppBar from '../../components/AppBar';
 import Container from '../../components/Container';
-import { StateType } from '../../types';
+import { StateType, PublisherType } from '../../types';
 import Notebook from '../../components/Notebook';
 import { selectFile, createNotebook } from '../../store/actions';
 import { getNotebookIndexById, createNewTitle, generateUrl } from '../../store/selectors';
+import { WebsiteType, EditorType, NotebookType } from '../../types/app';
 
 const Menu = styled.div`
   margin-left: auto;
@@ -61,12 +62,11 @@ const Home: FunctionComponent = () => {
       navigate(generateUrl(name, title), { replace: true });
     }, []);
   }
-  const [files, publisher, website, editor] = useSelector((state: StateType) => [
-    state.files,
-    state.publisher,
-    state.website,
-    state.editor,
-  ]);
+  const [f, p, w, ed] = useSelector((state: StateType) => [state.files, state.publisher, state.website, state.editor]);
+  const files = f as NotebookType[];
+  const publisher = p as PublisherType;
+  const website = w as WebsiteType;
+  const editor = ed as EditorType;
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     const title = createNewTitle(files);

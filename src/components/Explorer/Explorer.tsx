@@ -14,7 +14,7 @@ import { Copy } from '@styled-icons/icomoon/Copy';
 import { Bin } from '@styled-icons/icomoon/Bin';
 import { useSelector, useDispatch } from 'react-redux';
 import { createNotebook, deleteNotebook, selectFile } from '../../store/actions';
-import { StateType, NotebookType, PublisherType, PackageType } from '../../types';
+import { StateType, NotebookType, PublisherType, PackageType, EditorType } from '../../types';
 import { DrawerToolbar, DrawerFooter } from '../Drawer';
 import IconButton from '../IconButton';
 import Item from '../Item';
@@ -27,15 +27,20 @@ const List = styled.ul`
 `;
 
 const Explorer: FunctionComponent<{ onCreateNotebook?: Function }> = ({ onCreateNotebook }) => {
-  const [publisher, files, editor, pkg] = useSelector((state: StateType) => [
+  const [p, f, ed, pk] = useSelector((state: StateType) => [
     state.publisher as PublisherType,
     state.files,
-    state.editor,
+    state.editor as EditorType,
     state.package as PackageType,
   ]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const notebook = getNotebook(editor.selected, files) as NotebookType;
+  const publisher = p as PublisherType;
+  const editor = ed as EditorType;
+  const sel = editor.selected;
+  const files = f as NotebookType[];
+  const pkg = pk as PackageType;
+  const notebook = getNotebook(sel, files) as NotebookType;
   const handleCreate = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     if (onCreateNotebook) {
@@ -81,7 +86,7 @@ const Explorer: FunctionComponent<{ onCreateNotebook?: Function }> = ({ onCreate
       </DrawerToolbar>
       <List>
         {files?.map((file: NotebookType, index: number) => (
-          <Item key={file.id} onClick={e => handleSelect(e, index)} selected={index === selected}>
+          <Item key={file.id} onClick={(e) => handleSelect(e, index)} selected={index === selected}>
             {file.title}
           </Item>
         ))}
