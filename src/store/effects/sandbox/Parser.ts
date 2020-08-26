@@ -46,6 +46,7 @@ class Parser implements ParserType {
     const code: CodeType = { variables: {}, funcs: {}, imports: {}, script: input };
     const tree = acorn.parse(input, {
       sourceType: 'module',
+      ecmaVersion: 2020,
       allowImportExportEverywhere: true,
       allowAwaitOutsideFunction: true,
     }) as ESTreeNode;
