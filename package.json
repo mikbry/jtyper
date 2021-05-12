@@ -100,7 +100,7 @@
     "@styled-icons/icomoon": "^10.15.1",
     "@styled-icons/styled-icon": "^10.6.2",
     "acorn": "^8.0.1",
-    "codemirror": "^5.56.0",
+    "codemirror": "^5.58.2",
     "history": "^5.0.0",
     "markdown-it": "^11.0.0",
     "react": "^16.12.0",
